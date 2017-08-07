@@ -1,0 +1,14 @@
+{
+  "client": {
+    "name": "flashme",
+    "path": "dist/client"
+  },
+  "server": {
+    "name": "flashme server",
+    "path": "dist/server",
+    "logLevel": "debug"
+  },
+  "http": {
+    "port": 3000
+  }
+}
