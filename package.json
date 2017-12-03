@@ -26,8 +26,10 @@
     "jest": "^20.0.4",
     "moment": "^2.18.1",
     "mongodb": "^2.2.30",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "node-sass": "^4.7.2",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
@@ -37,6 +39,7 @@
     "webfontloader": "^1.6.28",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1",
+    "webpack-external-module": "^3.0.1",
     "webpack-source-map-support": "^2.0.1"
   },
   "dependencies": {
@@ -50,6 +53,7 @@
     "serve-static": "^1.12.3"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "start": "nodemon --watch dist/server/server.bundle.js --exec \"node dist/server/server.bundle.js\"",
     "build": "webpack",
     "lint": "eslint"

@@ -18,5 +18,5 @@ getRoutes({ app, logger });
 app.use(serveStatic(config.client.path));
 
 app.listen(config.http.port, () => {
-  logger.info(`${config.server.name} listening on HTTP port ${config.http.port}`);
+  logger.debug(`${config.server.name} listening on HTTP port ${config.http.port}`);
 });

@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-import _merge from 'lodash/merge';
-import _isArray from 'lodash/isArray';
+import { merge, isArray } from 'lodash';
 import webpack from 'webpack';
 import config from 'config';
 
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackSourceMapSupportPlugin from 'webpack-source-map-support';
+import WebpackExternalModule from 'webpack-external-module';
 
 const mergeCustomiser = (a, b) => {
-  if (_isArray(a)) {
+  if (isArray(a)) {
     return a.concat(b);
   }
 };
@@ -57,7 +57,7 @@ const baseConfig = {
   devtool: 'eval-source-map'
 };
 
-const serverConfig = _merge({}, baseConfig, {
+const serverConfig = merge({}, baseConfig, {
   entry: {
     server: path.resolve(__dirname, 'src/server/index.js')
   },
@@ -72,7 +72,7 @@ const serverConfig = _merge({}, baseConfig, {
   externals: nodeModules
 }, mergeCustomiser);
 
-const clientConfig = _merge({}, baseConfig, {
+const clientConfig = merge({}, baseConfig, {
   entry: {
     client: path.resolve(__dirname, 'src/client/index.js')
   },
@@ -81,6 +81,11 @@ const clientConfig = _merge({}, baseConfig, {
     filename: '[name].bundle.js'
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: '[name]-bundle.js',
+      minChunks: module => WebpackExternalModule.isExternal(module)
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/client/index.html')
     })
