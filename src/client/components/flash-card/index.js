@@ -14,16 +14,27 @@ class FlashCard extends Component {
     this.flip = this.flip.bind(this);
   }
 
+  flip() {
+    this.setState({
+      flipped: !this.state.flipped
+    });
+  }
+
   render() {
     return (
       <div className={classNames(styles.flashCard, {
         [styles.flipped]: this.state.flipped
       })}>
-        <div className={styles.front}>
-          Front
+        <div className={classNames(styles.front, styles.face)}>
+          {this.props.front}
         </div>
-        <div className={styles.back}>
-          Back
+        <div className={classNames(styles.back, styles.face)}>
+          {this.props.back}
+        </div>
+        <div className={styles.controls}>
+          <button onClick={this.flip}>
+            Flip
+          </button>
         </div>
       </div>
     );

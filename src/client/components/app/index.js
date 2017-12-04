@@ -6,7 +6,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <FlashCard />
+        <FlashCard
+          front="Question"
+          back="Answer"
+        />
       </div>
     );
   }

@@ -5,6 +5,7 @@ import { merge, isArray } from 'lodash';
 import webpack from 'webpack';
 import config from 'config';
 
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackSourceMapSupportPlugin from 'webpack-source-map-support';
 import WebpackExternalModule from 'webpack-external-module';
@@ -32,7 +33,21 @@ const baseConfig = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                importLoaders: 1,
+                modules: true,
+                localIdentName: '[name]__[local]__[hash:base64:5]'
+              }
+            },
+            'sass-loader'
+          ]
+        })
       },
       {
         test: /\.png$/,
@@ -86,6 +101,7 @@ const clientConfig = merge({}, baseConfig, {
       filename: '[name]-bundle.js',
       minChunks: module => WebpackExternalModule.isExternal(module)
     }),
+    new ExtractTextPlugin('styles.css'),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/client/index.html')
     })
