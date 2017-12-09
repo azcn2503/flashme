@@ -1,0 +1,24 @@
+.subjectCard {
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-width: 0 0 1px 0;
+  display: flex;
+
+  .title {
+    display: flex;
+    flex-grow: 1;
+
+    .label {
+    }
+
+    .count {
+      margin-left: 10px;
+    }
+  }
+
+  .controls {
+    margin-left: 10px;
+    flex-shrink: 0;
+  }
+}

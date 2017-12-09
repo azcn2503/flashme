@@ -1,0 +1,16 @@
+.subjects {
+  width: 300px;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+
+  .list {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  .controls {
+    padding: 20px;
+    flex-shrink: 0;
+  }
+}

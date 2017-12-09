@@ -7,7 +7,7 @@ class Root extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Route path='/' component={App} />
+        <Route path="/" component={App} />
       </BrowserRouter>
     );
   }

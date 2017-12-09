@@ -1,15 +1,24 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-import FlashCard from '../flash-card';
+import Subjects from '../subjects/subjects';
+import Cards from '../cards/cards';
 
-class App extends Component {
+import styles from './index.scss';
+
+class App extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      subjects: [],
+      cards: []
+    };
+  }
+
   render() {
     return (
-      <div>
-        <FlashCard
-          front="Question"
-          back="Answer"
-        />
+      <div className={styles.app}>
+        <Subjects subjects={this.state.subjects} />
+        <Cards cards={this.state.cards} />
       </div>
     );
   }
