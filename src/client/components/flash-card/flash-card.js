@@ -86,6 +86,18 @@ class FlashCard extends PureComponent {
     return { question, answer };
   }
 
+  getQuestionMarkup() {
+    return {
+      __html: this.props.question
+    };
+  }
+
+  getAnswerMarkup() {
+    return {
+      __html: this.props.answer
+    };
+  }
+
   render() {
     return (
       <div className={classNames(styles.flashCard, {
@@ -103,9 +115,8 @@ class FlashCard extends PureComponent {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             ref={el => (this._question = el)}
-          >
-            { this.props.editable ? null : this.props.question }
-          </div>
+            dangerouslySetInnerHTML={this.getQuestionMarkup()}
+          />
           { !this.props.showBothSides ? (
             <div className={styles.controls}>
               <button onClick={this.flip}>
@@ -124,9 +135,8 @@ class FlashCard extends PureComponent {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             ref={el => (this._answer = el)}
-          >
-            { this.props.editable ? null : this.props.answer }
-          </div>
+            dangerouslySetInnerHTML={this.getAnswerMarkup()}
+          />
           { !this.props.showBothSides ? (
             <div className={styles.controls}>
               <button onClick={this.flip}>
