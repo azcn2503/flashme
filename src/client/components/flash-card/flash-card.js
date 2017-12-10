@@ -101,7 +101,8 @@ class FlashCard extends PureComponent {
   render() {
     return (
       <div className={classNames(styles.flashCard, {
-        [styles.flipped]: this.state.flipped,
+        [styles.editable]: this.props.editable,
+        [styles.flipped]: this.state.flipped && !this.props.showBothSides,
         [styles.showBothSides]: this.props.showBothSides
       })}
       >
