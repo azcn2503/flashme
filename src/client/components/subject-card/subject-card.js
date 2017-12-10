@@ -6,6 +6,24 @@ import PropTypes from 'prop-types';
 import styles from './subject-card.scss';
 
 class SubjectCard extends PureComponent {
+  renderLink() {
+    return (
+      <NavLink
+        to={`/subject/${this.props.id}`}
+      >
+        {this.props.title}
+      </NavLink>
+    );
+  }
+
+  renderTitle() {
+    return (
+      <div>
+        {this.props.title}
+      </div>
+    )
+  }
+
   render() {
     return (
       <div
@@ -15,11 +33,9 @@ class SubjectCard extends PureComponent {
       >
         <div className={styles.title}>
           <div className={styles.label}>
-            <NavLink
-              to={`/subject/${this.props.id}`}
-            >
-              {this.props.title}
-            </NavLink>
+            {
+              this.props.active ? this.renderTitle() : this.renderLink()
+            }
           </div>
           <div className={styles.count}>
             ({this.props.count})

@@ -21,14 +21,17 @@ class Cards extends PureComponent {
   }
 
   onChangeCard(key, value) {
-    console.log("Changing card", value);
+    console.log("Changing card", key, value);
+    this.props.updateCard(key, value);
   }
 
   onSubmitCard(key, value) {
     if (!key) {
       console.log("Creating new card", value);
+      this.props.addCard(value);
     } else {
-      console.log("Updating existing card", value);
+      console.log("Updating existing card", key, value);
+      this.props.updateCard(key, value);
     }
   }
 
@@ -40,22 +43,24 @@ class Cards extends PureComponent {
             {this.state.showBothSides ? "Show one side only" : "Show both sides"}
           </button>
         </div>
-        <FlashCard
-          onChange={value => this.onChangeCard(null, value)}
-          onSubmit={value => this.onSubmitCard(null, value)}
-          editable
-          showBothSides={this.state.showBothSides}
-        />
-        {
-          this.props.cards.map((card, key) => (
-            <FlashCard
-              key={key}
-              question={card.question}
-              answer={card.answer}
-              showBothSides={this.state.showBothSides}
-            />
-          ))
-        }
+        <div className={styles.cardList}>
+          <FlashCard
+            onChange={value => this.onChangeCard(null, value)}
+            onSubmit={value => this.onSubmitCard(null, value)}
+            editable
+            showBothSides={this.state.showBothSides}
+          />
+          {
+            this.props.cards.map((card, key) => (
+              <FlashCard
+                key={key}
+                question={card.question}
+                answer={card.answer}
+                showBothSides={this.state.showBothSides}
+              />
+            ))
+          }
+        </div>
       </div>
     );
   }
@@ -63,11 +68,15 @@ class Cards extends PureComponent {
 
 Cards.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
-  onChangeCard: PropTypes.func
+  addCard: PropTypes.func,
+  updateCard: PropTypes.func,
+  removeCard: PropTypes.func
 };
 
 Cards.defaultProps = {
-  onChangeCard: () => null
+  addCard: () => null,
+  updateCard: () => null,
+  removeCard: () => null
 };
 
 export default Cards;

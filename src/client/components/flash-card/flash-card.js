@@ -30,7 +30,9 @@ class FlashCard extends PureComponent {
       } else {
         this._question.focus();
       }
-      document.execCommand('selectAll', null, false);
+      if (this.props.editable) {
+        document.execCommand('selectAll', null, false);
+      }
     }
   }
 
@@ -102,6 +104,7 @@ class FlashCard extends PureComponent {
             onBlur={this.onBlur}
             ref={el => (this._question = el)}
           >
+            { this.props.editable ? null : this.props.question }
           </div>
           { !this.props.showBothSides ? (
             <div className={styles.controls}>
@@ -122,6 +125,7 @@ class FlashCard extends PureComponent {
             onBlur={this.onBlur}
             ref={el => (this._answer = el)}
           >
+            { this.props.editable ? null : this.props.answer }
           </div>
           { !this.props.showBothSides ? (
             <div className={styles.controls}>
