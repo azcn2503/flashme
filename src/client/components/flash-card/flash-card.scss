@@ -47,8 +47,6 @@
 }
 
 .question, .answer {
-  @extend .centered;
-
   outline: none;
   text-align: center;
   padding: 10px;

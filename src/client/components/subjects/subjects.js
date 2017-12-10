@@ -41,8 +41,9 @@ class Subjects extends PureComponent {
           {
             this.state.subjects.map((subject, key) => (
               <SubjectCard
+                id={key}
                 key={key}
-                label={subject.title}
+                title={subject.title}
               />
             ))
           }

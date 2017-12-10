@@ -1,3 +1,4 @@
+import path from 'path';
 import config from 'config';
 import express from 'express';
 import { getLogger } from 'log4js';
@@ -16,6 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 getRoutes({ app, logger });
 
 app.use(serveStatic(config.client.path));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(config.client.path, 'index.html'));
+});
 
 app.listen(config.http.port, () => {
   logger.debug(`${config.server.name} listening on HTTP port ${config.http.port}`);

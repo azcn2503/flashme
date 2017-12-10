@@ -39,21 +39,32 @@ class FlashCard extends PureComponent {
   }
 
   onBlur() {
-    this.setState({
-      focused: false
-    });
+    if (this.props.editable) {
+      this.props.onChange(this.value());
+      this.setState({
+        focused: false
+      });
+    }
   }
 
   onFocus() {
-    this.setState({
-      focused: true
-    });
+    if (this.props.editable) {
+      this.setState({
+        focused: true
+      });
+    }
   }
 
   onKeyDown(e) {
-    if (this.state.focused && e.keyCode === 9) {
-      e.preventDefault();
-      this.flip();
+    if (this.props.editable && this.state.focused) {
+      if (e.keyCode === 9) {
+        e.preventDefault();
+        this.flip();
+      }
+      if (e.metaKey && e.keyCode === 13) {
+        e.preventDefault();
+        this.submit();
+      }
     }
   }
 
@@ -61,6 +72,16 @@ class FlashCard extends PureComponent {
     this.setState({
       flipped: !this.state.flipped
     });
+  }
+
+  submit() {
+    this.props.onSubmit(this.value());
+  }
+
+  value() {
+    const question = this._question.innerHTML;
+    const answer = this._answer.innerHTML;
+    return { question, answer };
   }
 
   render() {
@@ -80,7 +101,6 @@ class FlashCard extends PureComponent {
             onBlur={this.onBlur}
             ref={el => (this._question = el)}
           >
-            {this.props.question}
           </div>
           <div className={styles.controls}>
             <button onClick={this.flip}>
@@ -99,7 +119,6 @@ class FlashCard extends PureComponent {
             onBlur={this.onBlur}
             ref={el => (this._answer = el)}
           >
-            {this.props.answer}
           </div>
           <div className={styles.controls}>
             <button onClick={this.flip}>
@@ -115,13 +134,17 @@ class FlashCard extends PureComponent {
 FlashCard.propTypes = {
   question: PropTypes.string,
   answer: PropTypes.string,
-  editable: PropTypes.bool
+  editable: PropTypes.bool,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func
 };
 
 FlashCard.defaultProps = {
   question: '',
   answer: '',
-  editable: false
+  editable: false,
+  onChange: () => null,
+  onSubmit: () => null
 };
 
 export default FlashCard;

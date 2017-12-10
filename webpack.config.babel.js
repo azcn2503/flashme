@@ -92,6 +92,7 @@ const clientConfig = merge({}, baseConfig, {
     client: path.resolve(__dirname, 'src/client/index.js')
   },
   output: {
+    publicPath: '/',
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].bundle.js'
   },

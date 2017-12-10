@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import styles from './subject-card.scss';
@@ -9,7 +10,11 @@ class SubjectCard extends PureComponent {
       <div className={styles.subjectCard}>
         <div className={styles.title}>
           <div className={styles.label} contentEditable>
-            {this.props.label}
+            <NavLink
+              to={`/subject/${this.props.id}`}
+            >
+              {this.props.title}
+            </NavLink>
           </div>
           <div className={styles.count}>
             ({this.props.count})
@@ -28,6 +33,7 @@ class SubjectCard extends PureComponent {
 }
 
 SubjectCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string,
   count: PropTypes.number
 };
