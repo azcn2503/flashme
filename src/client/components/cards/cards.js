@@ -16,6 +16,14 @@ class Cards extends PureComponent {
     this.onContinueTest = this.onContinueTest.bind(this);
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.test !== this.props.test && this.props.test) {
+      this.setState({
+        testCard: 0
+      });
+    }
+  }
+
   onClickShowBothSides() {
     this.setState({
       showBothSides: !this.state.showBothSides
@@ -43,24 +51,31 @@ class Cards extends PureComponent {
     });
   }
 
-  renderTestCard() {
-    return (
-      <div className={styles.testCard}>
-        { this.state.testCard < this.props.cards.length
-          ? (
+  renderTestContainer() {
+    if (this.state.testCard < this.props.cards.length) {
+      return (
+        <div className={styles.testContainer}>
+          <div className={styles.progressContainer}>
+            <div className={styles.progressBar} style={{ width: `${Math.floor(100 / this.props.cards.length * (this.state.testCard + 1))}%` }} />
+          </div>
+          <div className={styles.testStatus}>
+            Card {this.state.testCard + 1} of {this.props.cards.length}
+          </div>
+          <div className={styles.testCard}>
             <FlashCard
               question={this.props.cards[this.state.testCard].question}
               answer={this.props.cards[this.state.testCard].answer}
               onContinue={this.onContinueTest}
               test
             />
-          )
-          : (
-            <div>All done!</div>
-          )
-        }
-      </div>
-    );
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>Doneded</div>
+      );
+    }
   }
 
   renderCardList() {
@@ -94,7 +109,7 @@ class Cards extends PureComponent {
             {this.state.showBothSides ? 'Show one side only' : 'Show both sides'}
           </button>
         </div>
-        { this.props.test ? this.renderTestCard() : this.renderCardList() }
+        { this.props.test ? this.renderTestContainer() : this.renderCardList() }
       </div>
     );
   }
