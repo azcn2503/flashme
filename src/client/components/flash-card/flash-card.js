@@ -24,6 +24,11 @@ class FlashCard extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.test !== this.props.test) {
+      this.setState({
+        flipped: false
+      });
+    }
     if (this._question && this._answer && prevState.flipped !== this.state.flipped) {
       if (this.state.flipped) {
         this._answer.focus();
@@ -47,6 +52,11 @@ class FlashCard extends PureComponent {
         focused: false
       });
     }
+  }
+
+  onContinue(value) {
+    this.flip();
+    this.props.onContinue(value);
   }
 
   onFocus() {
@@ -98,9 +108,17 @@ class FlashCard extends PureComponent {
     };
   }
 
+  renderFeedbackControls() {
+    return ([
+      <button key={0} onClick={() => this.onContinue(true)}>Right</button>,
+      <button key={1} onClick={() => this.onContinue(false)}>Wrong</button>
+    ]);
+  }
+
   render() {
     return (
       <div className={classNames(styles.flashCard, {
+        [styles.test]: this.props.test,
         [styles.editable]: this.props.editable,
         [styles.flipped]: this.state.flipped && !this.props.showBothSides,
         [styles.showBothSides]: this.props.showBothSides
@@ -140,9 +158,13 @@ class FlashCard extends PureComponent {
           />
           { !this.props.showBothSides ? (
             <div className={styles.controls}>
-              <button onClick={this.flip}>
-                Show Question
-              </button>
+              {
+                this.props.test ? this.renderFeedbackControls() : (
+                  <button onClick={this.flip}>
+                    Show Question
+                  </button>
+                )
+              }
             </div>
           ) : null }
         </div>
@@ -157,7 +179,9 @@ FlashCard.propTypes = {
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
-  showBothSides: PropTypes.bool
+  showBothSides: PropTypes.bool,
+  test: PropTypes.bool,
+  onContinue: PropTypes.func
 };
 
 FlashCard.defaultProps = {
@@ -166,7 +190,9 @@ FlashCard.defaultProps = {
   editable: false,
   onChange: () => null,
   onSubmit: () => null,
-  showBothSides: false
+  showBothSides: false,
+  test: false,
+  onContinue: () => null
 };
 
 export default FlashCard;

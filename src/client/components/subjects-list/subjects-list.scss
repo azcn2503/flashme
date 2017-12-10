@@ -1,0 +1,13 @@
+.subjectsList {
+  width: 100%;
+
+  .list {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  .controls {
+    padding: 10px;
+    flex-shrink: 0;
+  }
+}

@@ -11,6 +11,13 @@
     padding: 20px;
   }
 
+  .testCard {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .controls {
     padding: 20px;
     display: flex;

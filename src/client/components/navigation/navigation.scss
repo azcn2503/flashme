@@ -1,0 +1,18 @@
+.navigation {
+  width: 300px;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-width: 0 1px 0 0;
+}
+
+.navItem {
+  padding: 10px;
+}
+
+.header {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, .1);
+  font-weight: bold;
+}

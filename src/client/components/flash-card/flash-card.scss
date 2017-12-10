@@ -29,6 +29,10 @@
     }
   }
 
+  &.test {
+    transform: scale(1.5);
+  }
+
   &:not(.showBothSides) {
     &.flipped .front {
       transform: rotateY(180deg);
@@ -89,4 +93,12 @@
   flex-shrink: 0;
   padding: 10px;
   z-index: 1;
+
+  > * {
+    margin-left: 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
