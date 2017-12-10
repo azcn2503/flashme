@@ -87,7 +87,8 @@ class FlashCard extends PureComponent {
   render() {
     return (
       <div className={classNames(styles.flashCard, {
-        [styles.flipped]: this.state.flipped
+        [styles.flipped]: this.state.flipped,
+        [styles.showBothSides]: this.props.showBothSides
       })}
       >
         <div className={classNames(styles.front, styles.face)}>
@@ -102,11 +103,13 @@ class FlashCard extends PureComponent {
             ref={el => (this._question = el)}
           >
           </div>
-          <div className={styles.controls}>
-            <button onClick={this.flip}>
-              Show Answer
-            </button>
-          </div>
+          { !this.props.showBothSides ? (
+            <div className={styles.controls}>
+              <button onClick={this.flip}>
+                Show Answer
+              </button>
+            </div>
+          ) : null}
         </div>
         <div className={classNames(styles.back, styles.face)}>
           <div className={styles.faceTitle}>
@@ -120,11 +123,13 @@ class FlashCard extends PureComponent {
             ref={el => (this._answer = el)}
           >
           </div>
-          <div className={styles.controls}>
-            <button onClick={this.flip}>
-              Show Question
-            </button>
-          </div>
+          { !this.props.showBothSides ? (
+            <div className={styles.controls}>
+              <button onClick={this.flip}>
+                Show Question
+              </button>
+            </div>
+          ) : null }
         </div>
       </div>
     );
@@ -136,7 +141,8 @@ FlashCard.propTypes = {
   answer: PropTypes.string,
   editable: PropTypes.bool,
   onChange: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  showBothSides: PropTypes.bool
 };
 
 FlashCard.defaultProps = {
@@ -144,7 +150,8 @@ FlashCard.defaultProps = {
   answer: '',
   editable: false,
   onChange: () => null,
-  onSubmit: () => null
+  onSubmit: () => null,
+  showBothSides: false
 };
 
 export default FlashCard;

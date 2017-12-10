@@ -15,6 +15,7 @@ class App extends PureComponent {
     };
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
+    this.renderSubjectsPanel = this.renderSubjectsPanel.bind(this);
   }
 
   renderCards(routerProps) {
@@ -29,10 +30,21 @@ class App extends PureComponent {
     );
   }
 
+  renderSubjectsPanel(routerProps) {
+    return (
+      <Subjects
+        subjects={this.state.subjects}
+        activeId={routerProps.match.params.id}
+      />
+    );
+  }
+
   render() {
     return (
       <div className={styles.app}>
-        <Subjects subjects={this.state.subjects} />
+        <Switch>
+          <Route path="/subject/:id" component={this.renderSubjectsPanel} />
+        </Switch>
         <Switch>
           <Route path="/cards" component={this.renderCards} />
           <Route path="/subject/:id" component={this.renderSubjectCards} />

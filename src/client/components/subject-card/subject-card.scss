@@ -5,6 +5,10 @@
   border-width: 0 0 1px 0;
   display: flex;
 
+  &.active {
+    background-color: rgba(0, 90, 180, .1);
+  }
+
   .title {
     display: flex;
     flex-grow: 1;

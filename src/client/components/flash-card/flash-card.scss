@@ -11,12 +11,24 @@
   width: 200px;
   height: 300px;
   display: flex;
+  flex-direction: column;
 
-  &.flipped .front {
-    transform: rotateY(180deg);
+  &.showBothSides {
+    .face {
+      position: relative;
+    }
+    .back {
+      transform: rotateY(0deg);
+    }
   }
-  &.flipped .back {
-    transform: rotateY(0deg);
+
+  &:not(.showBothSides) {
+    &.flipped .front {
+      transform: rotateY(180deg);
+    }
+    &.flipped .back {
+      transform: rotateY(0deg);
+    }
   }
 }
 

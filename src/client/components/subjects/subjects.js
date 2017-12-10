@@ -14,12 +14,22 @@ class Subjects extends PureComponent {
     this.onClickRemoveSubject = this.onClickRemoveSubject.bind(this);
   }
 
+  subjectTitle(input) {
+    return input;
+  }
+
+  subjectId(input) {
+    return input.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  }
+
   onClickAddSubject() {
+    const title = `Subject ${this.state.subjects.length + 1}`;
     this.setState({
       subjects: [
         ...this.state.subjects,
         {
-          title: 'New subject'
+          title: this.subjectTitle(title),
+          id: this.subjectId(title)
         }
       ]
     });
@@ -41,9 +51,10 @@ class Subjects extends PureComponent {
           {
             this.state.subjects.map((subject, key) => (
               <SubjectCard
-                id={key}
+                id={subject.id}
                 key={key}
                 title={subject.title}
+                active={subject.id === this.props.activeId}
               />
             ))
           }
