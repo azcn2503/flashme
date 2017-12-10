@@ -6,6 +6,12 @@ import PropTypes from 'prop-types';
 import styles from './subject-card.scss';
 
 class SubjectCard extends PureComponent {
+  getTitleMarkup() {
+    return {
+      __html: this.props.title
+    };
+  }
+
   renderLink() {
     return (
       <NavLink
@@ -18,10 +24,11 @@ class SubjectCard extends PureComponent {
 
   renderTitle() {
     return (
-      <div>
-        {this.props.title}
-      </div>
-    )
+      <div
+        contentEditable
+        dangerouslySetInnerHTML={this.getTitleMarkup()}
+      />
+    );
   }
 
   render() {
