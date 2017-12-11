@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import Subjects from '../subjects/subjects';
 import Cards from '../cards/cards';
 import Navigation from '../navigation/navigation';
 
@@ -12,17 +11,18 @@ class App extends PureComponent {
     super(props);
     this.state = {
       subjects: [],
-      cards: [],
-      tests: []
+      cards: []
     };
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
+    this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
     this.addSubject = this.addSubject.bind(this);
     this.removeSubject = this.removeSubject.bind(this);
     this.updateSubject = this.updateSubject.bind(this);
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
+    this.updateCard = this.updateCard.bind(this);
   }
 
   addCard(card, subjectId) {
@@ -43,11 +43,21 @@ class App extends PureComponent {
     });
   }
 
+  updateCard(index, card) {
+    this.setState({
+      cards: [
+        ...this.state.cards.slice(0, index),
+        Object.assign({}, this.state.cards[index], card),
+        ...this.state.cards.slice(index + 1)
+      ]
+    });
+  }
+
   updateSubject(index, subject) {
     this.setState({
       subjects: [
         ...this.state.subjects.slice(0, index),
-        subject,
+        Object.assign({}, this.state.subjects[index], subject),
         ...this.state.subjects.slice(index + 1)
       ]
     });
@@ -71,7 +81,7 @@ class App extends PureComponent {
     });
   }
 
-  renderCards(routerProps) {
+  renderCards() {
     return (
       <Cards
         cards={this.state.cards}
@@ -82,14 +92,24 @@ class App extends PureComponent {
   }
 
   renderSubjectCards(routerProps) {
-    const subjectId = routerProps.match.params.id;
-    const test = routerProps.match.params.type === 'test';
+    const { id: subjectId } = routerProps.match.params;
     return (
       <Cards
         cards={this.state.cards.filter(card => card.subjectId === subjectId)}
         addCard={card => this.addCard(card, subjectId)}
         removeCard={card => this.removeCard(card, subjectId)}
-        test={test}
+      />
+    );
+  }
+
+  renderSubjectTestCards(routerProps) {
+    const { id: subjectId } = routerProps.match.params;
+    return (
+      <Cards
+        cards={this.state.cards.filter(card => card.subjectId === subjectId)}
+        addCard={card => this.addCard(card, subjectId)}
+        removeCard={card => this.removeCard(card, subjectId)}
+        test
       />
     );
   }
@@ -127,7 +147,9 @@ class App extends PureComponent {
         </Switch>
         <Switch>
           <Route path="/cards" component={this.renderCards} exact />
-          <Route path="/subject/:id/:type" component={this.renderSubjectCards} exact />
+          <Route path="/subject/:id/view" component={this.renderSubjectCards} exact />
+          <Route path="/subject/:id/test" component={this.renderSubjectTestCards} exact />
+          <Route path="/tests" component={this.renderTests} exact />
           <Redirect from="*" to="/cards" />
         </Switch>
       </div>

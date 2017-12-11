@@ -52,7 +52,13 @@ class Cards extends PureComponent {
   }
 
   renderTestContainer() {
-    if (this.state.testCard < this.props.cards.length) {
+    if (this.props.cards.length === 0) {
+      return (
+        <div className={styles.testContainer}>
+          Nothing to test!
+        </div>
+      );
+    } else if (this.state.testCard < this.props.cards.length) {
       return (
         <div className={styles.testContainer}>
           <div className={styles.progressContainer}>
@@ -73,7 +79,9 @@ class Cards extends PureComponent {
       );
     } else {
       return (
-        <div>Doneded</div>
+        <div className={styles.testContainer}>
+          Test completed
+        </div>
       );
     }
   }
@@ -120,14 +128,16 @@ Cards.propTypes = {
   addCard: PropTypes.func,
   updateCard: PropTypes.func,
   removeCard: PropTypes.func,
-  test: PropTypes.bool
+  test: PropTypes.bool,
+  testName: PropTypes.string
 };
 
 Cards.defaultProps = {
   addCard: () => null,
   updateCard: () => null,
   removeCard: () => null,
-  test: false
+  test: false,
+  testName: 'Test'
 };
 
 export default Cards;
