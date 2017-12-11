@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { PureComponent } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import Cards from '../cards/cards';
-import Navigation from '../navigation/navigation';
+import Cards from "../cards/cards";
+import Navigation from "../navigation/navigation";
 
-import styles from './app.scss';
+import styles from "./app.scss";
 
 class App extends PureComponent {
   constructor(props) {
@@ -23,23 +23,21 @@ class App extends PureComponent {
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
     this.updateCard = this.updateCard.bind(this);
+    this.selectCard = this.selectCard.bind(this);
   }
 
   addCard(card, subjectId) {
     this.setState({
       cards: [
         ...this.state.cards,
-        Object.assign({}, card, { subjectId })
+        Object.assign({}, card, { subjectId, selected: false })
       ]
     });
   }
 
   addSubject(subject) {
     this.setState({
-      subjects: [
-        ...this.state.subjects,
-        subject
-      ]
+      subjects: [...this.state.subjects, subject]
     });
   }
 
@@ -51,6 +49,11 @@ class App extends PureComponent {
         ...this.state.cards.slice(index + 1)
       ]
     });
+  }
+
+  selectCard(index, selected) {
+    const card = this.state.cards[index];
+    this.updateCard(index, Object.assign({}, card, { selected }));
   }
 
   updateSubject(index, subject) {
@@ -87,6 +90,7 @@ class App extends PureComponent {
         cards={this.state.cards}
         addCard={this.addCard}
         removeCard={this.removeCard}
+        selectCard={this.selectCard}
       />
     );
   }
@@ -98,6 +102,7 @@ class App extends PureComponent {
         cards={this.state.cards.filter(card => card.subjectId === subjectId)}
         addCard={card => this.addCard(card, subjectId)}
         removeCard={card => this.removeCard(card, subjectId)}
+        selectCard={this.selectCard}
       />
     );
   }
@@ -109,6 +114,7 @@ class App extends PureComponent {
         cards={this.state.cards.filter(card => card.subjectId === subjectId)}
         addCard={card => this.addCard(card, subjectId)}
         removeCard={card => this.removeCard(card, subjectId)}
+        selectCard={this.selectCard}
         test
       />
     );
@@ -133,22 +139,22 @@ class App extends PureComponent {
     return (
       <div className={styles.app}>
         <Switch>
-          <Route
-            path="/cards"
-            component={this.renderNavigation}
-          />
-          <Route
-            path="/subject/:id"
-            component={this.renderNavigation}
-          />
-          <Route
-            component={this.renderNavigation}
-          />
+          <Route path="/cards" component={this.renderNavigation} />
+          <Route path="/subject/:id" component={this.renderNavigation} />
+          <Route component={this.renderNavigation} />
         </Switch>
         <Switch>
           <Route path="/cards" component={this.renderCards} exact />
-          <Route path="/subject/:id/view" component={this.renderSubjectCards} exact />
-          <Route path="/subject/:id/test" component={this.renderSubjectTestCards} exact />
+          <Route
+            path="/subject/:id/view"
+            component={this.renderSubjectCards}
+            exact
+          />
+          <Route
+            path="/subject/:id/test"
+            component={this.renderSubjectTestCards}
+            exact
+          />
           <Route path="/tests" component={this.renderTests} exact />
           <Redirect from="*" to="/cards" />
         </Switch>

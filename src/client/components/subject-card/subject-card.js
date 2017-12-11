@@ -34,7 +34,7 @@ class SubjectCard extends PureComponent {
 
   value() {
     if (this.el) {
-      return this.el.innerHTML;
+      return this.el.textContent;
     }
   }
 

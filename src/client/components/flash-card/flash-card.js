@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
 
-import styles from './flash-card.scss';
+import styles from "./flash-card.scss";
 
 class FlashCard extends PureComponent {
   constructor(props) {
@@ -17,10 +17,12 @@ class FlashCard extends PureComponent {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onClickFlip = this.onClickFlip.bind(this);
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener("keydown", this.onKeyDown);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,20 +31,35 @@ class FlashCard extends PureComponent {
         flipped: false
       });
     }
-    if (this._question && this._answer && prevState.flipped !== this.state.flipped) {
+    if (
+      this._question &&
+      this._answer &&
+      prevState.flipped !== this.state.flipped
+    ) {
       if (this.state.flipped) {
         this._answer.focus();
       } else {
         this._question.focus();
       }
       if (this.props.editable) {
-        document.execCommand('selectAll', null, false);
+        document.execCommand("selectAll", null, false);
       }
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener("keydown", this.onKeyDown);
+  }
+
+  onClick() {
+    if (!this.props.editable) {
+      this.props.onSelect(!this.props.selected);
+    }
+  }
+
+  onClickFlip(e) {
+    e.stopPropagation();
+    this.flip();
   }
 
   onBlur() {
@@ -103,31 +120,54 @@ class FlashCard extends PureComponent {
   }
 
   getAnswerMarkup() {
-    return {
-      __html: this.props.answer
-    };
+    if (!this.props.test || (this.props.test && this.state.flipped)) {
+      return {
+        __html: this.props.answer
+      };
+    } else {
+      return null;
+    }
   }
 
   renderFeedbackControls() {
-    return ([
-      <button key={0} onClick={() => this.onContinue(true)}>Right</button>,
-      <button key={1} onClick={() => this.onContinue(false)}>Wrong</button>
-    ]);
+    return [
+      <button key={0} onClick={() => this.onContinue(true)}>
+        Right
+      </button>,
+      <button key={1} onClick={() => this.onContinue(false)}>
+        Wrong
+      </button>
+    ];
+  }
+
+  renderControls() {
+    if (this.props.showBothSides) {
+      return null;
+    } else if (this.props.test && this.state.flipped) {
+      return this.renderFeedbackControls();
+    } else {
+      return <button onClick={this.onClickFlip}>Flip</button>;
+    }
   }
 
   render() {
     return (
-      <div className={classNames(styles.flashCard, {
-        [styles.test]: this.props.test,
-        [styles.editable]: this.props.editable,
-        [styles.flipped]: this.state.flipped && !this.props.showBothSides,
-        [styles.showBothSides]: this.props.showBothSides
-      })}
+      <div
+        className={classNames(styles.flashCard, {
+          [styles.selected]: this.props.selected,
+          [styles.animated]:
+            !this.props.showBothSides ||
+            (this.props.test && this.state.flipped),
+          [styles.test]: this.props.test,
+          [styles.editable]: this.props.editable,
+          [styles.selectable]: !this.props.editable && !this.props.test,
+          [styles.flipped]: this.state.flipped && !this.props.showBothSides,
+          [styles.showBothSides]: this.props.showBothSides
+        })}
+        onClick={this.onClick}
       >
         <div className={classNames(styles.front, styles.face)}>
-          <div className={styles.faceTitle}>
-            Question
-          </div>
+          <div className={styles.faceTitle}>Question</div>
           <div
             className={styles.question}
             contentEditable={this.props.editable}
@@ -136,18 +176,9 @@ class FlashCard extends PureComponent {
             ref={el => (this._question = el)}
             dangerouslySetInnerHTML={this.getQuestionMarkup()}
           />
-          { !this.props.showBothSides ? (
-            <div className={styles.controls}>
-              <button onClick={this.flip}>
-                Show Answer
-              </button>
-            </div>
-          ) : null}
         </div>
         <div className={classNames(styles.back, styles.face)}>
-          <div className={styles.faceTitle}>
-            Answer
-          </div>
+          <div className={styles.faceTitle}>Answer</div>
           <div
             className={styles.answer}
             contentEditable={this.props.editable}
@@ -156,18 +187,8 @@ class FlashCard extends PureComponent {
             ref={el => (this._answer = el)}
             dangerouslySetInnerHTML={this.getAnswerMarkup()}
           />
-          { !this.props.showBothSides ? (
-            <div className={styles.controls}>
-              {
-                this.props.test ? this.renderFeedbackControls() : (
-                  <button onClick={this.flip}>
-                    Show Question
-                  </button>
-                )
-              }
-            </div>
-          ) : null }
         </div>
+        <div className={styles.controls}>{this.renderControls()}</div>
       </div>
     );
   }
@@ -179,20 +200,24 @@ FlashCard.propTypes = {
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
+  onSelect: PropTypes.func,
   showBothSides: PropTypes.bool,
   test: PropTypes.bool,
-  onContinue: PropTypes.func
+  onContinue: PropTypes.func,
+  selected: PropTypes.bool
 };
 
 FlashCard.defaultProps = {
-  question: '',
-  answer: '',
+  question: "",
+  answer: "",
   editable: false,
   onChange: () => null,
   onSubmit: () => null,
+  onSelect: () => null,
   showBothSides: false,
   test: false,
-  onContinue: () => null
+  onContinue: () => null,
+  selected: false
 };
 
 export default FlashCard;

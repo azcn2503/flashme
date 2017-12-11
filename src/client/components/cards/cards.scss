@@ -6,7 +6,6 @@
   flex-direction: column;
 
   .cardList {
-    flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
@@ -48,9 +47,20 @@
   }
 
   .controls {
-    padding: 20px;
+    padding: 10px;
     display: flex;
+    justify-content: flex-end;
+  }
+
+  .filterContainer {
+    padding: 0;
     border: 1px solid rgba(0, 0, 0, .1);
     border-width: 0 0 1px 0;
+
+    .filter {
+      padding: 10px;
+      border: 0;
+      width: 100%;
+    }
   }
 }

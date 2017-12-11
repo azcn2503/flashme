@@ -14,6 +14,22 @@
   flex-direction: column;
   margin: 0 20px 20px 0;
 
+  &.selectable {
+    cursor: pointer;
+  }
+
+  &.selected {
+    .face {
+      background-color: rgba(0, 90, 180, .2);
+    }
+  }
+
+  &.animated {
+    .face {
+      @include transition(transform);
+    }
+  }
+
   &.showBothSides {
     .face {
       position: relative;
@@ -44,7 +60,6 @@
 }
 
 .face {
-  @include transition(transform);
   @include shadowed();
 
   display: flex;
@@ -93,6 +108,9 @@
   flex-shrink: 0;
   padding: 10px;
   z-index: 1;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 
   > * {
     margin-left: 10px;

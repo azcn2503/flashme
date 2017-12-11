@@ -1,14 +1,26 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 
-import SubjectCard from '../subject-card/subject-card';
+import SubjectCard from "../subject-card/subject-card";
 
-import styles from './subjects-list.scss';
+import styles from "./subjects-list.scss";
 
 class SubjectsList extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      filter: ""
+    };
     this.onClickAddSubject = this.onClickAddSubject.bind(this);
+    this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.filterSubject = this.filterSubject.bind(this);
+    this.renderSubject = this.renderSubject.bind(this);
+  }
+
+  onChangeFilter(e) {
+    this.setState({
+      filter: e.target.value
+    });
   }
 
   onClickAddSubject() {
@@ -24,30 +36,48 @@ class SubjectsList extends PureComponent {
   }
 
   subjectId(input) {
-    return input.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    return input.toLowerCase().replace(/[^a-z0-9]/g, "-");
+  }
+
+  filterSubject(subject) {
+    return subject.title
+      .toLowerCase()
+      .includes(this.state.filter.toLowerCase());
+  }
+
+  renderSubject(subject, key) {
+    return (
+      <SubjectCard
+        key={key}
+        id={subject.id}
+        title={subject.title}
+        active={subject.id === this.props.activeId}
+        count={
+          this.props.cards.filter(card => card.subjectId === subject.id).length
+        }
+        onChange={subject => this.props.updateSubject(key, subject)}
+      />
+    );
   }
 
   render() {
     return (
       <div className={styles.subjectsList}>
         <div className={styles.controls}>
-          <button onClick={this.onClickAddSubject}>
-            Add Subject
-          </button>
+          <button onClick={this.onClickAddSubject}>Add Subject</button>
+        </div>
+        <div className={styles.filterContainer}>
+          <input
+            className={styles.filter}
+            type="text"
+            placeholder="Filter subjects"
+            onChange={this.onChangeFilter}
+          />
         </div>
         <div className={styles.list}>
-          {
-            this.props.subjects.map((subject, key) => (
-              <SubjectCard
-                key={key}
-                id={subject.id}
-                title={subject.title}
-                active={subject.id === this.props.activeId}
-                count={this.props.cards.filter(card => card.subjectId === subject.id).length}
-                onChange={subject => this.props.updateSubject(key, subject)}
-              />
-            ))
-          }
+          {this.props.subjects
+            .filter(this.filterSubject)
+            .map(this.renderSubject)}
         </div>
       </div>
     );

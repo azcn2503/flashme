@@ -10,4 +10,14 @@
     padding: 10px;
     flex-shrink: 0;
   }
+
+  .filterContainer {
+    padding: 0;
+
+    .filter {
+      width: 100%;
+      padding: 10px;
+      border: 0;
+    }
+  }
 }

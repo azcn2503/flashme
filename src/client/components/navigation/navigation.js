@@ -16,9 +16,9 @@ class Navigation extends PureComponent {
       <div className={styles.navigation}>
         <div className={styles.header}>Cards</div>
         <Link className={styles.navItem} to="/cards">
-          All Cards
+          All Cards ({this.props.cards.length})
         </Link>
-        <div className={styles.header}>Subjects</div>
+        <div className={styles.header}>Subjects ({this.props.subjects.length})</div>
         <SubjectsList
           cards={this.props.cards}
           subjects={this.props.subjects}
