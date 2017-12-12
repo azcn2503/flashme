@@ -179,28 +179,28 @@ class Cards extends PureComponent {
   }
 
   renderControls() {
-    const controls = [];
     const selected = this.props.cards.filter(card => card.selected);
-    if (!this.props.test) {
-      controls.push(
-        <Button onClick={this.onClickShowBothSides} primary>
-          {this.state.showBothSides ? "Show one side only" : "Show both sides"}
-        </Button>
-      );
-    }
-    if (selected.length > 0) {
-      controls.push(
-        <Button>Do something with your {selected.length} cards</Button>
-      );
-    }
-    controls.push(this.renderFilters());
-    return controls;
+    return (
+      <div className={styles.controls}>
+        {!this.props.test ? (
+          <Button onClick={this.onClickShowBothSides} primary>
+            {this.state.showBothSides
+              ? "Show one side only"
+              : "Show both sides"}
+          </Button>
+        ) : null}
+        {selected.length > 0 ? (
+          <Button>Do something with your {selected.length} cards</Button>
+        ) : null}
+        {this.renderFilters()}
+      </div>
+    );
   }
 
   render() {
     return (
       <div className={styles.cards}>
-        <div className={styles.controls}>{this.renderControls()}</div>
+        {this.renderControls()}
         {this.props.test ? this.renderTestContainer() : this.renderCardList()}
       </div>
     );

@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import Cards from "../cards/cards";
 import Navigation from "../navigation/navigation";
+import SubjectTest from "../subject-test/subject-test";
 
 import styles from "./app.scss";
 
@@ -11,19 +13,31 @@ class App extends PureComponent {
     super(props);
     this.state = {
       subjects: [],
-      cards: []
+      cards: [],
+      routerAction: null
     };
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
     this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
+    this.renderNewSubjectTest = this.renderNewSubjectTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
     this.addSubject = this.addSubject.bind(this);
+    this.addSubjectTest = this.addSubjectTest.bind(this);
     this.removeSubject = this.removeSubject.bind(this);
     this.updateSubject = this.updateSubject.bind(this);
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
     this.updateCard = this.updateCard.bind(this);
     this.selectCard = this.selectCard.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.routerAction !== prevState.routerAction && this.state.routerAction !== null) {
+      this.state.routerAction();
+      this.setState({
+        routerAction: null
+      });
+    }
   }
 
   addCard(card, subjectId) {
@@ -37,8 +51,44 @@ class App extends PureComponent {
 
   addSubject(subject) {
     this.setState({
-      subjects: [...this.state.subjects, subject]
+      subjects: [
+        ...this.state.subjects,
+        Object.assign({}, subject, { tests: [] })
+      ]
     });
+  }
+
+  addSubjectTest(subjectId) {
+    if (this.state.subjects.find(subject => subject.id === subjectId)) {
+      this.setState({
+        routerAction: () =>
+          this.props.history.push(
+            `/subject/${subjectId}/test/${
+              this.state.subjects.find(subject => subject.id === subjectId).tests
+                .length
+            }`
+          ),
+        subjects: this.state.subjects.map(subject => {
+          if (subject.id === subjectId) {
+            return {
+              ...subject,
+              tests: [
+                ...subject.tests,
+                {
+                  cards: [
+                    ...this.state.cards.filter(
+                      card => card.subjectId === subjectId
+                    )
+                  ]
+                }
+              ]
+            };
+          } else {
+            return subject;
+          }
+        })
+      });
+    }
   }
 
   updateCard(index, card) {
@@ -104,7 +154,7 @@ class App extends PureComponent {
   }
 
   renderSubjectCards(routerProps) {
-    const { id: subjectId } = routerProps.match.params;
+    const { subjectId } = routerProps.match.params;
     if (this.state.subjects.find(subject => subject.id === subjectId)) {
       return (
         <Cards
@@ -121,7 +171,7 @@ class App extends PureComponent {
   }
 
   renderSubjectTestCards(routerProps) {
-    const { id: subjectId } = routerProps.match.params;
+    const { subjectId } = routerProps.match.params;
     return (
       <Cards
         cards={this.getSubjectCards(subjectId)}
@@ -130,6 +180,11 @@ class App extends PureComponent {
         test
       />
     );
+  }
+
+  renderNewSubjectTest(routerProps) {
+    const { subjectId } = routerProps.match.params;
+    return <SubjectTest action={this.addSubjectTest} subjectId={subjectId} />;
   }
 
   renderNavigation(routerProps) {
@@ -158,12 +213,17 @@ class App extends PureComponent {
         <Switch>
           <Route path="/cards" component={this.renderCards} exact />
           <Route
-            path="/subject/:id/view"
+            path="/subject/:subjectId/view"
             component={this.renderSubjectCards}
             exact
           />
           <Route
-            path="/subject/:id/test"
+            path="/subject/:subjectId/test"
+            component={this.renderNewSubjectTest}
+            exact
+          />
+          <Route
+            path="/subject/:subjectId/test/:testId"
             component={this.renderSubjectTestCards}
             exact
           />
@@ -174,5 +234,11 @@ class App extends PureComponent {
     );
   }
 }
+
+App.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
+};
 
 export default App;

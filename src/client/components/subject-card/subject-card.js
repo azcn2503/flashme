@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import Button from "../button/button";
+
 import styles from './subject-card.scss';
 
 class SubjectCard extends PureComponent {
@@ -77,12 +79,12 @@ class SubjectCard extends PureComponent {
           </div>
         </div>
         <div className={styles.controls}>
-          <button
+          <Button
             disabled={this.props.count === 0}
             onClick={this.onClickTest}
           >
             Test
-          </button>
+          </Button>
         </div>
       </div>
     );

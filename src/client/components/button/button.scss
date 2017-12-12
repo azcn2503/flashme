@@ -29,6 +29,15 @@
     }
   }
 
+  &.disabled {
+    cursor: not-allowed;
+    color: rgba(0, 0, 0, .5);
+
+    &:hover {
+      background-color: $light-grey;
+    }
+  }
+
   &:last-child {
     margin-right: 0;
   }
