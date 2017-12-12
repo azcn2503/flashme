@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
+import Button from "../button/button";
+
 import styles from "./flash-card.scss";
 
 class FlashCard extends PureComponent {
@@ -85,7 +87,22 @@ class FlashCard extends PureComponent {
   }
 
   onKeyDown(e) {
-    if (this.props.editable && this.state.focused) {
+    if (this.props.test) {
+      if (e.keyCode === 9) { // Tab
+        if (this.state.flipped) {
+          e.preventDefault();
+          this.onContinue(false);
+        } else {
+          e.preventDefault();
+          this.flip();
+        }
+      } else if (e.keyCode === 13) { // Enter
+        if (this.state.flipped) {
+          e.preventDefault();
+          this.onContinue(true);
+        }
+      }
+    } else if (this.props.editable && this.state.focused) {
       if (e.keyCode === 9) {
         e.preventDefault();
         this.flip();
@@ -131,12 +148,12 @@ class FlashCard extends PureComponent {
 
   renderFeedbackControls() {
     return [
-      <button key={0} onClick={() => this.onContinue(true)}>
+      <Button key={0} onClick={() => this.onContinue(true)} primary>
         Right
-      </button>,
-      <button key={1} onClick={() => this.onContinue(false)}>
+      </Button>,
+      <Button key={1} onClick={() => this.onContinue(false)}>
         Wrong
-      </button>
+      </Button>
     ];
   }
 
@@ -146,7 +163,7 @@ class FlashCard extends PureComponent {
     } else if (this.props.test && this.state.flipped) {
       return this.renderFeedbackControls();
     } else {
-      return <button onClick={this.onClickFlip}>Flip</button>;
+      return <Button onClick={this.onClickFlip}>Flip</Button>;
     }
   }
 

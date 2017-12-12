@@ -1,0 +1,29 @@
+@import "../../styles/tools.scss";
+
+.filterBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .input {
+    flex-grow: 1;
+    border: 0;
+    outline: none;
+    padding: 10px;
+  }
+
+  .summary {
+    pointer-events: none;
+    transition-property: none;
+    position: absolute;
+    opacity: 0;
+    right: 10px;
+
+    &.visible {
+      @include transition(opacity);
+      opacity: .2;
+    }
+  }
+}

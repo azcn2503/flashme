@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 import SubjectCard from "../subject-card/subject-card";
+import FilterBox from "../filter-box/filter-box";
+import Button from "../button/button";
 
 import styles from "./subjects-list.scss";
 
@@ -64,16 +66,15 @@ class SubjectsList extends PureComponent {
     return (
       <div className={styles.subjectsList}>
         <div className={styles.controls}>
-          <button onClick={this.onClickAddSubject}>Add Subject</button>
+          <Button onClick={this.onClickAddSubject} primary>Add Subject</Button>
         </div>
-        <div className={styles.filterContainer}>
-          <input
-            className={styles.filter}
-            type="text"
-            placeholder="Filter subjects"
-            onChange={this.onChangeFilter}
-          />
-        </div>
+        <FilterBox
+          value={this.state.filter}
+          onChange={this.onChangeFilter}
+          totalCount={this.props.subjects.length}
+          filteredCount={this.props.subjects.filter(this.filterSubject).length}
+          type="subjects"
+        />
         <div className={styles.list}>
           {this.props.subjects
             .filter(this.filterSubject)

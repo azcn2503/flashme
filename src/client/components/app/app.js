@@ -84,6 +84,14 @@ class App extends PureComponent {
     });
   }
 
+  getSelectedCards() {
+    return this.state.cards.filter(card => card.selected);
+  }
+
+  getSubjectCards(subjectId) {
+    return this.state.cards.filter(card => card.subjectId === subjectId);
+  }
+
   renderCards() {
     return (
       <Cards
@@ -97,24 +105,28 @@ class App extends PureComponent {
 
   renderSubjectCards(routerProps) {
     const { id: subjectId } = routerProps.match.params;
-    return (
-      <Cards
-        cards={this.state.cards.filter(card => card.subjectId === subjectId)}
-        addCard={card => this.addCard(card, subjectId)}
-        removeCard={card => this.removeCard(card, subjectId)}
-        selectCard={this.selectCard}
-      />
-    );
+    if (this.state.subjects.find(subject => subject.id === subjectId)) {
+      return (
+        <Cards
+          cards={this.getSubjectCards(subjectId)}
+          addCard={card => this.addCard(card, subjectId)}
+          removeCard={card => this.removeCard(card, subjectId)}
+          selectCard={this.selectCard}
+        />
+      );
+    } else {
+      this.props.history.push("/cards");
+      return null;
+    }
   }
 
   renderSubjectTestCards(routerProps) {
     const { id: subjectId } = routerProps.match.params;
     return (
       <Cards
-        cards={this.state.cards.filter(card => card.subjectId === subjectId)}
+        cards={this.getSubjectCards(subjectId)}
         addCard={card => this.addCard(card, subjectId)}
         removeCard={card => this.removeCard(card, subjectId)}
-        selectCard={this.selectCard}
         test
       />
     );

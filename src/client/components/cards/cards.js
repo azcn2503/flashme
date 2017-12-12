@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 import FlashCard from "../flash-card/flash-card";
+import FilterBox from "../filter-box/filter-box";
+import Button from "../button/button";
 
 import styles from "./cards.scss";
 
@@ -11,7 +13,8 @@ class Cards extends PureComponent {
     this.state = {
       filter: "",
       showBothSides: false,
-      testCard: 0
+      testCard: 0,
+      correct: 0
     };
     this.onClickShowBothSides = this.onClickShowBothSides.bind(this);
     this.onContinueTest = this.onContinueTest.bind(this);
@@ -59,7 +62,8 @@ class Cards extends PureComponent {
 
   onContinueTest(status) {
     this.setState({
-      testCard: this.state.testCard + 1
+      testCard: this.state.testCard + 1,
+      correct: status ? this.state.correct + 1 : this.state.correct
     });
   }
 
@@ -78,6 +82,15 @@ class Cards extends PureComponent {
                 )}%`
               }}
             />
+            <div className={styles.progressSummary}>
+              {this.state.testCard > 0 ? (
+                <div>
+                  {this.state.correct} of {this.state.testCard} ({Math.floor(
+                    100 / this.state.testCard * this.state.correct
+                  )}%)
+                </div>
+              ) : null}
+            </div>
           </div>
           <div className={styles.testStatus}>
             Card {this.state.testCard + 1} of {this.props.cards.length}
@@ -93,8 +106,25 @@ class Cards extends PureComponent {
         </div>
       );
     } else {
-      return <div className={styles.testContainer}>Test completed</div>;
+      return (
+        <div className={styles.testContainer}>
+          Test completed - you scored {this.state.correct} of{" "}
+          {this.state.testCard} ({Math.floor(
+            100 / this.state.testCard * this.state.correct
+          )}%)
+          {this.renderPostTestActions()}
+        </div>
+      );
     }
+  }
+
+  renderPostTestActions() {
+    return (
+      <div className={styles.postTestActions}>
+        <Button primary>Why am I so bad?</Button>
+        <Button>Why am I so amazing?</Button>
+      </div>
+    );
   }
 
   filterCard(card) {
@@ -135,14 +165,13 @@ class Cards extends PureComponent {
   renderFilters() {
     if (!this.props.test) {
       return (
-        <div className={styles.filterContainer}>
-          <input
-            className={styles.filter}
-            type="text"
-            placeholder="Filter cards"
-            onChange={this.onChangeFilter}
-          />
-        </div>
+        <FilterBox
+          onChange={this.onChangeFilter}
+          value={this.state.filter}
+          type="cards"
+          totalCount={this.props.cards.length}
+          filteredCount={this.props.cards.filter(this.filterCard).length}
+        />
       );
     } else {
       return null;
@@ -154,18 +183,17 @@ class Cards extends PureComponent {
     const selected = this.props.cards.filter(card => card.selected);
     if (!this.props.test) {
       controls.push(
-        <button onClick={this.onClickShowBothSides}>
+        <Button onClick={this.onClickShowBothSides} primary>
           {this.state.showBothSides ? "Show one side only" : "Show both sides"}
-        </button>
+        </Button>
       );
     }
     if (selected.length > 0) {
       controls.push(
-        <button>
-          Do something with your {selected.length} cards
-        </button>
+        <Button>Do something with your {selected.length} cards</Button>
       );
     }
+    controls.push(this.renderFilters());
     return controls;
   }
 
@@ -173,7 +201,6 @@ class Cards extends PureComponent {
     return (
       <div className={styles.cards}>
         <div className={styles.controls}>{this.renderControls()}</div>
-        {this.renderFilters()}
         {this.props.test ? this.renderTestContainer() : this.renderCardList()}
       </div>
     );

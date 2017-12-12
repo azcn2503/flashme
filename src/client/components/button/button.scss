@@ -1,0 +1,35 @@
+@import "../../styles/variables.scss";
+@import "../../styles/tools.scss";
+
+.button {
+  @include transition(background-color);
+
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: $light-grey;
+  color: black;
+  border: 0;
+  border-radius: 2px;
+  outline: none;
+  font-size: inherit;
+  margin-right: 10px;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: lighten($light-grey, 10%);
+  }
+
+  &.primary {
+    color: white;
+    font-weight: bold;
+    background-color: $primary-color;
+
+    &:hover {
+      background-color: lighten($primary-color, 10%);
+    }
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
