@@ -1,14 +1,26 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import React, { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 
-import App from 'client/components/app/app';
+import rootReducer from "../../state/reducers";
+
+import App from "client/components/app/app";
 
 class Root extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <Route path="/" component={App} />
-      </BrowserRouter>
+      <Provider
+        store={createStore(
+          rootReducer,
+          window.__REDUX_DEVTOOLS_EXTENSION__ &&
+            window.__REDUX_DEVTOOLS_EXTENSION__()
+        )}
+      >
+        <BrowserRouter>
+          <Route path="/" component={App} />
+        </BrowserRouter>
+      </Provider>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 
@@ -9,6 +10,12 @@ import SubjectTest from "../subject-test/subject-test";
 import styles from "./app.scss";
 
 class App extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      cards: state.cards
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +39,10 @@ class App extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.routerAction !== prevState.routerAction && this.state.routerAction !== null) {
+    if (
+      this.state.routerAction !== prevState.routerAction &&
+      this.state.routerAction !== null
+    ) {
       this.state.routerAction();
       this.setState({
         routerAction: null
@@ -64,8 +74,8 @@ class App extends PureComponent {
         routerAction: () =>
           this.props.history.push(
             `/subject/${subjectId}/test/${
-              this.state.subjects.find(subject => subject.id === subjectId).tests
-                .length
+              this.state.subjects.find(subject => subject.id === subjectId)
+                .tests.length
             }`
           ),
         subjects: this.state.subjects.map(subject => {
@@ -241,4 +251,4 @@ App.propTypes = {
   })
 };
 
-export default App;
+export default connect(App.mapStateToProps)(App);

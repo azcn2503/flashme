@@ -89,7 +89,8 @@ class FlashCard extends PureComponent {
   onKeyDown(e) {
     const modifierKey = e.metaKey || e.ctrlKey;
     if (this.props.test) {
-      if (e.keyCode === 9) { // Tab
+      if (e.keyCode === 9) {
+        // Tab
         if (this.state.flipped) {
           e.preventDefault();
           this.onContinue(false);
@@ -97,7 +98,8 @@ class FlashCard extends PureComponent {
           e.preventDefault();
           this.flip();
         }
-      } else if (e.keyCode === 13) { // Enter
+      } else if (e.keyCode === 13) {
+        // Enter
         if (this.state.flipped) {
           e.preventDefault();
           this.onContinue(true);

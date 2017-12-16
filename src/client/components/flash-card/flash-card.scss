@@ -1,5 +1,5 @@
-@import '../../styles/variables.scss';
-@import '../../styles/tools.scss';
+@import "../../styles/variables.scss";
+@import "../../styles/tools.scss";
 
 .centered {
   display: flex;
@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   margin: 0 20px 20px 0;
-  border: 1px solid rgba(0, 0, 0, .1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: $box-shadow-small;
   background-color: white;
 
@@ -66,14 +66,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: .05;
+    opacity: 0.05;
     font-size: 3em;
     font-family: serif;
     pointer-events: none;
   }
 }
 
-.question, .answer {
+.question,
+.answer {
   outline: none;
   text-align: center;
   padding: 10px;
