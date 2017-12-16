@@ -1,13 +1,23 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import SubjectCard from "../subject-card/subject-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 
+import { addSubject } from "../../state/actions/subjects";
+
 import styles from "./subjects-list.scss";
 
 class SubjectsList extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      subjects: state.subjects.subjects,
+      cards: state.cards.cards
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,11 +36,7 @@ class SubjectsList extends PureComponent {
   }
 
   onClickAddSubject() {
-    const title = `Subject ${this.props.subjects.length + 1}`;
-    this.props.addSubject({
-      title: this.subjectTitle(title),
-      id: this.subjectId(title)
-    });
+    this.props.dispatch(addSubject());
   }
 
   subjectTitle(input) {
@@ -66,7 +72,9 @@ class SubjectsList extends PureComponent {
     return (
       <div className={styles.subjectsList}>
         <div className={styles.controls}>
-          <Button onClick={this.onClickAddSubject} primary>Add Subject</Button>
+          <Button onClick={this.onClickAddSubject} primary>
+            Add Subject
+          </Button>
         </div>
         <FilterBox
           value={this.state.filter}
@@ -93,4 +101,4 @@ SubjectsList.propTypes = {
   updateSubject: PropTypes.func
 };
 
-export default SubjectsList;
+export default connect(SubjectsList.mapStateToProps)(SubjectsList);

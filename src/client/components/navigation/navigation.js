@@ -10,13 +10,9 @@ import styles from "./navigation.scss";
 class Navigation extends PureComponent {
   static mapStateToProps(state) {
     return {
-      cards: state.cards,
-      subjects: state.subjects
+      cards: state.cards.cards,
+      subjects: state.subjects.subjects
     };
-  }
-
-  constructor(props) {
-    super(props);
   }
 
   render() {
@@ -29,14 +25,7 @@ class Navigation extends PureComponent {
         <div className={styles.header}>
           Subjects ({this.props.subjects.length})
         </div>
-        <SubjectsList
-          cards={this.props.cards}
-          subjects={this.props.subjects}
-          activeId={this.props.routerProps.match.params.id}
-          addSubject={this.props.addSubject}
-          removeSubject={this.props.removeSubject}
-          updateSubject={this.props.updateSubject}
-        />
+        <SubjectsList activeId={this.props.routerProps.match.params.id} />
       </div>
     );
   }

@@ -7,15 +7,13 @@ import Cards from "../cards/cards";
 import Navigation from "../navigation/navigation";
 import SubjectTest from "../subject-test/subject-test";
 
-import { addCard, removeCard, updateCard } from "../../state/actions/cards";
-
 import styles from "./app.scss";
 
 class App extends PureComponent {
   static mapStateToProps(state) {
     return {
-      cards: state.cards,
-      subjects: state.subjects
+      cards: state.cards.cards,
+      subjects: state.subjects.subjects
     };
   }
 
@@ -26,16 +24,9 @@ class App extends PureComponent {
     };
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
-    this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
+    // this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
     this.renderNewSubjectTest = this.renderNewSubjectTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
-    this.addSubject = this.addSubject.bind(this);
-    this.addSubjectTest = this.addSubjectTest.bind(this);
-    this.removeSubject = this.removeSubject.bind(this);
-    this.updateSubject = this.updateSubject.bind(this);
-    this.addCard = this.addCard.bind(this);
-    this.removeCard = this.removeCard.bind(this);
-    this.updateCard = this.updateCard.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -50,131 +41,24 @@ class App extends PureComponent {
     }
   }
 
-  addCard(card, subjectId) {
-    this.props.dispatch(addCard(Object.assign({}, card, { subjectId })));
-  }
-
-  addSubject(subject) {
-    this.setState({
-      subjects: [
-        ...this.state.subjects,
-        Object.assign({}, subject, { tests: [] })
-      ]
-    });
-  }
-
-  addSubjectTest(subjectId) {
-    if (this.state.subjects.find(subject => subject.id === subjectId)) {
-      this.setState({
-        routerAction: () =>
-          this.props.history.push(
-            `/subject/${subjectId}/test/${
-              this.state.subjects.find(subject => subject.id === subjectId)
-                .tests.length
-            }`
-          ),
-        subjects: this.state.subjects.map(subject => {
-          if (subject.id === subjectId) {
-            return {
-              ...subject,
-              tests: [
-                ...subject.tests,
-                {
-                  cards: [
-                    ...this.state.cards.filter(
-                      card => card.subjectId === subjectId
-                    )
-                  ]
-                }
-              ]
-            };
-          } else {
-            return subject;
-          }
-        })
-      });
-    }
-  }
-
-  updateCard(index, card) {
-    this.props.dispatch(updateCard(index, card));
-  }
-
-  updateSubject(index, subject) {
-    this.setState({
-      subjects: [
-        ...this.state.subjects.slice(0, index),
-        Object.assign({}, this.state.subjects[index], subject),
-        ...this.state.subjects.slice(index + 1)
-      ]
-    });
-  }
-
-  removeCard(index) {
-    this.setState({
-      cards: [
-        ...this.state.cards.slice(0, index),
-        ...this.state.cards.slice(index + 1)
-      ]
-    });
-  }
-
-  removeSubject(index) {
-    this.setState({
-      subjects: [
-        ...this.state.subjects.slice(0, index),
-        ...this.state.subjects.slice(index + 1)
-      ]
-    });
-  }
-
-  getSelectedCards() {
-    return this.state.cards.filter(card => card.selected);
-  }
-
-  getSubjectCards(subjectId) {
-    return this.state.cards.filter(card => card.subjectId === subjectId);
-  }
-
   renderCards() {
-    return (
-      <Cards
-        cards={this.state.cards}
-        addCard={this.addCard}
-        removeCard={this.removeCard}
-        selectCard={this.selectCard}
-      />
-    );
+    return <Cards dispatch={this.props.dispatch} />;
   }
 
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
-    if (this.state.subjects.find(subject => subject.id === subjectId)) {
-      return (
-        <Cards
-          cards={this.getSubjectCards(subjectId)}
-          addCard={card => this.addCard(card, subjectId)}
-          removeCard={card => this.removeCard(card, subjectId)}
-          selectCard={this.selectCard}
-        />
-      );
+    if (this.props.subjects.find(subject => subject.id === subjectId)) {
+      return <Cards dispatch={this.props.dispatch} subjectId={subjectId} />;
     } else {
       this.props.history.push("/cards");
       return null;
     }
   }
 
-  renderSubjectTestCards(routerProps) {
-    const { subjectId } = routerProps.match.params;
-    return (
-      <Cards
-        cards={this.getSubjectCards(subjectId)}
-        addCard={card => this.addCard(card, subjectId)}
-        removeCard={card => this.removeCard(card, subjectId)}
-        test
-      />
-    );
-  }
+  // renderSubjectTestCards(routerProps) {
+  //   const { subjectId } = routerProps.match.params;
+  //   return <Cards cards={this.getSubjectCards(subjectId)} test />;
+  // }
 
   renderNewSubjectTest(routerProps) {
     const { subjectId } = routerProps.match.params;
@@ -183,14 +67,7 @@ class App extends PureComponent {
 
   renderNavigation(routerProps) {
     return (
-      <Navigation
-        routerProps={routerProps}
-        addCard={this.addCard}
-        removeCard={this.removeCard}
-        addSubject={this.addSubject}
-        removeSubject={this.removeSubject}
-        updateSubject={this.updateSubject}
-      />
+      <Navigation dispatch={this.props.dispatch} routerProps={routerProps} />
     );
   }
 
@@ -214,11 +91,11 @@ class App extends PureComponent {
             component={this.renderNewSubjectTest}
             exact
           />
-          <Route
+          {/* <Route
             path="/subject/:subjectId/test/:testId"
             component={this.renderSubjectTestCards}
             exact
-          />
+          /> */}
           <Route path="/tests" component={this.renderTests} exact />
           <Redirect from="*" to="/cards" />
         </Switch>
