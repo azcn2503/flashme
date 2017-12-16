@@ -6,7 +6,12 @@ import FlashCard from "../flash-card/flash-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 
-import { addCard, removeCard, updateCard } from "../../state/actions/cards";
+import {
+  addCard,
+  addSubjectCard,
+  removeCard,
+  updateCard
+} from "../../state/actions/cards";
 
 import styles from "./cards.scss";
 
@@ -45,6 +50,10 @@ class Cards extends PureComponent {
     this.props.dispatch(addCard(card));
   }
 
+  addSubjectCard(card) {
+    this.props.dispatch(addSubjectCard(card, this.props.subjectId));
+  }
+
   onClickShowBothSides() {
     this.setState({
       showBothSides: !this.state.showBothSides
@@ -67,7 +76,11 @@ class Cards extends PureComponent {
 
   onSubmitCard(key, value) {
     if (!key) {
-      this.addCard(value);
+      if (this.props.subjectId) {
+        this.addSubjectCard(value);
+      } else {
+        this.addCard(value);
+      }
     } else {
       this.updateCard(key, value);
     }
@@ -227,7 +240,8 @@ Cards.propTypes = {
   removeCard: PropTypes.func,
   selectCard: PropTypes.func,
   test: PropTypes.bool,
-  testName: PropTypes.string
+  testName: PropTypes.string,
+  subjectId: PropTypes.string
 };
 
 Cards.defaultProps = {

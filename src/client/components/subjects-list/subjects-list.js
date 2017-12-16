@@ -61,7 +61,8 @@ class SubjectsList extends PureComponent {
         title={subject.title}
         active={subject.id === this.props.activeId}
         count={
-          this.props.cards.filter(card => card.subjectId === subject.id).length
+          this.props.cards.filter(card => card.subjects.includes(subject.id))
+            .length
         }
         onChange={subject => this.props.updateSubject(key, subject)}
       />
