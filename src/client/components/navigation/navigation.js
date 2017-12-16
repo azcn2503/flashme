@@ -1,12 +1,20 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { Switch, Route, Link } from 'react-router-dom';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { Switch, Route, Link } from "react-router-dom";
 
-import SubjectsList from '../subjects-list/subjects-list';
+import SubjectsList from "../subjects-list/subjects-list";
 
-import styles from './navigation.scss';
+import styles from "./navigation.scss";
 
 class Navigation extends PureComponent {
+  static mapStateToProps(state) {
+    console.log(state);
+    return {
+      cards: state.cards
+    };
+  }
+
   constructor(props) {
     super(props);
   }
@@ -18,7 +26,9 @@ class Navigation extends PureComponent {
         <Link className={styles.navItem} to="/cards">
           All Cards ({this.props.cards.length})
         </Link>
-        <div className={styles.header}>Subjects ({this.props.subjects.length})</div>
+        <div className={styles.header}>
+          Subjects ({this.props.subjects.length})
+        </div>
         <SubjectsList
           cards={this.props.cards}
           subjects={this.props.subjects}
@@ -41,4 +51,4 @@ Navigation.propTypes = {
   routerProps: PropTypes.object
 };
 
-export default Navigation;
+export default connect(Navigation.mapStateToProps)(Navigation);

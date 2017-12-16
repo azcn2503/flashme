@@ -7,6 +7,8 @@ import Cards from "../cards/cards";
 import Navigation from "../navigation/navigation";
 import SubjectTest from "../subject-test/subject-test";
 
+import { addCard, removeCard, updateCard } from "../../state/actions/cards";
+
 import styles from "./app.scss";
 
 class App extends PureComponent {
@@ -20,7 +22,6 @@ class App extends PureComponent {
     super(props);
     this.state = {
       subjects: [],
-      cards: [],
       routerAction: null
     };
     this.renderCards = this.renderCards.bind(this);
@@ -51,12 +52,7 @@ class App extends PureComponent {
   }
 
   addCard(card, subjectId) {
-    this.setState({
-      cards: [
-        ...this.state.cards,
-        Object.assign({}, card, { subjectId, selected: false })
-      ]
-    });
+    this.props.dispatch(addCard(Object.assign({}, card, { subjectId })));
   }
 
   addSubject(subject) {
@@ -102,18 +98,7 @@ class App extends PureComponent {
   }
 
   updateCard(index, card) {
-    this.setState({
-      cards: [
-        ...this.state.cards.slice(0, index),
-        Object.assign({}, this.state.cards[index], card),
-        ...this.state.cards.slice(index + 1)
-      ]
-    });
-  }
-
-  selectCard(index, selected) {
-    const card = this.state.cards[index];
-    this.updateCard(index, Object.assign({}, card, { selected }));
+    this.props.dispatch(updateCard(index, card));
   }
 
   updateSubject(index, subject) {
@@ -201,7 +186,6 @@ class App extends PureComponent {
     return (
       <Navigation
         routerProps={routerProps}
-        cards={this.state.cards}
         addCard={this.addCard}
         removeCard={this.removeCard}
         subjects={this.state.subjects}
@@ -246,6 +230,8 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  cards: PropTypes.array,
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
   })

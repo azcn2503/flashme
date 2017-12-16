@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import FlashCard from "../flash-card/flash-card";
@@ -8,6 +9,12 @@ import Button from "../button/button";
 import styles from "./cards.scss";
 
 class Cards extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      cards: state.cards
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -226,4 +233,4 @@ Cards.defaultProps = {
   testName: "Test"
 };
 
-export default Cards;
+export default connect(Cards.mapStateToProps)(Cards);

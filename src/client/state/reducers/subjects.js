@@ -1,6 +1,4 @@
-const defaultState = {
-  subjects: []
-};
+const defaultState = [];
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
