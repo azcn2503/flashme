@@ -1,11 +1,9 @@
-const defaultState = {
-  cards: [],
-  subjects: []
-};
+import { combineReducers } from "redux";
 
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
+import cards from "./cards";
+import subjects from "./subjects";
+
+export default combineReducers({
+  cards,
+  subjects
+});
