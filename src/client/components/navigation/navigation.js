@@ -9,9 +9,9 @@ import styles from "./navigation.scss";
 
 class Navigation extends PureComponent {
   static mapStateToProps(state) {
-    console.log(state);
     return {
-      cards: state.cards
+      cards: state.cards,
+      subjects: state.subjects
     };
   }
 

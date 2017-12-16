@@ -14,14 +14,14 @@ import styles from "./app.scss";
 class App extends PureComponent {
   static mapStateToProps(state) {
     return {
-      cards: state.cards
+      cards: state.cards,
+      subjects: state.subjects
     };
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      subjects: [],
       routerAction: null
     };
     this.renderCards = this.renderCards.bind(this);
@@ -36,7 +36,6 @@ class App extends PureComponent {
     this.addCard = this.addCard.bind(this);
     this.removeCard = this.removeCard.bind(this);
     this.updateCard = this.updateCard.bind(this);
-    this.selectCard = this.selectCard.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -188,7 +187,6 @@ class App extends PureComponent {
         routerProps={routerProps}
         addCard={this.addCard}
         removeCard={this.removeCard}
-        subjects={this.state.subjects}
         addSubject={this.addSubject}
         removeSubject={this.removeSubject}
         updateSubject={this.updateSubject}
@@ -231,6 +229,7 @@ class App extends PureComponent {
 
 App.propTypes = {
   cards: PropTypes.array,
+  subjects: PropTypes.array,
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
