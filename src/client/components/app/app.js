@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 
@@ -10,50 +9,12 @@ import SubjectTest from "../subject-test/subject-test";
 import styles from "./app.scss";
 
 class App extends PureComponent {
-  static mapStateToProps(state) {
-    return {
-      cards: state.cards,
-      subjects: state.subjects,
-      tests: state.tests
-    };
-  }
-
   constructor(props) {
     super(props);
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
     this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
-  }
-
-  getSubjectCards(subjectId) {
-    const subject = this.props.subjects.find(
-      subject => subject.id === subjectId
-    );
-    if (subject) {
-      return subject.cards;
-    } else {
-      this.props.history.push("/subjects");
-      return null;
-    }
-  }
-
-  getSubjectTest(subjectId, testId) {
-    const subject = this.props.subjects.find(
-      subject => subject.id === subjectId
-    );
-    if (subject) {
-      const test = subject.tests.find(test => test.id === testId);
-      if (test) {
-        return test;
-      } else {
-        this.history.push(`/subjects/${subjectId}/view`);
-        return null;
-      }
-    } else {
-      this.props.history.push("/subjects");
-      return null;
-    }
   }
 
   renderCards() {
@@ -114,4 +75,4 @@ App.propTypes = {
   })
 };
 
-export default connect(App.mapStateToProps)(App);
+export default App;
