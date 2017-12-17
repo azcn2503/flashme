@@ -18,26 +18,20 @@ class App extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      routerAction: null
-    };
     this.renderCards = this.renderCards.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
-    // this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
-    this.renderNewSubjectTest = this.renderNewSubjectTest.bind(this);
+    this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.state.routerAction !== prevState.routerAction &&
-      this.state.routerAction !== null
-    ) {
-      this.state.routerAction();
-      this.setState({
-        routerAction: null
-      });
-    }
+  getSubjectCards(subjectId) {
+    return this.props.subjects.find(subject => subject.id === subjectId).cards;
+  }
+
+  getSubjectTest(subjectId, testId) {
+    return this.props.subjects
+      .find(subject => subject.id === subjectId)
+      .tests.find(test => test.id === testId);
   }
 
   renderCards() {
@@ -51,9 +45,7 @@ class App extends PureComponent {
         <Cards
           dispatch={this.props.dispatch}
           subjectId={subjectId}
-          cards={
-            this.props.subjects.find(subject => subject.id === subjectId).cards
-          }
+          cards={this.getSubjectCards(subjectId)}
         />
       );
     } else {
@@ -61,14 +53,16 @@ class App extends PureComponent {
     }
   }
 
-  // renderSubjectTestCards(routerProps) {
-  //   const { subjectId } = routerProps.match.params;
-  //   return <Cards cards={this.getSubjectCards(subjectId)} test />;
-  // }
-
-  renderNewSubjectTest(routerProps) {
-    const { subjectId } = routerProps.match.params;
-    return <SubjectTest action={this.addSubjectTest} subjectId={subjectId} />;
+  renderSubjectTestCards(routerProps) {
+    const { subjectId, testId } = routerProps.match.params;
+    return (
+      <Cards
+        subjectId={subjectId}
+        testId={testId}
+        test={this.getSubjectTest(subjectId, testId)}
+        dispatch={this.props.dispatch}
+      />
+    );
   }
 
   renderNavigation(routerProps) {
@@ -91,15 +85,10 @@ class App extends PureComponent {
             exact
           />
           <Route
-            path="/subject/:subjectId/test"
-            component={this.renderNewSubjectTest}
-            exact
-          />
-          {/* <Route
             path="/subject/:subjectId/test/:testId"
             component={this.renderSubjectTestCards}
             exact
-          /> */}
+          />
           <Route path="/tests" component={this.renderTests} exact />
         </Switch>
       </div>
@@ -108,8 +97,7 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  cards: PropTypes.array,
-  subjects: PropTypes.array,
+  subjects: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func

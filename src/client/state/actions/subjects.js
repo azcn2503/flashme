@@ -4,6 +4,8 @@ import Promise from "bluebird";
 export const ADD_SUBJECT = "ADD_SUBJECT";
 export const ADD_CARD = "ADD_CARD";
 export const ADD_TEST = "ADD_TEST";
+export const START_TEST = "START_TEST";
+export const ANSWER_TEST_CARD = "ANSWER_CARD";
 export const UPDATE_SUBJECT = "UPDATE_SUBJECT";
 
 export const addSubject = () => ({
@@ -33,3 +35,17 @@ export const addTest = subjectId => dispatch => {
     return resolve(testId);
   });
 };
+
+export const startTest = (subjectId, testId) => ({
+  type: START_TEST,
+  subjectId,
+  testId
+});
+
+export const answerTestCard = (subjectId, testId, cardId, correct) => ({
+  type: ANSWER_TEST_CARD,
+  subjectId,
+  testId,
+  cardId,
+  correct
+});

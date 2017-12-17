@@ -1,18 +1,18 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 class SubjectTest extends PureComponent {
-  componentDidMount() {
-    this.props.action(this.props.subjectId);
-  }
-
   render() {
     return null;
   }
 }
 
 SubjectTest.propTypes = {
-  action: PropTypes.func.isRequired
+  subjectId: PropTypes.string,
+  testId: PropTypes.string,
+  cards: PropTypes.array,
+  dispatch: PropTypes.func.isRequired
 };
 
 export default SubjectTest;

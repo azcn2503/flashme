@@ -75,7 +75,7 @@ class FlashCard extends PureComponent {
 
   onContinue(value) {
     this.flip();
-    this.props.onContinue(value);
+    this.props.onContinue(this.props.card.id, value);
   }
 
   onFocus() {
@@ -135,14 +135,14 @@ class FlashCard extends PureComponent {
 
   getQuestionMarkup() {
     return {
-      __html: this.props.question
+      __html: this.props.card.question
     };
   }
 
   getAnswerMarkup() {
     if (!this.props.test || (this.props.test && this.state.flipped)) {
       return {
-        __html: this.props.answer
+        __html: this.props.card.answer
       };
     } else {
       return null;
@@ -215,8 +215,11 @@ class FlashCard extends PureComponent {
 }
 
 FlashCard.propTypes = {
-  question: PropTypes.string,
-  answer: PropTypes.string,
+  card: PropTypes.shape({
+    id: PropTypes.string,
+    question: PropTypes.string,
+    answer: PropTypes.string
+  }),
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
