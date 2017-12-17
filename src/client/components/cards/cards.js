@@ -245,7 +245,7 @@ Cards.propTypes = {
   updateCard: PropTypes.func,
   removeCard: PropTypes.func,
   selectCard: PropTypes.func,
-  test: PropTypes.bool,
+  test: PropTypes.object,
   subjectId: PropTypes.string,
   testId: PropTypes.string
 };
@@ -254,8 +254,7 @@ Cards.defaultProps = {
   addCard: () => null,
   updateCard: () => null,
   removeCard: () => null,
-  selectCard: () => null,
-  test: false
+  selectCard: () => null
 };
 
 export default connect(Cards.mapStateToProps)(Cards);

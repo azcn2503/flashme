@@ -25,13 +25,33 @@ class App extends PureComponent {
   }
 
   getSubjectCards(subjectId) {
-    return this.props.subjects.find(subject => subject.id === subjectId).cards;
+    const subject = this.props.subjects.find(
+      subject => subject.id === subjectId
+    );
+    if (subject) {
+      return subject.cards;
+    } else {
+      this.props.history.push("/subjects");
+      return null;
+    }
   }
 
   getSubjectTest(subjectId, testId) {
-    return this.props.subjects
-      .find(subject => subject.id === subjectId)
-      .tests.find(test => test.id === testId);
+    const subject = this.props.subjects.find(
+      subject => subject.id === subjectId
+    );
+    if (subject) {
+      const test = subject.tests.find(test => test.id === testId);
+      if (test) {
+        return test;
+      } else {
+        this.history.push(`/subjects/${subjectId}/view`);
+        return null;
+      }
+    } else {
+      this.props.history.push("/subjects");
+      return null;
+    }
   }
 
   renderCards() {
