@@ -12,7 +12,9 @@ import styles from "./app.scss";
 class App extends PureComponent {
   static mapStateToProps(state) {
     return {
-      subjects: state.subjects.subjects
+      cards: state.cards,
+      subjects: state.subjects,
+      tests: state.tests
     };
   }
 
@@ -60,17 +62,7 @@ class App extends PureComponent {
 
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
-    if (this.props.subjects.find(subject => subject.id === subjectId)) {
-      return (
-        <Cards
-          dispatch={this.props.dispatch}
-          subjectId={subjectId}
-          cards={this.getSubjectCards(subjectId)}
-        />
-      );
-    } else {
-      return null;
-    }
+    return <Cards dispatch={this.props.dispatch} subjectId={subjectId} />;
   }
 
   renderSubjectTestCards(routerProps) {
@@ -79,7 +71,6 @@ class App extends PureComponent {
       <Cards
         subjectId={subjectId}
         testId={testId}
-        test={this.getSubjectTest(subjectId, testId)}
         dispatch={this.props.dispatch}
       />
     );
@@ -95,7 +86,7 @@ class App extends PureComponent {
     return (
       <div className={styles.app}>
         <Switch>
-          <Route path="/subject/:id" component={this.renderNavigation} />
+          <Route path="/subject/:subjectId" component={this.renderNavigation} />
           <Route component={this.renderNavigation} />
         </Switch>
         <Switch>
@@ -117,7 +108,6 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  subjects: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func

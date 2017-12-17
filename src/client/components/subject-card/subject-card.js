@@ -1,15 +1,23 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import classNames from "classnames";
 import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import Button from "../button/button";
 
-import { updateSubject, addTest } from "../../state/actions/subjects";
+import { updateSubjectTitle } from "../../state/actions/subjects";
+import { addTest } from "../../state/actions/tests";
 
 import styles from "./subject-card.scss";
 
 class SubjectCard extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      cards: state.cards
+    };
+  }
+
   constructor(props) {
     super(props);
     this.onBlur = this.onBlur.bind(this);
@@ -19,13 +27,20 @@ class SubjectCard extends PureComponent {
 
   onBlur() {
     if (this.el) {
-      this.props.dispatch(updateSubject(this.props.id, this.value()));
+      this.props.dispatch(updateSubjectTitle(this.props.id, this.value()));
     }
   }
 
   onClickTest() {
     this.props
-      .dispatch(addTest(this.props.id))
+      .dispatch(
+        addTest(
+          this.props.id,
+          Object.values(this.props.cards.byId).filter(card =>
+            card.subjectIds.includes(this.props.id)
+          )
+        )
+      )
       .then(testId =>
         this.props.history.push(`/subject/${this.props.id}/test/${testId}`)
       );
@@ -101,4 +116,4 @@ SubjectCard.defaultProps = {
   onChange: () => null
 };
 
-export default withRouter(SubjectCard);
+export default withRouter(connect(SubjectCard.mapStateToProps)(SubjectCard));

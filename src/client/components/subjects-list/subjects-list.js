@@ -13,7 +13,8 @@ import styles from "./subjects-list.scss";
 class SubjectsList extends PureComponent {
   static mapStateToProps(state) {
     return {
-      subjects: state.subjects.subjects
+      cards: state.cards,
+      subjects: state.subjects
     };
   }
 
@@ -59,7 +60,11 @@ class SubjectsList extends PureComponent {
         id={subject.id}
         title={subject.title}
         active={subject.id === this.props.activeId}
-        count={this.props.subjects.find(s => s.id === subject.id).cards.length}
+        count={
+          Object.values(this.props.cards.byId).filter(card =>
+            card.subjectIds.includes(subject.id)
+          ).length
+        }
         dispatch={this.props.dispatch}
       />
     );
@@ -76,12 +81,15 @@ class SubjectsList extends PureComponent {
         <FilterBox
           value={this.state.filter}
           onChange={this.onChangeFilter}
-          totalCount={this.props.subjects.length}
-          filteredCount={this.props.subjects.filter(this.filterSubject).length}
+          totalCount={this.props.subjects.allIds.length}
+          filteredCount={
+            Object.values(this.props.subjects.byId).filter(this.filterSubject)
+              .length
+          }
           type="subjects"
         />
         <div className={styles.list}>
-          {this.props.subjects
+          {Object.values(this.props.subjects.byId)
             .filter(this.filterSubject)
             .map(this.renderSubject)}
         </div>
@@ -91,8 +99,7 @@ class SubjectsList extends PureComponent {
 }
 
 SubjectsList.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.object),
-  subjects: PropTypes.arrayOf(PropTypes.object),
+  subjects: PropTypes.object,
   addSubject: PropTypes.func,
   activeId: PropTypes.string,
   updateSubject: PropTypes.func,

@@ -6,29 +6,23 @@ import FlashCard from "../flash-card/flash-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 
-import {
-  addCard,
-  answerTestCard,
-  startTest
-} from "../../state/actions/subjects";
+import { addCard, answerTestCard } from "../../state/actions/cards";
+import { startTest } from "../../state/actions/tests";
 
 import styles from "./cards.scss";
 
 class Cards extends PureComponent {
-  mapStateToProps(state) {
+  static mapStateToProps(state) {
     return {
-      subjects: state.subjects.subjects
+      cards: state.cards
     };
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      cards: [],
       filter: "",
-      showBothSides: false,
-      testCard: 0,
-      correct: 0
+      showBothSides: false
     };
     this.onClickShowBothSides = this.onClickShowBothSides.bind(this);
     this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
@@ -36,25 +30,17 @@ class Cards extends PureComponent {
     this.filterCard = this.filterCard.bind(this);
     this.renderCard = this.renderCard.bind(this);
     this.onSelectCard = this.onSelectCard.bind(this);
+    this.onSubmitCard = this.onSubmitCard.bind(this);
   }
 
   componentDidMount() {
     if (this.props.test) {
-      this.setState({
-        cards: this.props.test.cards
-      });
-    }
-    this.props.dispatch(startTest(this.props.subjectId, this.props.testId));
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.cards) {
-      this.setState({ cards: nextProps.cards });
+      this.props.dispatch(startTest(this.props.subjectId, this.props.testId));
     }
   }
 
   addCard(card) {
-    this.props.dispatch(addCard(this.props.subjectId, card));
+    this.props.dispatch(addCard(card, this.props.subjectId));
   }
 
   onClickShowBothSides() {
@@ -77,12 +63,8 @@ class Cards extends PureComponent {
     });
   }
 
-  onSubmitCard(key, value) {
-    if (!key) {
-      this.addCard(value);
-    } else {
-      this.updateCard(key, value);
-    }
+  onSubmitCard(value) {
+    this.addCard(value);
   }
 
   onAnswerTestCard(cardId, correct) {
@@ -158,8 +140,9 @@ class Cards extends PureComponent {
   filterCard(card) {
     const filter = this.state.filter.toLowerCase();
     return (
-      card.question.toLowerCase().includes(filter) ||
-      card.answer.toLowerCase().includes(filter)
+      card.subjectIds.includes(this.props.subjectId) &&
+      (card.question.toLowerCase().includes(filter) ||
+        card.answer.toLowerCase().includes(filter))
     );
   }
 
@@ -180,12 +163,15 @@ class Cards extends PureComponent {
       <div className={styles.cardList}>
         <FlashCard
           card={{}}
-          onChange={value => this.onChangeCard(null, value)}
-          onSubmit={value => this.onSubmitCard(null, value)}
+          onSubmit={this.onSubmitCard}
           editable
           showBothSides={this.state.showBothSides}
         />
-        {this.state.cards.filter(this.filterCard).map(this.renderCard)}
+        {this.props.cards
+          ? Object.values(this.props.cards.byId)
+              .filter(this.filterCard)
+              .map(this.renderCard)
+          : null}
       </div>
     );
   }
@@ -207,7 +193,10 @@ class Cards extends PureComponent {
   }
 
   renderControls() {
-    const selected = this.state.cards.filter(card => card.selected);
+    debugger;
+    const selected = Object.values(this.props.cards.byId).filter(
+      card => card.selected
+    );
     return (
       <div className={styles.controls}>
         {!this.props.test ? (
@@ -226,35 +215,20 @@ class Cards extends PureComponent {
   }
 
   render() {
-    if (this.state.cards) {
-      return (
-        <div className={styles.cards}>
-          {this.renderControls()}
-          {this.props.test ? this.renderTestContainer() : this.renderCardList()}
-        </div>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <div className={styles.cards}>
+        {/* {this.renderControls()} */}
+        {this.props.test ? this.renderTestContainer() : this.renderCardList()}
+      </div>
+    );
   }
 }
 
 Cards.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.object),
-  addCard: PropTypes.func,
-  updateCard: PropTypes.func,
-  removeCard: PropTypes.func,
-  selectCard: PropTypes.func,
+  cards: PropTypes.object,
   test: PropTypes.object,
   subjectId: PropTypes.string,
   testId: PropTypes.string
-};
-
-Cards.defaultProps = {
-  addCard: () => null,
-  updateCard: () => null,
-  removeCard: () => null,
-  selectCard: () => null
 };
 
 export default connect(Cards.mapStateToProps)(Cards);

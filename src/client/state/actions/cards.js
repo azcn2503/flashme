@@ -1,26 +1,27 @@
+import uuidv4 from "uuid/v4";
+
 export const ADD_CARD = "ADD_CARD";
 export const ADD_SUBJECT_CARD = "ADD_SUBJECT_CARD";
 export const REMOVE_CARD = "REMOVE_CARD";
 export const UPDATE_CARD = "UPDATE_CARD";
 
-export const addCard = card => ({
-  type: ADD_CARD,
-  card
-});
+export const addCard = (card, subjectId) => {
+  const cardId = uuidv4();
+  return {
+    type: ADD_CARD,
+    cardId,
+    card,
+    subjectId
+  };
+};
 
-export const addSubjectCard = (card, subjectId) => ({
-  type: ADD_SUBJECT_CARD,
-  card,
-  subjectId
-});
-
-export const removeCard = index => ({
+export const removeCard = cardId => ({
   type: REMOVE_CARD,
-  index
+  cardId
 });
 
-export const updateCard = (index, card) => ({
+export const updateCard = (cardId, card) => ({
   type: UPDATE_CARD,
-  index,
+  cardId,
   card
 });

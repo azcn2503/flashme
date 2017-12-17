@@ -3,15 +3,18 @@ import uuidv4 from "uuid/v4";
 import * as actions from "../actions/cards";
 
 const defaultState = {
-  cards: [],
+  byId: {},
+  allIds: [],
   requesting: null,
   error: null
 };
 
-const newCard = () => ({
+const newCard = (id = uuidv4(), subjectId) => ({
+  id,
   selected: false,
-  id: uuidv4(),
-  subjects: []
+  subjectIds: subjectId ? [subjectId] : [],
+  question: "",
+  answer: ""
 });
 
 const reducer = (state = defaultState, action) => {
@@ -19,52 +22,14 @@ const reducer = (state = defaultState, action) => {
     case actions.ADD_CARD:
       return {
         ...state,
-        cards: [
-          ...state.cards,
-          {
-            ...newCard(),
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...newCard(action.cardId, action.subjectId),
             ...action.card
           }
-        ]
-      };
-
-    case actions.ADD_SUBJECT_CARD:
-      return {
-        ...state,
-        cards: [
-          ...state.cards,
-          {
-            ...newCard(),
-            ...action.card,
-            subjects: [action.subjectId]
-          }
-        ]
-      };
-
-    // case actions.ADD_CARD_TO_SUBJECT:
-    //   return {
-    //     ...state,
-    //     cards: [
-    //       ...state.cards.map(card => {
-    //         if (card.id === action.id) {
-    //           return {
-    //             ...card,
-    //             subjects: [...card.subjects, action.subjectId]
-    //           };
-    //         } else {
-    //           return card;
-    //         }
-    //       })
-    //     ]
-    //   };
-
-    case actions.REMOVE_CARD:
-      return {
-        ...state,
-        cards: [
-          ...state.cards.slice(0, action.index),
-          ...state.cards.slice(action.index + 1)
-        ]
+        },
+        allIds: [...state.allIds, action.cardId]
       };
 
     default:
