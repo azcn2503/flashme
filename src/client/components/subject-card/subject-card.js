@@ -1,11 +1,13 @@
-import React, { PureComponent } from 'react';
-import classNames from 'classnames';
-import { NavLink, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from "react";
+import classNames from "classnames";
+import { NavLink, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import Button from "../button/button";
 
-import styles from './subject-card.scss';
+import { updateSubject, addTest } from "../../state/actions/subjects";
+
+import styles from "./subject-card.scss";
 
 class SubjectCard extends PureComponent {
   constructor(props) {
@@ -17,15 +19,16 @@ class SubjectCard extends PureComponent {
 
   onBlur() {
     if (this.el) {
-      this.props.onChange({
-        id: this.props.id,
-        title: this.value()
-      });
+      this.props.dispatch(updateSubject(this.props.id, this.value()));
     }
   }
 
   onClickTest() {
-    this.props.history.push(`/subject/${this.props.id}/test`);
+    this.props
+      .dispatch(addTest(this.props.id))
+      .then(testId =>
+        this.props.history.push(`/subject/${this.props.id}/test/${testId}`)
+      );
   }
 
   getTitleMarkup() {
@@ -42,9 +45,7 @@ class SubjectCard extends PureComponent {
 
   renderLink() {
     return (
-      <NavLink
-        to={`/subject/${this.props.id}/view`}
-      >
+      <NavLink to={`/subject/${this.props.id}/view`}>
         {this.props.title}
       </NavLink>
     );
@@ -70,19 +71,12 @@ class SubjectCard extends PureComponent {
       >
         <div className={styles.title}>
           <div className={styles.label}>
-            {
-              this.props.active ? this.renderTitle() : this.renderLink()
-            }
+            {this.props.active ? this.renderTitle() : this.renderLink()}
           </div>
-          <div className={styles.count}>
-            ({this.props.count})
-          </div>
+          <div className={styles.count}>({this.props.count})</div>
         </div>
         <div className={styles.controls}>
-          <Button
-            disabled={this.props.count === 0}
-            onClick={this.onClickTest}
-          >
+          <Button disabled={this.props.count === 0} onClick={this.onClickTest}>
             Test
           </Button>
         </div>
@@ -96,11 +90,12 @@ SubjectCard.propTypes = {
   title: PropTypes.string,
   count: PropTypes.number,
   active: PropTypes.bool,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  dispatch: PropTypes.func.isRequired
 };
 
 SubjectCard.defaultProps = {
-  title: '',
+  title: "",
   count: 0,
   active: false,
   onChange: () => null

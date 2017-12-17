@@ -12,7 +12,6 @@ import styles from "./app.scss";
 class App extends PureComponent {
   static mapStateToProps(state) {
     return {
-      cards: state.cards.cards,
       subjects: state.subjects.subjects
     };
   }
@@ -48,9 +47,16 @@ class App extends PureComponent {
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
     if (this.props.subjects.find(subject => subject.id === subjectId)) {
-      return <Cards dispatch={this.props.dispatch} subjectId={subjectId} />;
+      return (
+        <Cards
+          dispatch={this.props.dispatch}
+          subjectId={subjectId}
+          cards={
+            this.props.subjects.find(subject => subject.id === subjectId).cards
+          }
+        />
+      );
     } else {
-      this.props.history.push("/cards");
       return null;
     }
   }
@@ -75,12 +81,10 @@ class App extends PureComponent {
     return (
       <div className={styles.app}>
         <Switch>
-          <Route path="/cards" component={this.renderNavigation} />
           <Route path="/subject/:id" component={this.renderNavigation} />
           <Route component={this.renderNavigation} />
         </Switch>
         <Switch>
-          <Route path="/cards" component={this.renderCards} exact />
           <Route
             path="/subject/:subjectId/view"
             component={this.renderSubjectCards}
@@ -97,7 +101,6 @@ class App extends PureComponent {
             exact
           /> */}
           <Route path="/tests" component={this.renderTests} exact />
-          <Redirect from="*" to="/cards" />
         </Switch>
       </div>
     );

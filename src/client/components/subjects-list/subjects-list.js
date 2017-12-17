@@ -13,8 +13,7 @@ import styles from "./subjects-list.scss";
 class SubjectsList extends PureComponent {
   static mapStateToProps(state) {
     return {
-      subjects: state.subjects.subjects,
-      cards: state.cards.cards
+      subjects: state.subjects.subjects
     };
   }
 
@@ -60,11 +59,8 @@ class SubjectsList extends PureComponent {
         id={subject.id}
         title={subject.title}
         active={subject.id === this.props.activeId}
-        count={
-          this.props.cards.filter(card => card.subjects.includes(subject.id))
-            .length
-        }
-        onChange={subject => this.props.updateSubject(key, subject)}
+        count={this.props.subjects.find(s => s.id === subject.id).cards.length}
+        dispatch={this.props.dispatch}
       />
     );
   }
@@ -99,7 +95,8 @@ SubjectsList.propTypes = {
   subjects: PropTypes.arrayOf(PropTypes.object),
   addSubject: PropTypes.func,
   activeId: PropTypes.string,
-  updateSubject: PropTypes.func
+  updateSubject: PropTypes.func,
+  dispatch: PropTypes.func.isRequired
 };
 
 export default connect(SubjectsList.mapStateToProps)(SubjectsList);
