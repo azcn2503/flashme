@@ -6,7 +6,7 @@ import FlashCard from "../flash-card/flash-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 
-import { addCard, answerTestCard } from "../../state/actions/cards";
+import { getCards, addCard, answerTestCard } from "../../state/actions/cards";
 import { startTest } from "../../state/actions/tests";
 
 import styles from "./cards.scss";
@@ -34,9 +34,20 @@ class Cards extends PureComponent {
   }
 
   componentDidMount() {
+    this.getCards();
     if (this.props.test) {
       this.props.dispatch(startTest(this.props.subjectId, this.props.testId));
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.subjectId !== this.props.subjectId) {
+      this.getCards();
+    }
+  }
+
+  getCards() {
+    this.props.dispatch(getCards(this.props.subjectId));
   }
 
   addCard(card) {

@@ -1,8 +1,11 @@
 const initialise = ({ app, logger }) => {
-  logger.info('get routes initialised');
+  app.use("/api/cards/:subjectId", (req, res) => {
+    logger.info("Getting cards for subject " + req.params.subjectId);
+    res.send(200);
+  });
 
-  app.use('/test', (req, res) => {
-    logger.info('test');
+  app.use("/api/cards", (req, res) => {
+    logger.info("Getting cards");
     res.send(200);
   });
 };

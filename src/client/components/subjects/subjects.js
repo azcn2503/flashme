@@ -11,10 +11,8 @@ class Subjects extends PureComponent {
   }
 
   render() {
-    return (
-      <div>Subjects</div>
-    );
+    return <div>Subjects</div>;
   }
 }
 
-export default Subjects;
+export default connect(Subjects.mapStateToProps)(Subjects);

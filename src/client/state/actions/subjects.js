@@ -1,5 +1,6 @@
 import uuidv4 from "uuid/v4";
-import Promise from "bluebird";
+
+import * as api from "../../lib/api";
 
 export const ADD_SUBJECT = "ADD_SUBJECT";
 export const UPDATE_SUBJECT_TITLE = "UPDATE_SUBJECT_TITLE";

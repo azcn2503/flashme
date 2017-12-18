@@ -1,5 +1,7 @@
 import uuidv4 from "uuid/v4";
 
+import * as api from "../../lib/api";
+
 export const ADD_TEST = "ADD_TEST";
 export const START_TEST = "START_TEST";
 export const ANSWER_TEST_CARD = "ANSWER_TEST_CARD";
