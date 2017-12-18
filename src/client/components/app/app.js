@@ -20,16 +20,16 @@ class App extends PureComponent {
   }
 
   renderCards() {
-    return <Cards dispatch={this.props.dispatch} />;
+    return <Cards />;
   }
 
   renderSubjects() {
-    return <Subjects dispatch={this.props.dispatch} />;
+    return <Subjects />;
   }
 
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
-    return <Cards dispatch={this.props.dispatch} subjectId={subjectId} />;
+    return <Cards subjectId={subjectId} />;
   }
 
   renderTest(routerProps) {
@@ -38,9 +38,7 @@ class App extends PureComponent {
   }
 
   renderNavigation(routerProps) {
-    return (
-      <Navigation dispatch={this.props.dispatch} routerProps={routerProps} />
-    );
+    return <Navigation routerProps={routerProps} />;
   }
 
   render() {
@@ -62,6 +60,7 @@ class App extends PureComponent {
             component={this.renderTest}
             exact
           />
+          <Redirect to="/subjects" />
         </Switch>
       </div>
     );
