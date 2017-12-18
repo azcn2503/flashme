@@ -17,12 +17,8 @@ class Navigation extends PureComponent {
   render() {
     return (
       <div className={styles.navigation}>
-        <div className={styles.header}>Cards</div>
-        <Link className={styles.navItem} to="/cards">
-          All Cards
-        </Link>
         <div className={styles.header}>
-          Subjects ({Object.keys(this.props.subjects).length})
+          <Link to="/subjects">Subjects ({Object.keys(this.props.subjects).length})</Link>
         </div>
         <SubjectsList
           activeId={this.props.routerProps.match.params.subjectId}

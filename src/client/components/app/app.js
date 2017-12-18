@@ -4,7 +4,8 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import Cards from "../cards/cards";
 import Navigation from "../navigation/navigation";
-import SubjectTest from "../subject-test/subject-test";
+import Subjects from "../subjects/subjects";
+import Test from "../test/test";
 
 import styles from "./app.scss";
 
@@ -12,8 +13,9 @@ class App extends PureComponent {
   constructor(props) {
     super(props);
     this.renderCards = this.renderCards.bind(this);
+    this.renderSubjects = this.renderSubjects.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
-    this.renderSubjectTestCards = this.renderSubjectTestCards.bind(this);
+    this.renderTest = this.renderTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
   }
 
@@ -21,20 +23,18 @@ class App extends PureComponent {
     return <Cards dispatch={this.props.dispatch} />;
   }
 
+  renderSubjects() {
+    return <Subjects dispatch={this.props.dispatch} />;
+  }
+
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
     return <Cards dispatch={this.props.dispatch} subjectId={subjectId} />;
   }
 
-  renderSubjectTestCards(routerProps) {
-    const { subjectId, testId } = routerProps.match.params;
-    return (
-      <Cards
-        subjectId={subjectId}
-        testId={testId}
-        dispatch={this.props.dispatch}
-      />
-    );
+  renderTest(routerProps) {
+    const { testId } = routerProps.match.params;
+    return <Test testId={testId} />;
   }
 
   renderNavigation(routerProps) {
@@ -51,17 +51,17 @@ class App extends PureComponent {
           <Route component={this.renderNavigation} />
         </Switch>
         <Switch>
+          <Route path="/subjects" component={this.renderSubjects} exact />
           <Route
-            path="/subject/:subjectId/view"
+            path="/subject/:subjectId"
             component={this.renderSubjectCards}
             exact
           />
           <Route
             path="/subject/:subjectId/test/:testId"
-            component={this.renderSubjectTestCards}
+            component={this.renderTest}
             exact
           />
-          <Route path="/tests" component={this.renderTests} exact />
         </Switch>
       </div>
     );
@@ -69,7 +69,6 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
   })

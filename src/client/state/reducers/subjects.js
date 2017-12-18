@@ -35,7 +35,8 @@ const reducer = (state = defaultState, action) => {
           ...state.byId,
           [action.subjectId]: {
             ...state.byId[action.subjectId],
-            title: action.title
+            title: action.title,
+            updated: Date.now()
           }
         }
       };

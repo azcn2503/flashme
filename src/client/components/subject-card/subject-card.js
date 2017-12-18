@@ -60,9 +60,7 @@ class SubjectCard extends PureComponent {
 
   renderLink() {
     return (
-      <NavLink to={`/subject/${this.props.id}/view`}>
-        {this.props.title}
-      </NavLink>
+      <NavLink to={`/subject/${this.props.id}`}>{this.props.title}</NavLink>
     );
   }
 
