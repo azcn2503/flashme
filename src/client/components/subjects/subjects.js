@@ -2,6 +2,10 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import Subheader from "../subheader/subheader";
+
+import styles from "./subjects.scss";
+
 class Subjects extends PureComponent {
   static mapStateToProps(state) {
     return {
@@ -11,7 +15,11 @@ class Subjects extends PureComponent {
   }
 
   render() {
-    return <div>Subjects</div>;
+    return (
+      <div className={styles.subjects}>
+        <Subheader label="Subjects" />
+      </div>
+    );
   }
 }
 

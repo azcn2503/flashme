@@ -41,9 +41,10 @@ class SubjectCard extends PureComponent {
           )
         )
       )
-      .then(testId =>
-        this.props.history.push(`/subject/${this.props.id}/test/${testId}`)
-      );
+      .then(test => {
+        console.log("test", test);
+        this.props.history.push(`/subject/${this.props.id}/test/${test.id}`);
+      });
   }
 
   getTitleMarkup() {

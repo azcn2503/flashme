@@ -6,17 +6,29 @@ export const ADD_TEST = "ADD_TEST";
 export const START_TEST = "START_TEST";
 export const ANSWER_TEST_CARD = "ANSWER_TEST_CARD";
 
+export const ADD_TEST_REQUEST = "ADD_TEST_REQUEST";
+export const ADD_TEST_SUCCESS = "ADD_TEST_SUCCESS";
+export const ADD_TEST_FAILURE = "ADD_TEST_FAILURE";
+
 export const addTest = (subjectId, cards) => dispatch => {
-  return new Promise((resolve, reject) => {
-    const testId = uuidv4();
-    dispatch({
-      type: ADD_TEST,
-      subjectId,
-      testId,
-      cards
-    });
-    return resolve(testId);
-  });
+  dispatch({ type: ADD_TEST_REQUEST });
+  return api
+    .addTest(subjectId, cards)
+    .then(test => {
+      dispatch({ type: ADD_TEST_SUCCESS, test });
+      return test;
+    })
+    .catch(err => dispatch({ type: ADD_TEST_FAILURE, err }));
+  // return new Promise((resolve, reject) => {
+  //   const testId = uuidv4();
+  //   dispatch({
+  //     type: ADD_TEST,
+  //     subjectId,
+  //     testId,
+  //     cards
+  //   });
+  //   return resolve(testId);
+  // });
 };
 
 export const startTest = (subjectId, testId) => ({

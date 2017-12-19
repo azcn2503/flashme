@@ -2,6 +2,7 @@
 @import "../../styles/tools.scss";
 
 .cards {
+  padding: 20px;
   display: flex;
   flex-direction: column;
 
@@ -21,7 +22,7 @@
     justify-content: center;
 
     .postTestActions {
-      margin-top: 20px
+      margin-top: 20px;
     }
   }
 
@@ -48,7 +49,7 @@
     .progressBar {
       height: 100%;
       @include transition(width);
-      background-color: fade-out($primary-color, .5);
+      background-color: fade-out($primary-color, 0.5);
     }
 
     .progressSummary {
@@ -70,7 +71,7 @@
 
   .filterContainer {
     padding: 0;
-    border: 1px solid rgba(0, 0, 0, .1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-width: 0 0 1px 0;
 
     .filter {

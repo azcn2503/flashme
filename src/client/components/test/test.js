@@ -16,7 +16,7 @@ class Test extends PureComponent {
 
   render() {
     const test = this.props.tests.byId[this.props.testId];
-    const subject = this.props.subjects.byId[test.subjectId];
+    const subject = this.props.subjects.byId[test.id];
     return (
       <div className={styles.test}>
         <Subheader

@@ -18,6 +18,12 @@ export const addSubject = () => {
   return axios.post(apiUrl("/subject")).then(({ data }) => data);
 };
 
+export const addTest = (subjectId, cards) => {
+  return axios
+    .post(apiUrl(`/test/${subjectId}`), { cards })
+    .then(({ data }) => data);
+};
+
 export const updateSubjectTitle = (subjectId, title) => {
   return axios
     .put(apiUrl(`/subject/${subjectId}/title`), { title })

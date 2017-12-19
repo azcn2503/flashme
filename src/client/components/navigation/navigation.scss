@@ -3,6 +3,7 @@
   background-color: #eee;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .navItem {
@@ -11,6 +12,6 @@
 
 .header {
   padding: 10px;
-  background-color: rgba(0, 0, 0, .1);
+  background-color: rgba(0, 0, 0, 0.1);
   font-weight: bold;
 }

@@ -33,9 +33,9 @@ export const initialise = ({ app, logger }) => {
   });
 
   app.post("/api/test/:subjectId", (req, res) => {
-    logger.info("Adding subject to " + req.params.subjectId);
+    logger.info("Adding test for " + req.params.subjectId);
     testService
-      .createTest(subjectId, req.body.cards)
+      .createTest(req.params.subjectId, req.body.cards)
       .then(test => res.json(test));
   });
 };
