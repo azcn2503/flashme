@@ -5,7 +5,7 @@ import { getLogger } from "log4js";
 import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 
-import { getRoutes, postRoutes } from "./rest";
+import * as api from "./api";
 
 const app = express();
 const logger = getLogger(config.server.name);
@@ -14,10 +14,9 @@ logger.level = config.server.logLevel || "debug";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-getRoutes({ app, logger });
-postRoutes({ app, logger });
-
 app.use(serveStatic(config.client.path));
+
+api.initialise({ app, logger });
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(config.client.path, "index.html"));

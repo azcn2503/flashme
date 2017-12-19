@@ -13,3 +13,13 @@ export const addCard = (card, subjectId) => {
     .post(apiUrl(`/card/${subjectId}`), card)
     .then(({ data }) => data);
 };
+
+export const addSubject = () => {
+  return axios.post(apiUrl("/subject")).then(({ data }) => data);
+};
+
+export const updateSubjectTitle = (subjectId, title) => {
+  return axios
+    .put(apiUrl(`/subject/${subjectId}/title`), { title })
+    .then(({ data }) => data);
+};

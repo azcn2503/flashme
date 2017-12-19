@@ -18,27 +18,64 @@ const defaultState = {
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actions.ADD_SUBJECT:
+    case actions.ADD_SUBJECT_REQUEST:
       return {
         ...state,
-        byId: {
-          ...state.byId,
-          [action.subjectId]: newSubject(action.subjectId, action.title)
-        },
-        allIds: [...state.allIds, action.subjectId]
+        requesting: true
       };
 
-    case actions.UPDATE_SUBJECT_TITLE:
+    case actions.ADD_SUBJECT_SUCCESS:
       return {
         ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.subject.id]: action.subject
+        },
+        allIds: [...state.allIds, action.subject.id]
+      };
+
+    case actions.ADD_SUBJECT_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
+      };
+
+    case actions.UPDATE_SUBJECT_TITLE_REQUEST:
+      return {
+        ...state,
+        requesting: true,
         byId: {
           ...state.byId,
           [action.subjectId]: {
             ...state.byId[action.subjectId],
-            title: action.title,
-            updated: Date.now()
+            title: action.title
           }
         }
+      };
+
+    case actions.UPDATE_SUBJECT_TITLE_SUCCESS:
+      console.log(action);
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.subject.id]: {
+            ...state.byId[action.subject.id],
+            title: action.subject.title
+          }
+        }
+      };
+
+    case actions.UPDATE_SUBJECT_TITLE_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
       };
 
     default:
