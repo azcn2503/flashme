@@ -19,16 +19,6 @@ export const addTest = (subjectId, cards) => dispatch => {
       return test;
     })
     .catch(err => dispatch({ type: ADD_TEST_FAILURE, err }));
-  // return new Promise((resolve, reject) => {
-  //   const testId = uuidv4();
-  //   dispatch({
-  //     type: ADD_TEST,
-  //     subjectId,
-  //     testId,
-  //     cards
-  //   });
-  //   return resolve(testId);
-  // });
 };
 
 export const startTest = (subjectId, testId) => ({
