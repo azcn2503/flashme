@@ -10,10 +10,17 @@ export const ADD_TEST_REQUEST = "ADD_TEST_REQUEST";
 export const ADD_TEST_SUCCESS = "ADD_TEST_SUCCESS";
 export const ADD_TEST_FAILURE = "ADD_TEST_FAILURE";
 
+const stripCard = card => ({
+  id: card.id,
+  question: card.question,
+  answer: card.answer
+});
+
 export const addTest = (subjectId, cards) => dispatch => {
+  const strippedCards = cards.map(stripCard);
   dispatch({ type: ADD_TEST_REQUEST });
   return api
-    .addTest(subjectId, cards)
+    .addTest(subjectId, strippedCards)
     .then(test => {
       dispatch({ type: ADD_TEST_SUCCESS, test });
       return test;
