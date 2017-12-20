@@ -1,6 +1,6 @@
 import uuidv4 from "uuid/v4";
 
-import * as api from "../../lib/api";
+import * as api from "../../api/tests";
 
 export const ADD_TEST = "ADD_TEST";
 export const START_TEST = "START_TEST";
@@ -36,7 +36,6 @@ export const startTest = (subjectId, testId) => ({
 
 export const answerTestCard = (testId, cardId, correct) => ({
   type: ANSWER_TEST_CARD,
-  subjectId,
   testId,
   cardId,
   correct

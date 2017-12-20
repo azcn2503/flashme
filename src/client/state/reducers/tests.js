@@ -14,29 +14,30 @@ const defaultState = {
   error: null
 };
 
-const newTest = (testId, subjectId, cards) => ({
-  id: testId,
-  subjectId,
-  cards,
-  created: Date.now(),
-  activeCardIndex: null,
-  status: status.NOT_STARTED
-});
-
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actions.ADD_TEST:
+    case actions.ADD_TEST_REQUEST:
       return {
         ...state,
+        requesting: true
+      };
+
+    case actions.ADD_TEST_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: false,
         byId: {
-          ...state.byId,
-          [action.testId]: newTest(
-            action.testId,
-            action.subjectId,
-            action.cards
-          )
+          [action.test.id]: action.test
         },
-        allIds: [...state.allIds, action.testId]
+        allIds: [...state.allIds, action.test.id]
+      };
+
+    case actions.ADD_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
       };
 
     default:

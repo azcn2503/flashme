@@ -1,6 +1,6 @@
 import uuidv4 from "uuid/v4";
 
-import * as api from "../../lib/api";
+import * as api from "../../api/cards";
 
 export const ADD_CARD = "ADD_CARD";
 export const ADD_SUBJECT_CARD = "ADD_SUBJECT_CARD";

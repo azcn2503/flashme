@@ -1,4 +1,4 @@
-import * as api from "../../lib/api";
+import * as api from "../../api/subjects";
 
 export const UPDATE_SUBJECT_TITLE_REQUEST = "UPDATE_SUBJECT_TITLE_REQUEST";
 export const UPDATE_SUBJECT_TITLE_SUCCESS = "UPDATE_SUBJECT_TITLE_SUCCESS";
