@@ -1,13 +1,4 @@
-import uuidv4 from "uuid/v4";
-
 import * as actions from "../actions/subjects";
-
-const newSubject = (id = uuidv4(), title = "New subject") => ({
-  id,
-  title,
-  created: Date.now(),
-  updated: null
-});
 
 const defaultState = {
   byId: {},
@@ -57,7 +48,6 @@ const reducer = (state = defaultState, action) => {
       };
 
     case actions.UPDATE_SUBJECT_TITLE_SUCCESS:
-      console.log(action);
       return {
         ...state,
         requesting: false,

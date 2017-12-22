@@ -1,9 +1,5 @@
-import uuidv4 from "uuid/v4";
-
 import * as api from "../../api/cards";
 
-export const ADD_CARD = "ADD_CARD";
-export const ADD_SUBJECT_CARD = "ADD_SUBJECT_CARD";
 export const REMOVE_CARD = "REMOVE_CARD";
 export const UPDATE_CARD = "UPDATE_CARD";
 
@@ -29,13 +25,6 @@ export const addCard = (card, subjectId) => dispatch => {
     .addCard(card, subjectId)
     .then(res => dispatch({ type: ADD_CARD_SUCCESS, card: res }))
     .catch(err => dispatch({ type: ADD_CARD_FAILURE, err }));
-  // const cardId = uuidv4();
-  // return {
-  //   type: ADD_CARD,
-  //   cardId,
-  //   card,
-  //   subjectId
-  // };
 };
 
 export const removeCard = cardId => ({

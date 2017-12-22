@@ -74,7 +74,11 @@ class SubjectsList extends PureComponent {
     return (
       <div className={styles.subjectsList}>
         <div className={styles.controls}>
-          <Button onClick={this.onClickAddSubject} primary>
+          <Button
+            onClick={this.onClickAddSubject}
+            primary
+            disabled={this.props.subjects.requesting}
+          >
             Add Subject
           </Button>
         </div>

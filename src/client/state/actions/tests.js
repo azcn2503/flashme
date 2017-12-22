@@ -1,5 +1,3 @@
-import uuidv4 from "uuid/v4";
-
 import * as api from "../../api/tests";
 
 export const ADD_TEST = "ADD_TEST";
@@ -9,6 +7,10 @@ export const ANSWER_TEST_CARD = "ANSWER_TEST_CARD";
 export const ADD_TEST_REQUEST = "ADD_TEST_REQUEST";
 export const ADD_TEST_SUCCESS = "ADD_TEST_SUCCESS";
 export const ADD_TEST_FAILURE = "ADD_TEST_FAILURE";
+
+export const START_TEST_REQUEST = "START_TEST_REQUEST";
+export const START_TEST_SUCCESS = "START_TEST_SUCCESS";
+export const START_TEST_FAILURE = "START_TEST_FAILURE";
 
 const stripCard = card => ({
   id: card.id,
