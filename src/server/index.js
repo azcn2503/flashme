@@ -5,7 +5,9 @@ import { getLogger } from "log4js";
 import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 
-import * as api from "./api";
+import { cardApi, subjectApi, testApi } from "./api";
+import { cardService, subjectService, testService } from "./service";
+import databaseController from "./db";
 
 const app = express();
 const logger = getLogger(config.server.name);
@@ -16,11 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(serveStatic(config.client.path));
 
-api.initialise({ app, logger });
+databaseController
+  .initialise({ logger })
+  .then(db => {
+    subjectService.initialise({ logger, db });
+    subjectApi.initialise({ app, logger, service: subjectService });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(config.client.path, "index.html"));
-});
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(config.client.path, "index.html"));
+    });
+  })
+  .catch(err => logger.error("Could not connect to Mongo", err.message));
 
 app.listen(config.http.port, () => {
   logger.debug(

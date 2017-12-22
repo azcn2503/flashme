@@ -9,6 +9,28 @@ const defaultState = {
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
+    case actions.GET_SUBJECTS_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.GET_SUBJECTS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: action.subjects,
+        allIds: action.subjects.map(subject => subject.id)
+      };
+
+    case actions.GET_SUBJECTS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
+      };
+
     case actions.ADD_SUBJECT_REQUEST:
       return {
         ...state,

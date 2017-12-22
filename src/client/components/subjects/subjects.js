@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 import Subheader from "../subheader/subheader";
 
+import { getSubjects } from "../../state/actions/subjects";
+
 import styles from "./subjects.scss";
 
 class Subjects extends PureComponent {
@@ -12,6 +14,10 @@ class Subjects extends PureComponent {
       cards: state.cards,
       subjects: state.subjects
     };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getSubjects());
   }
 
   render() {
