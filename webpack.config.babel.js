@@ -1,14 +1,14 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-import { merge, isArray } from 'lodash';
-import webpack from 'webpack';
-import config from 'config';
+import { merge, isArray } from "lodash";
+import webpack from "webpack";
 
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import WebpackSourceMapSupportPlugin from 'webpack-source-map-support';
-import WebpackExternalModule from 'webpack-external-module';
+import ExtractTextPlugin from "extract-text-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import WebpackSourceMapSupportPlugin from "webpack-source-map-support";
+import WebpackExternalModule from "webpack-external-module";
+import HardSourceWebpackPlugin from "hard-source-webpack-plugin";
 
 const mergeCustomiser = (a, b) => {
   if (isArray(a)) {
@@ -17,9 +17,10 @@ const mergeCustomiser = (a, b) => {
 };
 
 const nodeModules = {};
-fs.readdirSync('node_modules')
-  .filter(module => (['.bin'].indexOf(module) === -1))
-  .forEach((module) => {
+fs
+  .readdirSync("node_modules")
+  .filter(module => [".bin"].indexOf(module) === -1)
+  .forEach(module => {
     nodeModules[module] = `commonjs ${module}`;
   });
 
@@ -29,87 +30,93 @@ const baseConfig = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: "babel-loader"
       },
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
+          fallback: "style-loader",
           use: [
             {
-              loader: 'css-loader',
+              loader: "css-loader",
               options: {
                 sourceMap: true,
                 importLoaders: 1,
                 modules: true,
-                localIdentName: '[name]__[local]__[hash:base64:5]'
+                localIdentName: "[name]__[local]__[hash:base64:5]"
               }
             },
-            'sass-loader'
+            "sass-loader"
           ]
         })
       },
       {
         test: /\.png$/,
-        use: 'url-loader'
+        use: "url-loader"
       }
     ]
   },
   resolve: {
     alias: {
-      client: path.resolve(__dirname, 'src/client'),
-      server: path.resolve(__dirname, 'src/server')
+      client: path.resolve(__dirname, "src/client"),
+      server: path.resolve(__dirname, "src/server")
     },
-    extensions: ['.js', '.jsx', '.json']
+    extensions: [".js", ".jsx", ".json"]
   },
   plugins: [
+    new HardSourceWebpackPlugin(),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      "process.env": {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || "development")
       }
     })
   ],
-  devtool: 'eval-source-map'
+  devtool: "eval-source-map"
 };
 
-const serverConfig = merge({}, baseConfig, {
-  entry: {
-    server: path.resolve(__dirname, 'src/server/index.js')
+const serverConfig = merge(
+  {},
+  baseConfig,
+  {
+    entry: {
+      server: path.resolve(__dirname, "src/server/index.js")
+    },
+    output: {
+      path: path.resolve(__dirname, "dist/server"),
+      filename: "[name].bundle.js"
+    },
+    plugins: [new WebpackSourceMapSupportPlugin()],
+    target: "node",
+    externals: nodeModules
   },
-  output: {
-    path: path.resolve(__dirname, 'dist/server'),
-    filename: '[name].bundle.js'
-  },
-  plugins: [
-    new WebpackSourceMapSupportPlugin()
-  ],
-  target: 'node',
-  externals: nodeModules
-}, mergeCustomiser);
+  mergeCustomiser
+);
 
-const clientConfig = merge({}, baseConfig, {
-  entry: {
-    client: path.resolve(__dirname, 'src/client/index.js')
+const clientConfig = merge(
+  {},
+  baseConfig,
+  {
+    entry: {
+      client: path.resolve(__dirname, "src/client/index.js")
+    },
+    output: {
+      publicPath: "/",
+      path: path.resolve(__dirname, "dist/client"),
+      filename: "[name].bundle.js"
+    },
+    plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+        name: "vendor",
+        filename: "[name]-bundle.js",
+        minChunks: module => WebpackExternalModule.isExternal(module)
+      }),
+      new ExtractTextPlugin("styles.css"),
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, "src/client/index.html")
+      })
+    ]
   },
-  output: {
-    publicPath: '/',
-    path: path.resolve(__dirname, 'dist/client'),
-    filename: '[name].bundle.js'
-  },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: '[name]-bundle.js',
-      minChunks: module => WebpackExternalModule.isExternal(module)
-    }),
-    new ExtractTextPlugin('styles.css'),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/client/index.html')
-    })
-  ]
-}, mergeCustomiser);
+  mergeCustomiser
+);
 
-export default [
-  serverConfig,
-  clientConfig
-];
+export default [serverConfig, clientConfig];
