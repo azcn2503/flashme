@@ -1,5 +1,4 @@
 import uuidv4 from "uuid/v4";
-import Promise from "bluebird";
 
 class SubjectService {
   constructor() {
@@ -9,7 +8,7 @@ class SubjectService {
 
   initialise({ db, logger }) {
     this.logger = logger;
-    this.db = db.getSubjects();
+    this.db = db;
   }
 
   addSubject() {
@@ -23,6 +22,14 @@ class SubjectService {
 
   getSubjects() {
     return this.db.getSubjects();
+  }
+
+  getSubject(id) {
+    return this.db.getSubject(id);
+  }
+
+  updateSubjectTitle(id, title) {
+    return this.db.updateSubjectTitle(id, title);
   }
 }
 

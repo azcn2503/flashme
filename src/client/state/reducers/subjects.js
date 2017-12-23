@@ -1,3 +1,5 @@
+import { keyBy } from "lodash";
+
 import * as actions from "../actions/subjects";
 
 const defaultState = {
@@ -20,11 +22,36 @@ const reducer = (state = defaultState, action) => {
         ...state,
         requesting: false,
         error: null,
-        byId: action.subjects,
+        byId: keyBy(action.subjects, "id"),
         allIds: action.subjects.map(subject => subject.id)
       };
 
     case actions.GET_SUBJECTS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
+      };
+
+    case actions.GET_SUBJECT_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.GET_SUBJECT_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.subject.id]: action.subject
+        },
+        allIds: [...state.allIds.filter(id => id !== action.id), action.id]
+      };
+
+    case actions.GET_SUBJECT_FAILURE:
       return {
         ...state,
         requesting: false,

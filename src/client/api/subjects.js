@@ -15,3 +15,7 @@ export const updateSubjectTitle = (subjectId, title) => {
 export const getSubjects = () => {
   return axios.get(apiUrl("/subjects")).then(({ data }) => data);
 };
+
+export const getSubject = subjectId => {
+  return axios.get(apiUrl(`/subject/${subjectId}`)).then(({ data }) => data);
+};

@@ -5,15 +5,6 @@ import testApi from "./test";
 export { cardApi, subjectApi, testApi };
 
 // export const initialise = ({ app, logger }) => {
-//   app.get("/api/cards/:subjectId", (req, res) => {
-//     logger.info("Getting cards for subject " + req.params.subjectId);
-//     res.send(200);
-//   });
-
-//   app.get("/api/cards", (req, res) => {
-//     logger.info("Getting cards");
-//     res.send(200);
-//   });
 
 //   app.post("/api/card/:subjectId", (req, res) => {
 //     logger.info("Adding card to subject " + req.params.subjectId);

@@ -4,6 +4,10 @@ export const GET_SUBJECTS_REQUEST = "GET_SUBJECTS_REQUEST";
 export const GET_SUBJECTS_SUCCESS = "GET_SUBJECTS_SUCCESS";
 export const GET_SUBJECTS_FAILURE = "GET_SUBJECTS_FAILURE";
 
+export const GET_SUBJECT_REQUEST = "GET_SUBJECT_REQUEST";
+export const GET_SUBJECT_SUCCESS = "GET_SUBJECT_SUCCESS";
+export const GET_SUBJECT_FAILURE = "GET_SUBJECT_FAILURE";
+
 export const UPDATE_SUBJECT_TITLE_REQUEST = "UPDATE_SUBJECT_TITLE_REQUEST";
 export const UPDATE_SUBJECT_TITLE_SUCCESS = "UPDATE_SUBJECT_TITLE_SUCCESS";
 export const UPDATE_SUBJECT_TITLE_FAILURE = "UPDATE_SUBJECT_TITLE_FAILURE";
@@ -34,4 +38,12 @@ export const getSubjects = () => dispatch => {
     .getSubjects()
     .then(subjects => dispatch({ type: GET_SUBJECTS_SUCCESS, subjects }))
     .catch(err => dispatch({ type: GET_SUBJECTS_FAILURE, err }));
+};
+
+export const getSubject = subjectId => dispatch => {
+  dispatch({ type: GET_SUBJECT_REQUEST, subjectId });
+  return api
+    .getSubject(subjectId)
+    .then(subject => dispatch({ type: GET_SUBJECT_SUCCESS, subject }))
+    .catch(err => dispatch({ type: GET_SUBJECT_FAILURE, err }));
 };

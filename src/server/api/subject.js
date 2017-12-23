@@ -15,6 +15,13 @@ class SubjectApi {
       return this.service.getSubjects().then(subjects => res.json(subjects));
     });
 
+    this.app.get("/api/subject/:subjectId", (req, res) => {
+      this.logger.info("Getting subject " + req.params.subjectId);
+      return this.service
+        .getSubject(req.params.subjectId)
+        .then(subject => res.json(subject));
+    });
+
     this.app.post("/api/subject", (req, res) => {
       this.logger.info("Adding subject");
       return this.service.addSubject().then(subject => res.json(subject));

@@ -21,7 +21,10 @@ app.use(serveStatic(config.client.path));
 databaseController
   .initialise({ logger })
   .then(db => {
-    subjectService.initialise({ logger, db });
+    cardService.initialise({ logger, db: db.getCards() });
+    subjectService.initialise({ logger, db: db.getSubjects() });
+
+    cardApi.initialise({ app, logger, service: cardService });
     subjectApi.initialise({ app, logger, service: subjectService });
 
     app.get("*", (req, res) => {

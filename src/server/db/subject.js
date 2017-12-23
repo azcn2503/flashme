@@ -23,6 +23,26 @@ class SubjectsController {
         })
     );
   }
+
+  getSubject(id) {
+    return this.collection.findOne({ id });
+  }
+
+  updateSubjectTitle(id, title) {
+    return this.collection
+      .findOneAndUpdate(
+        { id },
+        {
+          $set: {
+            title
+          }
+        },
+        {
+          returnOriginal: false
+        }
+      )
+      .then(({ value }) => value);
+  }
 }
 
 export default SubjectsController;

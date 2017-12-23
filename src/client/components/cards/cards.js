@@ -7,6 +7,7 @@ import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 import Subheader from "../subheader/subheader";
 
+import { getSubject } from "../../state/actions/subjects";
 import { getCards, addCard, answerTestCard } from "../../state/actions/cards";
 import { startTest } from "../../state/actions/tests";
 
@@ -38,6 +39,7 @@ class Cards extends PureComponent {
   }
 
   componentDidMount() {
+    this.getSubject();
     this.getCards();
     if (this.props.test) {
       this.props.dispatch(startTest(this.props.subjectId, this.props.testId));
@@ -53,6 +55,10 @@ class Cards extends PureComponent {
         )
       });
     }
+  }
+
+  getSubject() {
+    this.props.dispatch(getSubject(this.props.subjectId));
   }
 
   getCards() {
