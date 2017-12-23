@@ -13,8 +13,8 @@ class DatabaseController {
 
   initialise({ logger }) {
     this.logger = logger;
-    this.logger.info("Initialising");
     return MongoClient.connect(config.db.url).then(db => {
+      this.logger.debug("Database initialised");
       this.db = db;
       this.cards = new CardController({ db, logger });
       this.subjects = new SubjectController({ db, logger });

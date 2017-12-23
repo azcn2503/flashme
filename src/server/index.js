@@ -20,6 +20,7 @@ app.use(serveStatic(config.client.path));
 
 databaseController
   .initialise({ logger })
+  .catch(err => logger.error("Could not connect to Mongo", err.message))
   .then(db => {
     cardService.initialise({ logger, db: db.getCards() });
     subjectService.initialise({ logger, db: db.getSubjects() });
@@ -31,10 +32,10 @@ databaseController
       res.sendFile(path.resolve(config.client.path, "index.html"));
     });
   })
-  .catch(err => logger.error("Could not connect to Mongo", err.message));
-
-app.listen(config.http.port, () => {
-  logger.debug(
-    `${config.server.name} listening on HTTP port ${config.http.port}`
-  );
-});
+  .then(() => {
+    app.listen(config.http.port, () => {
+      logger.info(
+        `${config.server.name} listening on HTTP port ${config.http.port}`
+      );
+    });
+  });

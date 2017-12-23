@@ -48,7 +48,7 @@ class Cards extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.subjectId !== this.props.subjectId) {
-      // this.getCards();
+      this.getCards();
       this.setState({
         cards: Object.values(this.props.cards.byId).filter(
           this.filterCardsBySubject

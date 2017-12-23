@@ -20,9 +20,10 @@ export const getCards = subjectId => dispatch => {
 };
 
 export const addCard = (card, subjectId) => dispatch => {
+  const subjectCard = { ...card, subjectIds: [subjectId] };
   dispatch({ type: ADD_CARD_REQUEST });
   return api
-    .addCard(card, subjectId)
+    .addCard(subjectCard)
     .then(res => dispatch({ type: ADD_CARD_SUCCESS, card: res }))
     .catch(err => dispatch({ type: ADD_CARD_FAILURE, err }));
 };

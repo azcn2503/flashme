@@ -1,3 +1,5 @@
+import { keyBy, uniq } from "lodash";
+
 import * as actions from "../actions/cards";
 
 const defaultState = {
@@ -32,6 +34,24 @@ const reducer = (state = defaultState, action) => {
         ...state,
         requesting: false,
         error: action.err
+      };
+
+    case actions.GET_CARDS_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.GET_CARDS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          ...keyBy(action.cards, "id")
+        },
+        allIds: uniq(...state.allIds, ...action.cards.map(card => card.id))
       };
 
     default:

@@ -6,9 +6,13 @@ class CardController {
     this.logger = logger;
   }
 
-  getCards() {
+  getCards(subjectId) {
     return this.collection.find(
-      {},
+      {
+        subjectIds: {
+          $all: [subjectId]
+        }
+      },
       (err, res) =>
         new Promise((resolve, reject) => {
           if (err) {
@@ -18,6 +22,10 @@ class CardController {
           }
         })
     );
+  }
+
+  addCard(card) {
+    return this.collection.insertOne(card).then(res => res.ops[0]);
   }
 }
 

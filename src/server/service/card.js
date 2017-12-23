@@ -12,8 +12,17 @@ class CardService {
     this.db = db;
   }
 
-  getCards() {
-    return this.db.getCards();
+  getCards(subjectId) {
+    return this.db.getCards(subjectId);
+  }
+
+  addCard(card) {
+    const enrichedCard = {
+      ...card,
+      id: uuidv4(),
+      created: Date.now()
+    };
+    return this.db.addCard(enrichedCard);
   }
 }
 

@@ -10,10 +10,19 @@ class CardApi {
     this.logger = logger;
     this.service = service;
 
-    app.get("/api/cards/:subjectId", (req, res) => {
+    app.get("/api/subject/:subjectId/cards", (req, res) => {
       logger.info("Getting cards");
-      this.service.getCards().then(cards => res.json(cards));
+      this.service
+        .getCards(req.params.subjectId)
+        .then(cards => res.json(cards));
     });
+
+    app.post("/api/card", (req, res) => {
+      logger.info("Adding card");
+      this.service.addCard(req.body.card).then(card => res.json(card));
+    });
+
+    this.logger.debug("Cards API initialised");
   }
 }
 

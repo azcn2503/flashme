@@ -33,6 +33,8 @@ class SubjectApi {
         .updateSubjectTitle(req.params.subjectId, req.body.title)
         .then(subject => res.json(subject));
     });
+
+    this.logger.debug("Subjects API initialised");
   }
 }
 

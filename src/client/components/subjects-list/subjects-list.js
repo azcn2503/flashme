@@ -6,7 +6,7 @@ import SubjectCard from "../subject-card/subject-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 
-import { addSubject } from "../../state/actions/subjects";
+import { addSubject, getSubjects } from "../../state/actions/subjects";
 
 import styles from "./subjects-list.scss";
 
@@ -27,6 +27,10 @@ class SubjectsList extends PureComponent {
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.filterSubject = this.filterSubject.bind(this);
     this.renderSubject = this.renderSubject.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getSubjects());
   }
 
   onChangeFilter(e) {
