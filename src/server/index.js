@@ -25,8 +25,8 @@ databaseController
     cardService.initialise({ logger, db: db.getCards() });
     subjectService.initialise({ logger, db: db.getSubjects() });
 
-    cardApi.initialise({ app, logger, service: cardService });
-    subjectApi.initialise({ app, logger, service: subjectService });
+    cardApi.initialise({ app, logger, cardService });
+    subjectApi.initialise({ app, logger, subjectService, cardService });
 
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(config.client.path, "index.html"));

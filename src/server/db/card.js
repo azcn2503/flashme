@@ -24,6 +24,18 @@ class CardController {
     );
   }
 
+  /**
+   * Get card counts for a subject
+   * @param {string} subjectId
+   */
+  getCardCount(subjectId) {
+    return this.collection.count({
+      subjectIds: {
+        $all: [subjectId]
+      }
+    });
+  }
+
   addCard(card) {
     return this.collection.insertOne(card).then(res => res.ops[0]);
   }
