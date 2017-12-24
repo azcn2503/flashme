@@ -3,34 +3,44 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Switch, Route, Link } from "react-router-dom";
 
-import SubjectsList from "../subjects-list/subjects-list";
+import { SUBJECTS_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
 
 import styles from "./navigation.scss";
 
 class Navigation extends PureComponent {
   static mapStateToProps(state) {
     return {
-      subjects: state.subjects.byId
+      cards: state.cards,
+      subjects: state.subjects
     };
   }
 
+  renderRoute() {
+    const { subjectId, testId } = this.props.routerProps.match.params;
+    if (subjectId) {
+      const subject = this.props.subjects.byId[subjectId];
+      if (subject) {
+        return [
+          <Link to="/subjects">Subjects</Link>,
+          <div>&gt;</div>,
+          <Link to={`/subject/${subjectId}`}>{subject.title}</Link>
+        ];
+      } else {
+        return <Link to="/subjects">Subjects</Link>;
+      }
+    } else {
+      return <Link to="/subjects">Subjects</Link>;
+    }
+  }
+
   render() {
-    return (
-      <div className={styles.navigation}>
-        <div className={styles.header}>
-          <Link to="/subjects">Subjects ({Object.keys(this.props.subjects).length})</Link>
-        </div>
-        <SubjectsList
-          activeId={this.props.routerProps.match.params.subjectId}
-          dispatch={this.props.dispatch}
-        />
-      </div>
-    );
+    return <div className={styles.navigation}>{this.renderRoute()}</div>;
   }
 }
 
 Navigation.propTypes = {
-  subjects: PropTypes.object,
+  cards: CARDS_PROPTYPE,
+  subjects: SUBJECTS_PROPTYPE,
   routerProps: PropTypes.object,
   dispatch: PropTypes.func.isRequired
 };
