@@ -30,7 +30,7 @@ class CardService {
     return Promise.all(countsPromises).then(counts =>
       subjects.map((subject, key) => ({
         ...subject,
-        count: counts[key]
+        cardCount: counts[key]
       }))
     );
   }
@@ -38,14 +38,24 @@ class CardService {
   /**
    * Add a card
    * @param {object} card
+   * @param {string} subjectId
    */
-  addCard(card) {
+  addCard(card, subjectId) {
     const enrichedCard = {
       ...card,
+      subjectId,
       id: uuidv4(),
       created: Date.now()
     };
     return this.db.addCard(enrichedCard);
+  }
+
+  updateCard(cardId, card) {
+    const enrichedCard = {
+      ...card,
+      updated: Date.now()
+    };
+    return this.db.updateCard(cardId, enrichedCard);
   }
 }
 

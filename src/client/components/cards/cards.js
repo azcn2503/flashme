@@ -29,13 +29,10 @@ class Cards extends PureComponent {
       showBothSides: false
     };
     this.onClickShowBothSides = this.onClickShowBothSides.bind(this);
-    this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.filterCardsBySearchTerm = this.filterCardsBySearchTerm.bind(this);
     this.filterCardsBySubject = this.filterCardsBySubject.bind(this);
     this.renderCard = this.renderCard.bind(this);
-    this.onSelectCard = this.onSelectCard.bind(this);
-    this.onSubmitCard = this.onSubmitCard.bind(this);
   }
 
   componentDidMount() {
@@ -73,14 +70,6 @@ class Cards extends PureComponent {
     this.setState({
       showBothSides: !this.state.showBothSides
     });
-  }
-
-  onChangeCard(key, value) {
-    this.props.updateCard(key, value);
-  }
-
-  onSelectCard(key, value) {
-    this.props.selectCard(key, value);
   }
 
   onChangeFilter(e) {
@@ -132,8 +121,8 @@ class Cards extends PureComponent {
           </div>
           <div className={styles.testCard}>
             <FlashCard
+              dispatch={this.props.dispatch}
               card={this.state.cards[this.props.test.activeCardIndex]}
-              onContinue={this.onAnswerTestCard}
               test
             />
           </div>
@@ -164,7 +153,7 @@ class Cards extends PureComponent {
   }
 
   filterCardsBySubject(card) {
-    return card.subjectIds.includes(this.props.subjectId);
+    return card.subjectId === this.props.subjectId;
   }
 
   filterCardsBySearchTerm(card) {
@@ -178,11 +167,13 @@ class Cards extends PureComponent {
   renderCard(card, key) {
     return (
       <FlashCard
+        dispatch={this.props.dispatch}
         key={key}
         card={card}
+        subjectId={this.props.subjectId}
         showBothSides={this.state.showBothSides}
         selected={card.selected}
-        onSelect={selected => this.onSelectCard(key, selected)}
+        editable
       />
     );
   }
@@ -194,8 +185,9 @@ class Cards extends PureComponent {
     return (
       <div className={styles.cardList}>
         <FlashCard
+          dispatch={this.props.dispatch}
           card={{}}
-          onSubmit={this.onSubmitCard}
+          subjectId={this.props.subjectId}
           editable
           showBothSides={this.state.showBothSides}
         />

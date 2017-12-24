@@ -9,9 +9,7 @@ class CardController {
   getCards(subjectId) {
     return this.collection.find(
       {
-        subjectIds: {
-          $all: [subjectId]
-        }
+        subjectId
       },
       (err, res) =>
         new Promise((resolve, reject) => {
@@ -30,14 +28,17 @@ class CardController {
    */
   getCardCount(subjectId) {
     return this.collection.count({
-      subjectIds: {
-        $all: [subjectId]
-      }
+      subjectId
     });
   }
 
   addCard(card) {
     return this.collection.insertOne(card).then(res => res.ops[0]);
+  }
+
+  updateCard(cardId, card) {
+    this.logger.info("Not implemented yet");
+    return false;
   }
 }
 

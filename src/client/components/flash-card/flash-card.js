@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
+import { CARD_PROPTYPE } from "../../proptypes";
+import { addCard, updateCard } from "../../state/actions/cards";
 import Button from "../button/button";
 
 import styles from "./flash-card.scss";
@@ -53,6 +55,10 @@ class FlashCard extends PureComponent {
     window.removeEventListener("keydown", this.onKeyDown);
   }
 
+  onChange(value) {
+    console.log(value);
+  }
+
   onClick() {
     if (!this.props.editable) {
       this.props.onSelect(!this.props.selected);
@@ -66,7 +72,7 @@ class FlashCard extends PureComponent {
 
   onBlur() {
     if (this.props.editable) {
-      this.props.onChange(this.value());
+      this.onChange(this.value());
       this.setState({
         focused: false
       });
@@ -124,7 +130,13 @@ class FlashCard extends PureComponent {
   }
 
   submit() {
-    this.props.onSubmit(this.value());
+    if (this.props.card.id) {
+      // Update
+      this.props.dispatch(updateCard(this.props.card.id, this.value()));
+    } else {
+      // Create
+      this.props.dispatch(addCard(this.value(), this.props.subjectId));
+    }
   }
 
   value() {
@@ -166,7 +178,13 @@ class FlashCard extends PureComponent {
     } else if (this.props.test && this.state.flipped) {
       return this.renderFeedbackControls();
     } else {
-      return <Button onClick={this.onClickFlip}>Flip</Button>;
+      const controls = [];
+      controls.push(
+        <Button key={0} onClick={this.onClickFlip}>
+          Flip
+        </Button>
+      );
+      return controls;
     }
   }
 
@@ -215,11 +233,7 @@ class FlashCard extends PureComponent {
 }
 
 FlashCard.propTypes = {
-  card: PropTypes.shape({
-    id: PropTypes.string,
-    question: PropTypes.string,
-    answer: PropTypes.string
-  }),
+  card: CARD_PROPTYPE,
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -227,7 +241,8 @@ FlashCard.propTypes = {
   showBothSides: PropTypes.bool,
   test: PropTypes.bool,
   onContinue: PropTypes.func,
-  selected: PropTypes.bool
+  selected: PropTypes.bool,
+  dispatch: PropTypes.func
 };
 
 FlashCard.defaultProps = {

@@ -7,7 +7,16 @@ class CardApi {
 
     app.post("/api/card", (req, res) => {
       logger.info("Adding card");
-      cardService.addCard(req.body.card).then(card => res.json(card));
+      cardService
+        .addCard(req.body.card, req.body.subjectId)
+        .then(card => res.json(card));
+    });
+
+    app.put("/api/card/:cardId", (req, res) => {
+      logger.info("Updating card " + req.params.cardId);
+      cardService
+        .updateCard(req.params.cardId, req.body.card)
+        .then(card => res.json(card));
     });
 
     logger.debug("Cards API initialised");

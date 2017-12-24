@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { CARDS_PROPTYPE, SUBJECTS_PROPTYPE } from "../../proptypes";
 import SubjectCard from "../subject-card/subject-card";
 import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
@@ -65,8 +66,9 @@ class SubjectsList extends PureComponent {
         title={subject.title}
         active={subject.id === this.props.activeId}
         count={
-          Object.values(this.props.cards.byId).filter(card =>
-            card.subjectIds.includes(subject.id)
+          subject.cardCount ||
+          Object.values(this.props.cards.byId).filter(
+            card => card.subjectId === subject.id
           ).length
         }
         dispatch={this.props.dispatch}
@@ -107,10 +109,9 @@ class SubjectsList extends PureComponent {
 }
 
 SubjectsList.propTypes = {
-  subjects: PropTypes.object,
-  addSubject: PropTypes.func,
+  subjects: SUBJECTS_PROPTYPE,
+  cards: CARDS_PROPTYPE,
   activeId: PropTypes.string,
-  updateSubject: PropTypes.func,
   dispatch: PropTypes.func.isRequired
 };
 
