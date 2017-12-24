@@ -43,6 +43,14 @@ class SubjectsController {
       )
       .then(({ value }) => value);
   }
+
+  /**
+   * Remove a subject by ID
+   * @param {string} id
+   */
+  removeSubject(id) {
+    return this.collection.remove({ id }).then(res => res);
+  }
 }
 
 export default SubjectsController;

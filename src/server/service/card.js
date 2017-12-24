@@ -70,6 +70,14 @@ class CardService {
   removeCard(cardId) {
     return this.db.removeCard(cardId);
   }
+
+  /**
+   * Remove all cards with the specified subject ID
+   * @param {string} subjectId
+   */
+  removeSubjectCards(subjectId) {
+    return this.db.removeSubjectCards(subjectId);
+  }
 }
 
 export default new CardService();

@@ -20,10 +20,20 @@ const subjectApi = ({ app, logger, subjectService, cardService }) => {
   });
 
   app.put("/api/subject/:subjectId/title", (req, res) => {
-    logger.info("Updating subject title for " + req.params.subjectId);
+    logger.info(`Updating subject title for ${req.params.subjectId}`);
     return subjectService
       .updateSubjectTitle(req.params.subjectId, req.body.title)
       .then(subject => res.json(subject));
+  });
+
+  app.delete("/api/subject/:subjectId", (req, res) => {
+    logger.info(`Removing subject ${req.params.subjectId}`);
+    const { subjectId } = req.params;
+    return cardService
+      .removeSubjectCards(subjectId)
+      .then(() => subjectService.removeSubject(subjectId))
+      .then(() => res.sendStatus(200))
+      .catch(() => res.sendStatus(500));
   });
 
   logger.debug("Subjects API initialised");

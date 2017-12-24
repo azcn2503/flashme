@@ -31,6 +31,14 @@ class SubjectService {
   updateSubjectTitle(id, title) {
     return this.db.updateSubjectTitle(id, title);
   }
+
+  /**
+   * Remove a subject
+   * @param {string} subjectId
+   */
+  removeSubject(subjectId) {
+    return this.db.removeSubject(subjectId);
+  }
 }
 
 export default new SubjectService();

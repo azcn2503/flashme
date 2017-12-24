@@ -6,7 +6,10 @@ import PropTypes from "prop-types";
 
 import Button from "../button/button";
 
-import { updateSubjectTitle } from "../../state/actions/subjects";
+import {
+  updateSubjectTitle,
+  removeSubject
+} from "../../state/actions/subjects";
 import { addTest } from "../../state/actions/tests";
 
 import styles from "./subject-card.scss";
@@ -21,6 +24,7 @@ class SubjectCard extends PureComponent {
   constructor(props) {
     super(props);
     this.onBlur = this.onBlur.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickTest = this.onClickTest.bind(this);
     this.el = null;
   }
@@ -31,20 +35,24 @@ class SubjectCard extends PureComponent {
     }
   }
 
+  onClickDelete() {
+    this.props.dispatch(removeSubject(this.props.id));
+  }
+
   onClickTest() {
-    this.props
-      .dispatch(
-        addTest(
-          this.props.id,
-          Object.values(this.props.cards.byId).filter(card =>
-            card.subjectIds.includes(this.props.id)
-          )
-        )
-      )
-      .then(test => {
-        console.log("test", test);
-        this.props.history.push(`/subject/${this.props.id}/test/${test.id}`);
-      });
+    // this.props
+    //   .dispatch(
+    //     addTest(
+    //       this.props.id,
+    //       Object.values(this.props.cards.byId).filter(card =>
+    //         card.subjectIds.includes(this.props.id)
+    //       )
+    //     )
+    //   )
+    //   .then(test => {
+    //     console.log("test", test);
+    //     this.props.history.push(`/subject/${this.props.id}/test/${test.id}`);
+    //   });
   }
 
   getTitleMarkup() {
@@ -92,6 +100,9 @@ class SubjectCard extends PureComponent {
         <div className={styles.controls}>
           <Button disabled={this.props.count === 0} onClick={this.onClickTest}>
             Test
+          </Button>
+          <Button delete onClick={this.onClickDelete}>
+            Delete
           </Button>
         </div>
       </div>

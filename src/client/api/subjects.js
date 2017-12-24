@@ -19,3 +19,11 @@ export const getSubjects = () => {
 export const getSubject = subjectId => {
   return axios.get(apiUrl(`/subject/${subjectId}`)).then(({ data }) => data);
 };
+
+/**
+ * Remove a subject using the API
+ * @param {string} subjectId
+ */
+export const removeSubject = subjectId => {
+  return axios.delete(apiUrl(`/subject/${subjectId}`)).then(({ data }) => data);
+};

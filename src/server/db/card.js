@@ -68,6 +68,14 @@ class CardController {
   removeCard(id) {
     return this.collection.remove({ id }).then(res => res);
   }
+
+  /**
+   * Remove all cards matching a specific subject ID
+   * @param {string} subjectId
+   */
+  removeSubjectCards(subjectId) {
+    return this.collection.remove({ subjectId }).then(res => res);
+  }
 }
 
 export default CardController;

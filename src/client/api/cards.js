@@ -34,6 +34,10 @@ export const updateCard = (cardId, card) => {
     .then(({ data }) => data);
 };
 
+/**
+ * Remove a card using the API
+ * @param {string} cardId
+ */
 export const removeCard = cardId => {
   return axios.delete(apiUrl(`/card/${cardId}`)).then(({ data }) => data);
 };
