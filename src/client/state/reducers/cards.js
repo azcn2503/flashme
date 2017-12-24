@@ -1,4 +1,4 @@
-import { keyBy, uniq } from "lodash";
+import { dropWhile, keyBy, omitBy, uniq } from "lodash";
 
 import * as actions from "../actions/cards";
 
@@ -51,7 +51,29 @@ const reducer = (state = defaultState, action) => {
           ...state.byId,
           ...keyBy(action.cards, "id")
         },
-        allIds: uniq(...state.allIds, ...action.cards.map(card => card.id))
+        allIds: uniq(...state.allIds, action.cards.map(card => card.id))
+      };
+
+    case actions.REMOVE_CARD_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.REMOVE_CARD_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: omitBy(state.byId, card => card.id === action.cardId),
+        allIds: [...dropWhile(state.allIds, id => id === action.cardId)]
+      };
+
+    case actions.REMOVE_CARD_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
       };
 
     default:

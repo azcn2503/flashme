@@ -5,7 +5,11 @@ import { getLogger } from "log4js";
 import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 
-import { cardApi, subjectApi, testApi } from "./api";
+import {
+  cardApi as initialiseCardApi,
+  subjectApi as initialiseSubjectApi,
+  testApi as initialiseTestApi
+} from "./api";
 import { cardService, subjectService, testService } from "./service";
 import databaseController from "./db";
 
@@ -25,8 +29,8 @@ databaseController
     cardService.initialise({ logger, db: db.getCards() });
     subjectService.initialise({ logger, db: db.getSubjects() });
 
-    cardApi.initialise({ app, logger, cardService });
-    subjectApi.initialise({ app, logger, subjectService, cardService });
+    initialiseCardApi({ app, logger, cardService });
+    initialiseSubjectApi({ app, logger, subjectService, cardService });
 
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(config.client.path, "index.html"));

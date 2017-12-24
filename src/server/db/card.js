@@ -32,10 +32,19 @@ class CardController {
     });
   }
 
+  /**
+   * Add a card
+   * @param {object} card
+   */
   addCard(card) {
     return this.collection.insertOne(card).then(res => res.ops[0]);
   }
 
+  /**
+   * Update a card by ID
+   * @param {string} id
+   * @param {object} card
+   */
   updateCard(id, card) {
     return this.collection
       .findOneAndUpdate(
@@ -50,6 +59,14 @@ class CardController {
         }
       )
       .then(({ value }) => value);
+  }
+
+  /**
+   * Remove a card by ID
+   * @param {string} id
+   */
+  removeCard(id) {
+    return this.collection.remove({ id }).then(res => res);
   }
 }
 

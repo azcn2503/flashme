@@ -33,3 +33,7 @@ export const updateCard = (cardId, card) => {
     .put(apiUrl(`/card/${cardId}`), { card })
     .then(({ data }) => data);
 };
+
+export const removeCard = cardId => {
+  return axios.delete(apiUrl(`/card/${cardId}`)).then(({ data }) => data);
+};

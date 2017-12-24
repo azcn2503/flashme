@@ -50,12 +50,25 @@ class CardService {
     return this.db.addCard(enrichedCard);
   }
 
+  /**
+   * Update a card
+   * @param {string} cardId
+   * @param {object} card
+   */
   updateCard(cardId, card) {
     const enrichedCard = {
       ...card,
       updated: Date.now()
     };
     return this.db.updateCard(cardId, enrichedCard);
+  }
+
+  /**
+   * Remove a card
+   * @param {string} cardId
+   */
+  removeCard(cardId) {
+    return this.db.removeCard(cardId);
   }
 }
 

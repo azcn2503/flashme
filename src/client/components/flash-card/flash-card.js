@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 
 import { CARD_PROPTYPE } from "../../proptypes";
-import { addCard, updateCard } from "../../state/actions/cards";
+import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
 
 import styles from "./flash-card.scss";
@@ -23,6 +23,7 @@ class FlashCard extends PureComponent {
     this.onFocus = this.onFocus.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onClickFlip = this.onClickFlip.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
   }
 
   componentDidMount() {
@@ -59,10 +60,13 @@ class FlashCard extends PureComponent {
     console.log(value);
   }
 
-  onClick() {
-    if (!this.props.editable) {
-      this.props.onSelect(!this.props.selected);
-    }
+  onClick(e) {
+    e.preventDefault();
+  }
+
+  onClickDelete(e) {
+    e.stopPropagation();
+    this.props.dispatch(removeCard(this.props.card.id));
   }
 
   onClickFlip(e) {
@@ -184,6 +188,13 @@ class FlashCard extends PureComponent {
           Flip
         </Button>
       );
+      if (this.props.card.id) {
+        controls.push(
+          <Button key={1} onClick={this.onClickDelete}>
+            Delete
+          </Button>
+        );
+      }
       return controls;
     }
   }
