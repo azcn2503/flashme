@@ -1,22 +1,23 @@
+@import "../../styles/variables.scss";
+
 .subjectCard {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid rgba(0, 0, 0, .1);
-  border-width: 0 0 1px 0;
+  width: 200px;
+  height: 300px;
   display: flex;
+  margin: 0 20px 20px 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow-small;
+  background-color: white;
 
   &.active {
-    background-color: rgba(0, 90, 180, .1);
+    background-color: rgba(0, 90, 180, 0.1);
   }
 
   .title {
     display: flex;
     flex-grow: 1;
     align-items: center;
-
-    .label {
-      flex-grow: 1;
-    }
+    justify-content: center;
 
     .count {
       margin-left: 10px;

@@ -15,3 +15,8 @@ export const CARD_PROPTYPE = PropTypes.shape({
   question: PropTypes.string,
   answer: PropTypes.string
 });
+
+export const SUBJECT_PROPTYPE = PropTypes.shape({
+  id: PropTypes.string,
+  title: PropTypes.string
+});

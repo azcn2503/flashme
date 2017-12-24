@@ -45,10 +45,6 @@ class App extends PureComponent {
     return (
       <div className={styles.app}>
         <Switch>
-          <Route path="/subject/:subjectId" component={this.renderNavigation} />
-          <Route component={this.renderNavigation} />
-        </Switch>
-        <Switch>
           <Route path="/subjects" component={this.renderSubjects} exact />
           <Route
             path="/subject/:subjectId"

@@ -1,4 +1,4 @@
-import { dropWhile, keyBy, omitBy } from "lodash";
+import { dropWhile, keyBy, omitBy, uniq } from "lodash";
 
 import * as actions from "../actions/subjects";
 
@@ -48,7 +48,7 @@ const reducer = (state = defaultState, action) => {
           ...state.byId,
           [action.subject.id]: action.subject
         },
-        allIds: [...state.allIds.filter(id => id !== action.id), action.id]
+        allIds: uniq([...state.allIds, action.subject.id])
       };
 
     case actions.GET_SUBJECT_FAILURE:

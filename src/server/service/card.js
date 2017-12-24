@@ -76,6 +76,7 @@ class CardService {
    * @param {string} subjectId
    */
   removeSubjectCards(subjectId) {
+    this.logger.debug(`Removing all cards for subject ${subjectId}`);
     return this.db.removeSubjectCards(subjectId);
   }
 }

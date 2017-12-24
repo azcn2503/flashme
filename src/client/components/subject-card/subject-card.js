@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import { SUBJECT_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
 import Button from "../button/button";
 
 import {
@@ -85,43 +86,35 @@ class SubjectCard extends PureComponent {
   }
 
   render() {
-    return (
-      <div
-        className={classNames(styles.subjectCard, {
-          [styles.active]: this.props.active
-        })}
-      >
-        <div className={styles.title}>
-          <div className={styles.label}>
-            {this.props.active ? this.renderTitle() : this.renderLink()}
+    if (this.props.subject) {
+      return (
+        <div className={styles.subjectCard}>
+          <div className={styles.title}>
+            <NavLink to={`/subject/${this.props.subject.id}`}>
+              {this.props.subject.title}
+            </NavLink>
+            <span className={styles.count}>
+              ({Object.keys(this.props.cards.byId).filter(
+                card => card.subjectId === this.props.subject.id
+              ).length || this.props.subject.cardCount})
+            </span>
           </div>
-          <div className={styles.count}>({this.props.count})</div>
+          <div className={styles.controls} />
         </div>
-        <div className={styles.controls}>
-          <Button disabled={this.props.count === 0} onClick={this.onClickTest}>
-            Test
-          </Button>
-          <Button delete onClick={this.onClickDelete}>
-            Delete
-          </Button>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 
 SubjectCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  count: PropTypes.number,
-  active: PropTypes.bool,
-  onChange: PropTypes.func,
+  subject: SUBJECT_PROPTYPE,
+  cards: CARDS_PROPTYPE,
   dispatch: PropTypes.func.isRequired
 };
 
 SubjectCard.defaultProps = {
-  title: "",
-  count: 0,
   active: false,
   onChange: () => null
 };
