@@ -31,10 +31,19 @@
 
   &.disabled {
     cursor: not-allowed;
-    color: rgba(0, 0, 0, .5);
+    color: rgba(0, 0, 0, 0.5);
 
     &:hover {
       background-color: $light-grey;
+    }
+  }
+
+  &.delete {
+    color: white;
+    background-color: $delete-color;
+
+    &:hover {
+      background-color: lighten($delete-color, 10%);
     }
   }
 

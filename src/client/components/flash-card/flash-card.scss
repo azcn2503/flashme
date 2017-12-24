@@ -31,24 +31,52 @@
   }
 
   .face.front {
-    z-index: 1;
+    display: flex;
   }
-
   .face.back {
-    z-index: 0;
+    display: none;
   }
 
   &.flipped .face.front {
-    z-index: 0;
+    display: none;
+  }
+  &.flipped .face.back {
+    display: flex;
   }
 
-  &.flipped .face.back {
+  &:hover .controls {
+    opacity: 1;
+  }
+
+  .controls {
+    @extend .centered;
+    @include transition(opacity);
+
+    flex-shrink: 0;
+    padding: 10px;
     z-index: 1;
+    width: 100%;
+    bottom: 0;
+    opacity: 0;
+
+    .deleteButton {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    > * {
+      margin-left: 10px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
   }
 }
 
 .face {
-  position: absolute;
+  flex-grow: 1;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -79,25 +107,6 @@
   text-align: center;
   padding: 10px;
   flex-grow: 1;
-}
-
-.controls {
-  @extend .centered;
-
-  flex-shrink: 0;
-  padding: 10px;
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-
-  > * {
-    margin-left: 10px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
 }
 
 @keyframes flip {

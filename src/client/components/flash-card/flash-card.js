@@ -165,37 +165,38 @@ class FlashCard extends PureComponent {
     }
   }
 
-  renderFeedbackControls() {
-    return [
-      <Button key={0} onClick={() => this.onContinue(true)} primary>
-        Right
-      </Button>,
-      <Button key={1} onClick={() => this.onContinue(false)}>
-        Wrong
-      </Button>
-    ];
+  renderTestButtons() {
+    if (this.props.test) {
+      return [
+        <Button key={0} onClick={() => this.onContinue(true)} primary>
+          Right
+        </Button>,
+        <Button key={1} onClick={() => this.onContinue(false)}>
+          Wrong
+        </Button>
+      ];
+    } else {
+      return null;
+    }
   }
 
-  renderControls() {
-    if (this.props.showBothSides) {
-      return null;
-    } else if (this.props.test && this.state.flipped) {
-      return this.renderFeedbackControls();
-    } else {
-      const controls = [];
-      controls.push(
-        <Button key={0} onClick={this.onClickFlip}>
-          Flip
-        </Button>
+  renderDeleteButton() {
+    if (this.props.card.id) {
+      return (
+        <button className={styles.deleteButton} onClick={this.onClickDelete}>
+          x
+        </button>
       );
-      if (this.props.card.id) {
-        controls.push(
-          <Button key={1} onClick={this.onClickDelete}>
-            Delete
-          </Button>
-        );
-      }
-      return controls;
+    } else {
+      return null;
+    }
+  }
+
+  renderFlipButton() {
+    if (!this.props.showBothSides) {
+      return <Button onClick={this.onClickFlip}>Flip</Button>;
+    } else {
+      return null;
     }
   }
 
@@ -237,7 +238,11 @@ class FlashCard extends PureComponent {
             dangerouslySetInnerHTML={this.getAnswerMarkup()}
           />
         </div>
-        <div className={styles.controls}>{this.renderControls()}</div>
+        <div className={styles.controls}>
+          {this.renderFlipButton()}
+          {this.renderDeleteButton()}
+          {this.renderTestButtons()}
+        </div>
       </div>
     );
   }

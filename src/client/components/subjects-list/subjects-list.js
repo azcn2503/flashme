@@ -66,10 +66,9 @@ class SubjectsList extends PureComponent {
         title={subject.title}
         active={subject.id === this.props.activeId}
         count={
-          subject.cardCount ||
           Object.values(this.props.cards.byId).filter(
             card => card.subjectId === subject.id
-          ).length
+          ).length || subject.cardCount
         }
         dispatch={this.props.dispatch}
       />
