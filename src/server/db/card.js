@@ -36,9 +36,20 @@ class CardController {
     return this.collection.insertOne(card).then(res => res.ops[0]);
   }
 
-  updateCard(cardId, card) {
-    this.logger.info("Not implemented yet");
-    return false;
+  updateCard(id, card) {
+    return this.collection
+      .findOneAndUpdate(
+        { id },
+        {
+          $set: {
+            ...card
+          }
+        },
+        {
+          returnOriginal: false
+        }
+      )
+      .then(({ value }) => value);
   }
 }
 
