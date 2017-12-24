@@ -5,8 +5,9 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 
 import rootReducer from "../../state/reducers";
+import App from "../app/app";
 
-import App from "client/components/app/app";
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 class Root extends Component {
   render() {
@@ -14,11 +15,7 @@ class Root extends Component {
       <Provider
         store={createStore(
           rootReducer,
-          compose(
-            applyMiddleware(thunk),
-            window.__REDUX_DEVTOOLS_EXTENSION__ &&
-              window.__REDUX_DEVTOOLS_EXTENSION__()
-          )
+          compose(composeEnhancers(applyMiddleware(thunk)))
         )}
       >
         <BrowserRouter>
