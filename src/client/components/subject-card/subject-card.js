@@ -7,10 +7,7 @@ import PropTypes from "prop-types";
 import { SUBJECT_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
 import Button from "../button/button";
 
-import {
-  updateSubjectTitle,
-  removeSubject
-} from "../../state/actions/subjects";
+import { removeSubject } from "../../state/actions/subjects";
 import { addTest } from "../../state/actions/tests";
 
 import styles from "./subject-card.scss";
@@ -24,20 +21,13 @@ class SubjectCard extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.onBlur = this.onBlur.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickTest = this.onClickTest.bind(this);
     this.el = null;
   }
 
-  onBlur() {
-    if (this.el) {
-      this.props.dispatch(updateSubjectTitle(this.props.id, this.value()));
-    }
-  }
-
   onClickDelete() {
-    this.props.dispatch(removeSubject(this.props.id));
+    this.props.dispatch(removeSubject(this.props.subject.id));
   }
 
   onClickTest() {
@@ -96,10 +86,16 @@ class SubjectCard extends PureComponent {
             <span className={styles.count}>
               ({Object.keys(this.props.cards.byId).filter(
                 card => card.subjectId === this.props.subject.id
-              ).length || this.props.subject.cardCount})
+              ).length ||
+                this.props.subject.cardCount ||
+                0})
             </span>
           </div>
-          <div className={styles.controls} />
+          <div className={styles.controls}>
+            <Button delete onClick={this.onClickDelete}>
+              Delete
+            </Button>
+          </div>
         </div>
       );
     } else {

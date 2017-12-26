@@ -7,7 +7,7 @@ import FilterBox from "../filter-box/filter-box";
 import Button from "../button/button";
 import Subheader from "../subheader/subheader";
 
-import { getSubject } from "../../state/actions/subjects";
+import { getSubject, updateSubjectTitle } from "../../state/actions/subjects";
 import { getCards, addCard, answerTestCard } from "../../state/actions/cards";
 import { startTest } from "../../state/actions/tests";
 
@@ -33,6 +33,7 @@ class Cards extends PureComponent {
     this.filterCardsBySearchTerm = this.filterCardsBySearchTerm.bind(this);
     this.filterCardsBySubject = this.filterCardsBySubject.bind(this);
     this.renderCard = this.renderCard.bind(this);
+    this.onChangeSubjectTitle = this.onChangeSubjectTitle.bind(this);
   }
 
   componentDidMount() {
@@ -76,6 +77,10 @@ class Cards extends PureComponent {
     this.setState({
       filter: e.target.value
     });
+  }
+
+  onChangeSubjectTitle(value) {
+    this.props.dispatch(updateSubjectTitle(this.props.subjectId, value));
   }
 
   onSubmitCard(value) {
@@ -241,7 +246,11 @@ class Cards extends PureComponent {
       if (subject) {
         return (
           <div className={styles.cards}>
-            <Subheader label={`${subject.title}`} />
+            <Subheader
+              editable
+              label={`${subject.title}`}
+              onChange={this.onChangeSubjectTitle}
+            />
             {this.renderControls()}
             {this.props.test
               ? this.renderTestContainer()
