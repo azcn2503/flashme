@@ -223,6 +223,7 @@ class Cards extends PureComponent {
     );
     return (
       <div className={styles.controls}>
+        {this.renderFilters()}
         {!this.props.test ? (
           <Button onClick={this.onClickShowBothSides} primary>
             {this.state.showBothSides
@@ -230,10 +231,6 @@ class Cards extends PureComponent {
               : "Show both sides"}
           </Button>
         ) : null}
-        {selected.length > 0 ? (
-          <Button>Do something with your {selected.length} cards</Button>
-        ) : null}
-        {this.renderFilters()}
       </div>
     );
   }

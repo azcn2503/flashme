@@ -1,5 +1,16 @@
+@import "../../styles/variables";
+
 .subjects {
   padding: 20px;
+
+  .controls {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    box-shadow: $box-shadow-large;
+    z-index: 1;
+  }
 
   .subjectList {
     margin-top: 20px;
