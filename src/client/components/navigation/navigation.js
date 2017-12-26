@@ -11,26 +11,58 @@ class Navigation extends PureComponent {
   static mapStateToProps(state) {
     return {
       cards: state.cards,
-      subjects: state.subjects
+      subjects: state.subjects,
+      tests: state.tests
     };
   }
 
-  renderRoute() {
-    const { subjectId, testId } = this.props.routerProps.match.params;
-    if (subjectId) {
-      const subject = this.props.subjects.byId[subjectId];
-      if (subject) {
-        return [
-          <Link to="/subjects">Subjects</Link>,
-          <div>&gt;</div>,
-          <Link to={`/subject/${subjectId}`}>{subject.title}</Link>
-        ];
-      } else {
-        return <Link to="/subjects">Subjects</Link>;
-      }
-    } else {
-      return <Link to="/subjects">Subjects</Link>;
+  renderSegment(path, url, index) {
+    switch (path) {
+      case "subject":
+      case "subjects":
+        return <Link to="../subjects">Subjects</Link>;
+      case ":subjectId":
+        const subject = this.props.subjects.byId[url];
+        if (subject) {
+          return <Link to={`../subject/${url}`}>{subject.title}</Link>;
+        } else {
+          return null;
+        }
+      case "test":
+      case "tests":
+        return <Link to="../tests">Tests</Link>;
+      case ":testId":
+        const test = this.props.tests.byId[url];
+        if (test) {
+          return <Link to={`../test/${url}`}>{test.id}</Link>;
+        } else {
+          return null;
+        }
+      default:
+        return null;
     }
+  }
+
+  renderSeparator(index, length) {
+    if (index < length - 1) {
+      return <div key={index}>&gt;</div>;
+    } else {
+      return null;
+    }
+  }
+
+  renderRoute() {
+    const { path, url } = this.props.routerProps.match;
+    const splitPath = path.split("/");
+    const splitUrl = url.split("/");
+    return splitPath.map((p, key) => [
+      <div key={`segment-${key}`}>
+        {this.renderSegment(splitPath[key], splitUrl[key], key)}
+      </div>,
+      key > 0 && key < splitPath.length - 1 ? (
+        <div key={`separator-${key}`}>&gt;</div>
+      ) : null
+    ]);
   }
 
   render() {
