@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 import { login } from "client/state/actions/user";
+import TextField from "client/components/textfield/textfield";
 
 import styles from "./login.scss";
 
@@ -36,19 +37,21 @@ class Login extends PureComponent {
     return (
       <div className={styles.login}>
         <div>
-          Username:{" "}
-          <input
+          <TextField
+            placeholder="Username"
             type="text"
-            defaultValue={this.state.username}
+            value={this.state.username}
             onChange={this.onChangeUsername}
+            fullWidth
           />
         </div>
         <div>
-          Password:{" "}
-          <input
+          <TextField
+            placeholder="Password"
             type="password"
-            defaultValue={this.state.password}
+            value={this.state.password}
             onChange={this.onChangePassword}
+            fullWidth
           />
         </div>
       </div>

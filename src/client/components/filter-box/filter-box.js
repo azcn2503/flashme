@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
+import TextField from "client/components/textfield/textfield";
+
 import styles from "./filter-box.scss";
 
 class FilterBox extends PureComponent {
@@ -24,8 +26,8 @@ class FilterBox extends PureComponent {
   render() {
     return (
       <div className={styles.filterBox}>
-        <input
-          defaultValue={this.props.value}
+        <TextField
+          value={this.props.value}
           className={styles.input}
           onChange={this.props.onChange}
           placeholder={`Filter ${this.props.type}`}
