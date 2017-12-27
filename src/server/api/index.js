@@ -1,8 +1,9 @@
+import authApi from "./auth";
 import cardApi from "./card";
 import subjectApi from "./subject";
 import testApi from "./test";
 
-export { cardApi, subjectApi, testApi };
+export { authApi, cardApi, subjectApi, testApi };
 
 // export const initialise = ({ app, logger }) => {
 

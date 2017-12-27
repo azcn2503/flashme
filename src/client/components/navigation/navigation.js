@@ -1,9 +1,13 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import { login } from "client/state/actions/user";
+import Dialog from "client/components/dialog/dialog";
+import Login from "client/components/login/login";
 import { SUBJECTS_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
+import Button from "../button/button";
 
 import styles from "./navigation.scss";
 
@@ -14,6 +18,35 @@ class Navigation extends PureComponent {
       subjects: state.subjects,
       tests: state.tests
     };
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginDialogOpen: false
+    };
+    this._login = null;
+    this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
+    this.onClickLoginButton = this.onClickLoginButton.bind(this);
+    this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
+  }
+
+  onClickLoginButton() {
+    if (this._login) {
+      this._login.submit();
+    }
+  }
+
+  onClickLoginOrRegister() {
+    this.setState({
+      loginDialogOpen: true
+    });
+  }
+
+  onCloseLoginDialog() {
+    this.setState({
+      loginDialogOpen: false
+    });
   }
 
   renderSegment(path, url, index) {
@@ -66,7 +99,32 @@ class Navigation extends PureComponent {
   }
 
   render() {
-    return <div className={styles.navigation}>{this.renderRoute()}</div>;
+    return (
+      <div className={styles.navigation}>
+        <div className={styles.route}>{this.renderRoute()}</div>
+        <div className={styles.login}>
+          <Button onClick={this.onClickLoginOrRegister}>
+            Login / Register
+          </Button>
+        </div>
+        <Dialog
+          open={this.state.loginDialogOpen}
+          onClose={this.onCloseLoginDialog}
+          header="Login / Register"
+          body={
+            <Login
+              ref={el => (this._login = el)}
+              dispatch={this.props.dispatch}
+            />
+          }
+          footer={
+            <Button primary onClick={this.onClickLoginButton}>
+              Login
+            </Button>
+          }
+        />
+      </div>
+    );
   }
 }
 

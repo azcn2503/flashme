@@ -2,8 +2,8 @@
 @import "../../styles/tools.scss";
 
 .cards {
+  margin-top: 20px;
   flex-grow: 1;
-  padding: 20px;
   display: flex;
   flex-direction: column;
 
@@ -11,8 +11,8 @@
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
-    margin-top: 10px;
-    z-index: 0;
+    padding: 20px;
+    flex-grow: 1;
   }
 
   .testContainer {
@@ -62,12 +62,13 @@
   }
 
   .controls {
+    background-color: white;
     padding: 10px;
-    margin-bottom: 10px;
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
     box-shadow: $box-shadow-large;
+    border-radius: 2px;
     z-index: 1;
   }
 

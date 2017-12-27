@@ -1,13 +1,27 @@
+@import "styles/variables";
+
 * {
   box-sizing: border-box;
 }
 
-body, html, body > div {
+body,
+html,
+body > div {
   height: 100%;
   margin: 0;
 }
 
-body, input {
+body,
+input {
   font: 10pt sans-serif;
   overflow: hidden;
+}
+
+a {
+  color: $primary-color;
+  font-weight: bold;
+
+  &:hover {
+    color: lighten($primary-color, 10%);
+  }
 }

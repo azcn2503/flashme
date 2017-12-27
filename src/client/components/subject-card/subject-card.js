@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import classNames from "classnames";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { SUBJECT_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
@@ -23,7 +22,11 @@ class SubjectCard extends PureComponent {
     super(props);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickTest = this.onClickTest.bind(this);
-    this.el = null;
+    this._fakeCards = [];
+  }
+
+  componentDidMount() {
+    this.scatterFakeCards();
   }
 
   onClickDelete() {
@@ -31,70 +34,64 @@ class SubjectCard extends PureComponent {
   }
 
   onClickTest() {
-    // this.props
-    //   .dispatch(
-    //     addTest(
-    //       this.props.id,
-    //       Object.values(this.props.cards.byId).filter(card =>
-    //         card.subjectIds.includes(this.props.id)
-    //       )
-    //     )
-    //   )
-    //   .then(test => {
-    //     console.log("test", test);
-    //     this.props.history.push(`/subject/${this.props.id}/test/${test.id}`);
-    //   });
+    this.props.dispatch(addTest(this.props.subject.id));
   }
 
-  getTitleMarkup() {
-    return {
-      __html: this.props.title
-    };
-  }
-
-  value() {
-    if (this.el) {
-      return this.el.textContent;
+  /**
+   * Randomly scatters the fake cards behind the subject card
+   */
+  scatterFakeCards() {
+    if (this._fakeCards.length > 0) {
+      setTimeout(() => {
+        this._fakeCards.forEach(fakeCard => {
+          const rotateAmount = Math.round(Math.random() * 6 - 3);
+          fakeCard.style.transform = `rotateZ(${rotateAmount}deg`;
+        });
+      });
     }
   }
 
-  renderLink() {
-    return (
-      <NavLink to={`/subject/${this.props.id}`}>{this.props.title}</NavLink>
-    );
-  }
-
-  renderTitle() {
-    return (
+  renderFakeCards() {
+    return [
       <div
-        contentEditable
-        dangerouslySetInnerHTML={this.getTitleMarkup()}
-        onBlur={this.onBlur}
-        ref={el => (this.el = el)}
+        className={styles.fakeCard}
+        key="fakeCard-0"
+        ref={el => this._fakeCards.push(el)}
+      />,
+      <div
+        className={styles.fakeCard}
+        key="fakeCard-1"
+        ref={el => this._fakeCards.push(el)}
       />
-    );
+    ];
   }
 
   render() {
     if (this.props.subject) {
       return (
-        <div className={styles.subjectCard}>
-          <div className={styles.title}>
-            <NavLink to={`/subject/${this.props.subject.id}`}>
-              {this.props.subject.title}
-            </NavLink>
-            <span className={styles.count}>
-              ({Object.keys(this.props.cards.byId).filter(
-                card => card.subjectId === this.props.subject.id
-              ).length ||
-                this.props.subject.cardCount ||
-                0})
-            </span>
-          </div>
-          <div className={styles.controls}>
-            <Button delete onClick={this.onClickDelete}>
-              Delete
-            </Button>
+        <div className={styles.subjectCardContainer}>
+          {this.renderFakeCards()}
+          <div className={styles.subjectCard}>
+            <div className={styles.title}>
+              <NavLink to={`/subject/${this.props.subject.id}`}>
+                {this.props.subject.title}
+              </NavLink>
+              <span className={styles.count}>
+                ({Object.keys(this.props.cards.byId).filter(
+                  card => card.subjectId === this.props.subject.id
+                ).length ||
+                  this.props.subject.cardCount ||
+                  0})
+              </span>
+            </div>
+            <div className={styles.controls}>
+              <Button primary onClick={this.onClickTest}>
+                Test
+              </Button>
+              <Button delete onClick={this.onClickDelete}>
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
       );
@@ -115,4 +112,4 @@ SubjectCard.defaultProps = {
   onChange: () => null
 };
 
-export default withRouter(connect(SubjectCard.mapStateToProps)(SubjectCard));
+export default connect(SubjectCard.mapStateToProps)(SubjectCard);

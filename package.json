@@ -50,10 +50,14 @@
     "body-parser": "^1.17.2",
     "config": "^1.26.1",
     "express": "^4.15.3",
+    "express-session": "^1.15.6",
     "http": "^0.0.0",
     "lodash": "^4.17.4",
     "log4js": "^2.3.3",
     "nodemon": "^1.11.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
     "serve-static": "^1.12.3"
   },
   "scripts": {

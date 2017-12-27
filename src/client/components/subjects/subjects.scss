@@ -1,20 +1,26 @@
 @import "../../styles/variables";
 
 .subjects {
-  padding: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
 
   .controls {
+    background-color: white;
     padding: 10px;
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
     box-shadow: $box-shadow-large;
     z-index: 1;
+    border-radius: 2px;
   }
 
   .subjectList {
-    margin-top: 20px;
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;
+    overflow: auto;
+    flex-grow: 1;
   }
 }

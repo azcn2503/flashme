@@ -2,10 +2,11 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import Cards from "../cards/cards";
-import Navigation from "../navigation/navigation";
-import Subjects from "../subjects/subjects";
-import Test from "../test/test";
+import Dialog from "client/components/dialog/dialog";
+import Cards from "client/components/cards/cards";
+import Navigation from "client/components/navigation/navigation";
+import Subjects from "client/components/subjects/subjects";
+import Test from "client/components/test/test";
 
 import styles from "./app.scss";
 
@@ -70,6 +71,7 @@ class App extends PureComponent {
           />
           <Redirect to="/subjects" />
         </Switch>
+        <Dialog />
       </div>
     );
   }
