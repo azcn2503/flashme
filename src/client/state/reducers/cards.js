@@ -57,7 +57,14 @@ const reducer = (state = defaultState, action) => {
     case actions.REMOVE_CARD_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...state.byId[action.cardId],
+            requesting: true
+          }
+        }
       };
 
     case actions.REMOVE_CARD_SUCCESS:
@@ -66,14 +73,62 @@ const reducer = (state = defaultState, action) => {
         requesting: false,
         error: null,
         byId: omitBy(state.byId, card => card.id === action.cardId),
-        allIds: [...dropWhile(state.allIds, id => id === action.cardId)]
+        allIds: [...state.allIds].filter(id => id !== action.cardId)
       };
 
     case actions.REMOVE_CARD_FAILURE:
       return {
         ...state,
         requesting: false,
-        error: action.err
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...state.byId[action.cardId],
+            requesting: false
+          }
+        }
+      };
+
+    case actions.UPDATE_CARD_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...state.byId[action.cardId],
+            requesting: true
+          }
+        }
+      };
+
+    case actions.UPDATE_CARD_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...action.card,
+            requesting: false
+          }
+        }
+      };
+
+    case actions.UPDATE_CARD_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.cardId]: {
+            ...state.byId[action.cardId],
+            requesting: false
+          }
+        }
       };
 
     default:

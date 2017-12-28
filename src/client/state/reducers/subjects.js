@@ -129,7 +129,7 @@ const reducer = (state = defaultState, action) => {
         requesting: false,
         error: null,
         byId: omitBy(state.byId, subject => subject.id === action.subjectId),
-        allIds: [...dropWhile(state.allIds, id => id === action.subjectId)]
+        allIds: [...state.allIds].filter(id => id !== action.subjectId)
       };
 
     case actions.REMOVE_SUBJECT_FAILURE:

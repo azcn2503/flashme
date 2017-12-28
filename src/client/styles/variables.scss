@@ -1,6 +1,16 @@
 $primary-color: rgb(0, 90, 180);
 $delete-color: rgb(180, 30, 0);
+$success-color: rgb(30, 180, 0);
 $light-grey: rgb(230, 232, 235);
+$light-tan: rgb(240, 235, 232);
+
+$card-gradient: linear-gradient(135deg, $light-tan, white);
 
 $box-shadow-large: 0px 4px 10px rgba(0, 0, 0, 0.1);
 $box-shadow-small: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+$border-radius-small: 2px;
+$border-radius-large: 4px;
+
+$font-size-small: 8pt;
+$font-size-medium: 10pt;

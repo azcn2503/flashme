@@ -118,7 +118,7 @@ class Navigation extends PureComponent {
             />
           }
           footer={
-            <Button primary onClick={this.onClickLoginButton}>
+            <Button primary disabled onClick={this.onClickLoginButton}>
               Login
             </Button>
           }

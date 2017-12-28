@@ -33,11 +33,11 @@ export const addCard = (card, subjectId) => dispatch => {
 };
 
 export const updateCard = (cardId, card) => dispatch => {
-  dispatch({ type: UPDATE_CARD_REQUEST });
+  dispatch({ type: UPDATE_CARD_REQUEST, cardId });
   return api
     .updateCard(cardId, card)
-    .then(res => dispatch({ type: UPDATE_CARD_SUCCESS, card: res }))
-    .catch(err => dispatch({ type: ADD_CARD_FAILURE, err }));
+    .then(res => dispatch({ type: UPDATE_CARD_SUCCESS, cardId, card: res }))
+    .catch(err => dispatch({ type: ADD_CARD_FAILURE, cardId, err }));
 };
 
 export const removeCard = cardId => dispatch => {

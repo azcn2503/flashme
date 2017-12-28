@@ -1,10 +1,13 @@
 import React, { PureComponent } from "react";
+import classNames from "classnames";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
+import pluralize from "pluralize";
 
 import { SUBJECT_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
 import Button from "../button/button";
+import Dialog from "../dialog/dialog";
 
 import { removeSubject } from "../../state/actions/subjects";
 import { addTest } from "../../state/actions/tests";
@@ -20,8 +23,15 @@ class SubjectCard extends PureComponent {
 
   constructor(props) {
     super(props);
+    this.state = {
+      deleteDialogOpen: false
+    };
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onClickTest = this.onClickTest.bind(this);
+    this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
+    this.onClickConfirmDelete = this.onClickConfirmDelete.bind(this);
+    this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
+    this.scatterFakeCards = this.scatterFakeCards.bind(this);
     this._fakeCards = [];
   }
 
@@ -30,11 +40,24 @@ class SubjectCard extends PureComponent {
   }
 
   onClickDelete() {
+    this.openDeleteDialog();
+  }
+
+  onClickCancelDelete() {
+    this.closeDeleteDialog();
+  }
+
+  onClickConfirmDelete() {
+    this.closeDeleteDialog();
     this.props.dispatch(removeSubject(this.props.subject.id));
   }
 
   onClickTest() {
     this.props.dispatch(addTest(this.props.subject.id));
+  }
+
+  onCloseDeleteDialog() {
+    this.closeDeleteDialog();
   }
 
   /**
@@ -44,11 +67,35 @@ class SubjectCard extends PureComponent {
     if (this._fakeCards.length > 0) {
       setTimeout(() => {
         this._fakeCards.forEach(fakeCard => {
-          const rotateAmount = Math.round(Math.random() * 6 - 3);
-          fakeCard.style.transform = `rotateZ(${rotateAmount}deg`;
+          if (fakeCard && fakeCard.style) {
+            const rotateAmount = Math.round(Math.random() * 6 - 3);
+            fakeCard.style.transform = `rotateZ(${rotateAmount}deg`;
+          }
         });
       });
     }
+  }
+
+  openDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: true
+    });
+  }
+
+  closeDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false
+    });
+  }
+
+  getCardCount() {
+    return (
+      Object.keys(this.props.cards.byId).filter(
+        card => card.subjectId === this.props.subject.id
+      ).length ||
+      this.props.subject.cardCount ||
+      0
+    );
   }
 
   renderFakeCards() {
@@ -66,33 +113,62 @@ class SubjectCard extends PureComponent {
     ];
   }
 
+  renderDeleteDialog() {
+    const cardCount = this.getCardCount();
+    return (
+      <Dialog
+        open={this.state.deleteDialogOpen}
+        onClose={this.onCloseDeleteDialog}
+        header="Delete subject?"
+        body={
+          <div>
+            <p>
+              Are you sure you want to delete this subject and all of its cards?
+            </p>
+            <p>{`${this.props.subject.title ||
+              "No title"} (${cardCount} ${pluralize("card", cardCount)})`}</p>
+          </div>
+        }
+        footer={[
+          <Button key={0} delete onClick={this.onClickConfirmDelete}>
+            Yes, delete this subject and its {cardCount}{" "}
+            {pluralize("card", cardCount)}
+          </Button>,
+          <Button key={1} onClick={this.onClickCancelDelete}>
+            No, cancel
+          </Button>
+        ]}
+      />
+    );
+  }
+
   render() {
     if (this.props.subject) {
       return (
         <div className={styles.subjectCardContainer}>
           {this.renderFakeCards()}
-          <div className={styles.subjectCard}>
+          <div
+            className={classNames(styles.subjectCard, {
+              [styles.deleting]: this.state.deleteDialogOpen
+            })}
+            onMouseOver={this.scatterFakeCards}
+          >
             <div className={styles.title}>
               <NavLink to={`/subject/${this.props.subject.id}`}>
                 {this.props.subject.title}
               </NavLink>
-              <span className={styles.count}>
-                ({Object.keys(this.props.cards.byId).filter(
-                  card => card.subjectId === this.props.subject.id
-                ).length ||
-                  this.props.subject.cardCount ||
-                  0})
-              </span>
+              <span className={styles.count}>({this.getCardCount()})</span>
             </div>
             <div className={styles.controls}>
-              <Button primary onClick={this.onClickTest}>
+              <Button small primary disabled onClick={this.onClickTest}>
                 Test
               </Button>
-              <Button delete onClick={this.onClickDelete}>
+              <Button small delete onClick={this.onClickDelete}>
                 Delete
               </Button>
             </div>
           </div>
+          {this.renderDeleteDialog()}
         </div>
       );
     } else {

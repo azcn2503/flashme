@@ -45,7 +45,9 @@ class CardService {
       ...card,
       subjectId,
       id: uuidv4(),
-      created: Date.now()
+      created: Date.now(),
+      question: card.question || "",
+      answer: card.answer || ""
     };
     return this.db.addCard(enrichedCard);
   }

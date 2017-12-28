@@ -19,6 +19,11 @@
     background-color: lighten($light-grey, 10%);
   }
 
+  &.small {
+    padding: 5px 10px;
+    font-size: $font-size-small;
+  }
+
   &.primary {
     color: white;
     font-weight: bold;

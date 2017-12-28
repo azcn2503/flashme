@@ -36,6 +36,7 @@ class Login extends PureComponent {
   render() {
     return (
       <div className={styles.login}>
+        <p>Please note that login is not working yet!</p>
         <div>
           <TextField
             placeholder="Username"

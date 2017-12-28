@@ -13,6 +13,7 @@ class Subheader extends PureComponent {
         value={this.props.label}
         editable={this.props.editable}
         onChange={this.props.onChange}
+        blurOnEnter={this.props.editable}
       />
     );
   }

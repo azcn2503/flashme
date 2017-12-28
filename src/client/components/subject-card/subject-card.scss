@@ -15,6 +15,11 @@
   box-shadow: $box-shadow-small;
   background-color: white;
   border-radius: 2px;
+  background-image: $card-gradient;
+
+  &.deleting {
+    border-color: $delete-color;
+  }
 }
 
 .fakeCard {
@@ -26,6 +31,8 @@
 
 .subjectCard {
   @extend .card;
+  @include transition(border-color);
+
   position: relative;
   z-index: 1;
 

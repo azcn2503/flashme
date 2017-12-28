@@ -4,37 +4,73 @@ import classNames from "classnames";
 
 import styles from "./editable-content.scss";
 
-class Subheader extends PureComponent {
+class EditableContent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      focused: false
+      focused: false,
+      value: props.value
     };
     this._el = null;
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
-  onFocus() {
-    if (this.props.editable) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value && !this.state.focused) {
       this.setState({
-        focused: true
+        value: nextProps.value
       });
     }
   }
 
-  onBlur() {
+  onFocus(e) {
+    if (this.props.editable) {
+      this.setState({
+        focused: true
+      });
+      if (this.props.onFocus) {
+        this.props.onFocus(e);
+      }
+    }
+  }
+
+  onBlur(e) {
     if (this.props.editable) {
       this.setState({
         focused: false
       });
+      if (this.props.onBlur) {
+        this.props.onBlur(e);
+      }
+    }
+  }
+
+  onKeyDown(e) {
+    if (this.props.editable) {
+      if (this.props.blurOnEnter && e.keyCode === 13) {
+        this.blur();
+      }
+      if (this.props.onKeyDown) {
+        this.props.onKeyDown(e);
+      }
+    }
+  }
+
+  onKeyUp(e) {
+    if (this.props.editable) {
       this.props.onChange(this.getValue());
+      if (this.props.onKeyUp) {
+        this.props.onKeyUp(e);
+      }
     }
   }
 
   getMarkup() {
     return {
-      __html: this.props.value
+      __html: this.state.value
     };
   }
 
@@ -42,7 +78,19 @@ class Subheader extends PureComponent {
     if (this._el) {
       return this._el.textContent;
     } else {
-      return this.props.label;
+      return this.state.value;
+    }
+  }
+
+  focus() {
+    if (this._el) {
+      this._el.focus();
+    }
+  }
+
+  blur() {
+    if (this._el) {
+      this._el.blur();
     }
   }
 
@@ -50,21 +98,36 @@ class Subheader extends PureComponent {
     return (
       <div
         ref={el => (this._el = el)}
-        className={classNames(styles.editableContent, this.props.className)}
+        className={classNames(
+          styles.editableContent,
+          { [styles.editable]: this.props.editable },
+          this.props.className
+        )}
         contentEditable={this.props.editable}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}
         dangerouslySetInnerHTML={this.getMarkup()}
       />
     );
   }
 }
 
-Subheader.propTypes = {
+EditableContent.propTypes = {
   className: PropTypes.string,
   value: PropTypes.string,
   editable: PropTypes.bool,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
+  blurOnEnter: PropTypes.bool
 };
 
-export default Subheader;
+EditableContent.defaultProps = {
+  blurOnEnter: false
+};
+
+export default EditableContent;

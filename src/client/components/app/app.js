@@ -71,7 +71,6 @@ class App extends PureComponent {
           />
           <Redirect to="/subjects" />
         </Switch>
-        <Dialog />
       </div>
     );
   }

@@ -5,32 +5,48 @@ import classNames from "classnames";
 import { CARD_PROPTYPE } from "../../proptypes";
 import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
+import EditableContent from "../editable-content/editable-content";
+import Dialog from "../dialog/dialog";
 
 import styles from "./flash-card.scss";
+
+const faceEnum = {
+  QUESTION: "QUESTION",
+  ANSWER: "ANSWER"
+};
 
 class FlashCard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      question: props.card.question || "",
+      answer: props.card.answer || "",
       flipped: false,
-      focused: false
+      focused: false,
+      deleteDialogOpen: false,
+      highlightUpdate: false
     };
     this._question = null;
     this._answer = null;
     this.flip = this.flip.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onClick = this.onClick.bind(this);
+    this.onChangeQuestion = this.onChangeQuestion.bind(this);
+    this.onChangeAnswer = this.onChangeAnswer.bind(this);
+    this.onKeyDownQuestion = this.onKeyDownQuestion.bind(this);
+    this.onKeyDownAnswer = this.onKeyDownAnswer.bind(this);
     this.onClickFlip = this.onClickFlip.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
-  }
-
-  componentDidMount() {
-    window.addEventListener("keydown", this.onKeyDown);
+    this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
+    this.onClickConfirmDelete = this.onClickConfirmDelete.bind(this);
+    this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
+    this.onClickAddCard = this.onClickAddCard.bind(this);
+    this.onClickUpdateCard = this.onClickUpdateCard.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.card.updated !== this.props.card.updated) {
+      this.highlightUpdate();
+    }
     if (prevProps.test !== this.props.test) {
       this.setState({
         flipped: false
@@ -52,20 +68,24 @@ class FlashCard extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.onKeyDown);
+  onChangeQuestion(value) {
+    this.setState({ question: value });
   }
 
-  onChange(value) {
-    console.log(value);
-  }
-
-  onClick(e) {
-    e.preventDefault();
+  onChangeAnswer(value) {
+    this.setState({ answer: value });
   }
 
   onClickDelete(e) {
-    e.stopPropagation();
+    this.openDeleteDialog();
+  }
+
+  onClickCancelDelete() {
+    this.closeDeleteDialog();
+  }
+
+  onClickConfirmDelete() {
+    this.closeDeleteDialog();
     this.props.dispatch(removeCard(this.props.card.id));
   }
 
@@ -74,13 +94,18 @@ class FlashCard extends PureComponent {
     this.flip();
   }
 
-  onBlur() {
-    if (this.props.editable) {
-      this.onChange(this.value());
-      this.setState({
-        focused: false
-      });
-    }
+  onClickAddCard() {
+    this.submit();
+  }
+
+  onClickUpdateCard() {
+    this.submit();
+  }
+
+  onCloseDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false
+    });
   }
 
   onContinue(value) {
@@ -88,20 +113,20 @@ class FlashCard extends PureComponent {
     this.props.onContinue(this.props.card.id, value);
   }
 
-  onFocus() {
-    if (this.props.editable) {
-      this.setState({
-        focused: true
-      });
-    }
+  onKeyDownQuestion(e) {
+    this.onKeyDown(e, faceEnum.QUESTION);
   }
 
-  onKeyDown(e) {
+  onKeyDownAnswer(e) {
+    this.onKeyDown(e, faceEnum.ANSWER);
+  }
+
+  onKeyDown(e, face) {
     const modifierKey = e.metaKey || e.ctrlKey;
     if (this.props.test) {
       if (e.keyCode === 9) {
         // Tab
-        if (this.state.flipped) {
+        if (face === faceEnum.ANSWER) {
           e.preventDefault();
           this.onContinue(false);
         } else {
@@ -110,12 +135,12 @@ class FlashCard extends PureComponent {
         }
       } else if (e.keyCode === 13) {
         // Enter
-        if (this.state.flipped) {
+        if (face === faceEnum.ANSWER) {
           e.preventDefault();
           this.onContinue(true);
         }
       }
-    } else if (this.props.editable && this.state.focused) {
+    } else if (this.props.editable) {
       if (e.keyCode === 9) {
         e.preventDefault();
         this.flip();
@@ -125,6 +150,25 @@ class FlashCard extends PureComponent {
         this.submit();
       }
     }
+  }
+
+  closeDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false
+    });
+  }
+
+  openDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: true
+    });
+  }
+
+  highlightUpdate() {
+    this.setState({
+      highlightUpdate: true
+    });
+    setTimeout(() => this.setState({ highlightUpdate: false }), 1000);
   }
 
   flip() {
@@ -140,29 +184,20 @@ class FlashCard extends PureComponent {
     } else {
       // Create
       this.props.dispatch(addCard(this.value(), this.props.subjectId));
+      this.clearValues();
     }
   }
 
   value() {
-    const question = this._question.innerHTML;
-    const answer = this._answer.innerHTML;
+    const { question, answer } = this.state;
     return { question, answer };
   }
 
-  getQuestionMarkup() {
-    return {
-      __html: this.props.card.question
-    };
-  }
-
-  getAnswerMarkup() {
-    if (!this.props.test || (this.props.test && this.state.flipped)) {
-      return {
-        __html: this.props.card.answer
-      };
-    } else {
-      return null;
-    }
+  clearValues() {
+    this.setState({
+      question: "",
+      answer: ""
+    });
   }
 
   renderTestButtons() {
@@ -183,9 +218,14 @@ class FlashCard extends PureComponent {
   renderDeleteButton() {
     if (this.props.card.id) {
       return (
-        <button className={styles.deleteButton} onClick={this.onClickDelete}>
-          x
-        </button>
+        <Button
+          small
+          delete
+          disabled={this.props.card.requesting}
+          onClick={this.onClickDelete}
+        >
+          Delete
+        </Button>
       );
     } else {
       return null;
@@ -194,7 +234,65 @@ class FlashCard extends PureComponent {
 
   renderFlipButton() {
     if (!this.props.showBothSides) {
-      return <Button onClick={this.onClickFlip}>Flip</Button>;
+      return (
+        <Button small onClick={this.onClickFlip}>
+          Flip
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderDeleteDialog() {
+    return (
+      <Dialog
+        open={this.state.deleteDialogOpen}
+        onClose={this.onCloseDeleteDialog}
+        header="Delete card?"
+        body={
+          <div>
+            <p>Are you sure you want to delete this card?</p>
+            <p>Question: {this.props.card.question || "No question"}</p>
+            <p>Answer: {this.props.card.answer || "No answer"}</p>
+          </div>
+        }
+        footer={[
+          <Button key={0} delete onClick={this.onClickConfirmDelete}>
+            Yes, delete this card
+          </Button>,
+          <Button key={1} onClick={this.onClickCancelDelete}>
+            No, cancel
+          </Button>
+        ]}
+      />
+    );
+  }
+
+  renderSubmitButton() {
+    if (!this.props.card.id) {
+      return (
+        <Button small primary onClick={this.onClickAddCard}>
+          Add
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderUpdateButton() {
+    if (this.props.card.id) {
+      return (
+        <Button
+          small
+          primary
+          disabled={this.props.card.requesting}
+          onClick={this.onClickUpdateCard}
+        >
+          Update
+        </Button>
+      );
     } else {
       return null;
     }
@@ -204,6 +302,8 @@ class FlashCard extends PureComponent {
     return (
       <div
         className={classNames(styles.flashCard, {
+          [styles.highlightUpdate]: this.state.highlightUpdate,
+          [styles.deleting]: this.state.deleteDialogOpen,
           [styles.selected]: this.props.selected,
           [styles.animated]:
             !this.props.showBothSides ||
@@ -214,35 +314,37 @@ class FlashCard extends PureComponent {
           [styles.flipped]: this.state.flipped && !this.props.showBothSides,
           [styles.showBothSides]: this.props.showBothSides
         })}
-        onClick={this.onClick}
       >
         <div className={classNames(styles.front, styles.face)}>
           <div className={styles.faceTitle}>Question</div>
-          <div
-            className={styles.question}
-            contentEditable={this.props.editable}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
+          <EditableContent
             ref={el => (this._question = el)}
-            dangerouslySetInnerHTML={this.getQuestionMarkup()}
+            className={styles.question}
+            value={this.state.question}
+            editable={this.props.editable}
+            onChange={this.onChangeQuestion}
+            onKeyDown={this.onKeyDownQuestion}
           />
         </div>
         <div className={classNames(styles.back, styles.face)}>
           <div className={styles.faceTitle}>Answer</div>
-          <div
-            className={styles.answer}
-            contentEditable={this.props.editable}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
+          <EditableContent
             ref={el => (this._answer = el)}
-            dangerouslySetInnerHTML={this.getAnswerMarkup()}
+            className={styles.answer}
+            value={this.state.answer}
+            editable={this.props.editable}
+            onChange={this.onChangeAnswer}
+            onKeyDown={this.onKeyDownAnswer}
           />
         </div>
         <div className={styles.controls}>
           {this.renderFlipButton()}
+          {this.renderSubmitButton()}
+          {this.renderUpdateButton()}
           {this.renderDeleteButton()}
           {this.renderTestButtons()}
         </div>
+        {this.renderDeleteDialog()}
       </div>
     );
   }
@@ -250,6 +352,7 @@ class FlashCard extends PureComponent {
 
 FlashCard.propTypes = {
   card: CARD_PROPTYPE,
+  subjectId: PropTypes.string,
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,

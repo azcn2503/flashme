@@ -8,6 +8,8 @@
 }
 
 .flashCard {
+  @include transition(border-color);
+
   position: relative;
   width: 200px;
   height: 300px;
@@ -26,9 +28,23 @@
   &.showBothSides .face {
     position: relative;
   }
+  &.showBothSides .face.front {
+    display: flex;
+  }
+  &.showBothSides .face.back {
+    display: flex;
+  }
+
+  &.highlightUpdate {
+    border-color: $success-color;
+  }
 
   &.selected {
     border-color: $primary-color;
+  }
+
+  &.deleting {
+    border-color: $delete-color;
   }
 
   .face.front {
@@ -59,20 +75,6 @@
     width: 100%;
     bottom: 0;
     opacity: 0;
-
-    .deleteButton {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-    }
-
-    > * {
-      margin-left: 10px;
-
-      &:first-child {
-        margin-left: 0;
-      }
-    }
   }
 }
 
@@ -87,6 +89,9 @@
   overflow: hidden;
 
   .faceTitle {
+    z-index: 0;
+    background-image: $card-gradient;
+    color: rgba(0, 0, 0, 0.05);
     position: absolute;
     top: 0;
     left: 0;
@@ -95,7 +100,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.05;
     font-size: 3em;
     font-family: serif;
     pointer-events: none;
@@ -108,6 +112,7 @@
   text-align: center;
   padding: 10px;
   flex-grow: 1;
+  z-index: 1;
 }
 
 @keyframes flip {
