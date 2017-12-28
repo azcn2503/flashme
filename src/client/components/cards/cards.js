@@ -1,15 +1,16 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { debounce } from "lodash";
 
-import FlashCard from "../flash-card/flash-card";
-import FilterBox from "../filter-box/filter-box";
-import Button from "../button/button";
-import Subheader from "../subheader/subheader";
-
-import { getSubject, updateSubjectTitle } from "../../state/actions/subjects";
-import { getCards, addCard, answerTestCard } from "../../state/actions/cards";
-import { startTest } from "../../state/actions/tests";
+import { CARDS_PROPTYPE, SUBJECTS_PROPTYPE } from "client/proptypes";
+import { getSubject, updateSubjectTitle } from "client/state/actions/subjects";
+import { getCards, addCard, answerTestCard } from "client/state/actions/cards";
+import { startTest } from "client/state/actions/tests";
+import FlashCard from "client/components/flash-card/flash-card";
+import FilterBox from "client/components/filter-box/filter-box";
+import Button from "client/components/button/button";
+import Subheader from "client/components/subheader/subheader";
 
 import styles from "./cards.scss";
 
@@ -33,7 +34,10 @@ class Cards extends PureComponent {
     this.filterCardsBySearchTerm = this.filterCardsBySearchTerm.bind(this);
     this.filterCardsBySubject = this.filterCardsBySubject.bind(this);
     this.renderCard = this.renderCard.bind(this);
-    this.onChangeSubjectTitle = this.onChangeSubjectTitle.bind(this);
+    this.onChangeSubjectTitle = debounce(
+      this.onChangeSubjectTitle.bind(this),
+      500
+    );
   }
 
   componentDidMount() {
@@ -267,7 +271,9 @@ class Cards extends PureComponent {
 }
 
 Cards.propTypes = {
-  cards: PropTypes.object,
+  dispatch: PropTypes.func.isRequired,
+  cards: CARDS_PROPTYPE,
+  subjects: SUBJECTS_PROPTYPE,
   test: PropTypes.object,
   subjectId: PropTypes.string,
   testId: PropTypes.string
