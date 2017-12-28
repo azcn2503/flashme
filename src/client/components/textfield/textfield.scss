@@ -17,4 +17,8 @@
   &:focus {
     border-bottom-color: $primary-color;
   }
+
+  &::placeholder {
+    color: $dark-grey;
+  }
 }

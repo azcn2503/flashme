@@ -21,8 +21,8 @@ class Button extends PureComponent {
       <button
         className={classNames(styles.button, {
           [styles.small]: this.props.small,
-          [styles.primary]: !this.props.disabled && this.props.primary,
-          [styles.delete]: !this.props.disabled && this.props.delete,
+          [styles.primary]: this.props.primary,
+          [styles.delete]: this.props.delete,
           [styles.disabled]: this.props.disabled
         })}
         onClick={this.onClick}
@@ -39,13 +39,15 @@ Button.propTypes = {
   value: PropTypes.node,
   primary: PropTypes.bool,
   delete: PropTypes.bool,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  small: PropTypes.bool
 };
 
 Button.defaultProps = {
   primary: false,
   disabled: false,
-  delete: false
+  delete: false,
+  small: false
 };
 
 export default Button;

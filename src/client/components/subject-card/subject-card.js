@@ -155,15 +155,19 @@ class SubjectCard extends PureComponent {
           >
             <div className={styles.title}>
               <NavLink to={`/subject/${this.props.subject.id}`}>
-                {this.props.subject.title}
+                {this.props.subject.title} ({this.getCardCount()})
               </NavLink>
-              <span className={styles.count}>({this.getCardCount()})</span>
             </div>
             <div className={styles.controls}>
               <Button small primary disabled onClick={this.onClickTest}>
                 Test
               </Button>
-              <Button small delete onClick={this.onClickDelete}>
+              <Button
+                small
+                delete
+                disabled={this.props.subject.requesting}
+                onClick={this.onClickDelete}
+              >
                 Delete
               </Button>
             </div>

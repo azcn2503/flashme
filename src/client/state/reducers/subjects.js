@@ -120,7 +120,14 @@ const reducer = (state = defaultState, action) => {
     case actions.REMOVE_SUBJECT_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        byId: {
+          ...state.byId,
+          [action.subjectId]: {
+            ...state.byId[action.subjectId],
+            requesting: true
+          }
+        }
       };
 
     case actions.REMOVE_SUBJECT_SUCCESS:
@@ -136,7 +143,14 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         requesting: false,
-        error: action.err
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.subjectId]: {
+            ...state.byId[action.subjectId],
+            requesting: false
+          }
+        }
       };
 
     default:

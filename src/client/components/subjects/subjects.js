@@ -73,10 +73,18 @@ class Subjects extends PureComponent {
       .map((subject, key) => <SubjectCard key={key} subject={subject} />);
   }
 
+  getSubjectCount() {
+    if (this.props.subjects.requesting) {
+      return "...";
+    } else {
+      return this.props.subjects.allIds.length;
+    }
+  }
+
   render() {
     return (
       <div className={styles.subjects}>
-        <Subheader label={`Subjects (${this.props.subjects.allIds.length})`} />
+        <Subheader label={`Subjects (${this.getSubjectCount()})`} />
         <div className={styles.controls}>
           {this.renderFilters()}
           <Button primary onClick={this.onClickAddSubject}>

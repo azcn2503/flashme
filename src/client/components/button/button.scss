@@ -35,11 +35,12 @@
   }
 
   &.disabled {
-    cursor: not-allowed;
-    color: rgba(0, 0, 0, 0.5);
+    cursor: not-allowed !important;
+    background-color: $light-grey !important;
+    color: rgba(0, 0, 0, 0.5) !important;
 
     &:hover {
-      background-color: $light-grey;
+      background-color: $light-grey !important;
     }
   }
 

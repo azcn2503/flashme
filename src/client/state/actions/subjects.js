@@ -57,5 +57,5 @@ export const removeSubject = subjectId => dispatch => {
   return api
     .removeSubject(subjectId)
     .then(() => dispatch({ type: REMOVE_SUBJECT_SUCCESS, subjectId }))
-    .catch(err => dispatch({ type: REMOVE_SUBJECT_FAILURE, err }));
+    .catch(err => dispatch({ type: REMOVE_SUBJECT_FAILURE, subjectId, err }));
 };

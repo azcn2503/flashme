@@ -298,6 +298,22 @@ class FlashCard extends PureComponent {
     }
   }
 
+  renderControls() {
+    if (this.props.showControls) {
+      return (
+        <div className={styles.controls}>
+          {this.renderFlipButton()}
+          {this.renderSubmitButton()}
+          {this.renderUpdateButton()}
+          {this.renderDeleteButton()}
+          {this.renderTestButtons()}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div
@@ -337,13 +353,7 @@ class FlashCard extends PureComponent {
             onKeyDown={this.onKeyDownAnswer}
           />
         </div>
-        <div className={styles.controls}>
-          {this.renderFlipButton()}
-          {this.renderSubmitButton()}
-          {this.renderUpdateButton()}
-          {this.renderDeleteButton()}
-          {this.renderTestButtons()}
-        </div>
+        {this.renderControls()}
         {this.renderDeleteDialog()}
       </div>
     );
@@ -361,7 +371,8 @@ FlashCard.propTypes = {
   test: PropTypes.bool,
   onContinue: PropTypes.func,
   selected: PropTypes.bool,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  showControls: PropTypes.bool
 };
 
 FlashCard.defaultProps = {
@@ -374,7 +385,8 @@ FlashCard.defaultProps = {
   showBothSides: false,
   test: false,
   onContinue: () => null,
-  selected: false
+  selected: false,
+  showControls: true
 };
 
 export default FlashCard;
