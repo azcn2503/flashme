@@ -71,6 +71,15 @@ class FlashCard extends PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.card.question !== this.props.card.question) {
+      this.setState({ question: nextProps.card.question });
+    }
+    if (nextProps.card.answer !== this.props.card.answer) {
+      this.setState({ answer: nextProps.card.answer });
+    }
+  }
+
   onChangeQuestion(value) {
     this.setState({ question: value });
   }
