@@ -44,7 +44,10 @@ class FlashCard extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.card.updated !== this.props.card.updated) {
+    if (
+      prevProps.card.id === this.props.card.id &&
+      prevProps.card.updated !== this.props.card.updated
+    ) {
       this.highlightUpdate();
     }
     if (prevProps.test !== this.props.test) {

@@ -5,7 +5,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 
   .input {
     flex-grow: 1;
@@ -23,7 +22,7 @@
 
     &.visible {
       @include transition(opacity);
-      opacity: .2;
+      opacity: 0.2;
     }
   }
 }

@@ -6,6 +6,10 @@
   display: flex;
   flex-direction: column;
 
+  .testsSummary {
+    padding: 20px;
+  }
+
   .cardList {
     display: flex;
     flex-wrap: wrap;

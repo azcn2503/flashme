@@ -16,6 +16,8 @@ const authApi = ({ app, logger, authService, passport }) => {
       failureRedirect: "/login"
     })
   );
+
+  logger.debug("Auth API initialised");
 };
 
 export default authApi;

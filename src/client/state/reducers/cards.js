@@ -1,4 +1,4 @@
-import { dropWhile, keyBy, omitBy, uniq } from "lodash";
+import { keyBy, omitBy, uniq } from "lodash";
 
 import * as actions from "../actions/cards";
 
@@ -21,8 +21,8 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         byId: {
-          ...state.byId,
-          [action.card.id]: action.card
+          [action.card.id]: action.card,
+          ...state.byId
         },
         allIds: [...state.allIds, action.card.id],
         requesting: false,

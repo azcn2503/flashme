@@ -48,6 +48,7 @@ databaseController
     });
     cardService.initialise({ logger, db: db.getCards() });
     subjectService.initialise({ logger, db: db.getSubjects() });
+    testService.initialise({ logger, db: db.getTests() });
 
     initialiseAuthApi({
       app,
@@ -64,6 +65,7 @@ databaseController
       subjectService,
       cardService
     });
+    initialiseTestApi({ app, logger, testService, cardService });
 
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(config.client.path, "index.html"));

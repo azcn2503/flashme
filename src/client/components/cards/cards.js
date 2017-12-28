@@ -1,11 +1,18 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { debounce } from "lodash";
+import pluralize from "pluralize";
 
-import { CARDS_PROPTYPE, SUBJECTS_PROPTYPE } from "client/proptypes";
+import {
+  CARDS_PROPTYPE,
+  SUBJECTS_PROPTYPE,
+  TESTS_PROPTYPE
+} from "client/proptypes";
 import { getSubject, updateSubjectTitle } from "client/state/actions/subjects";
 import { getCards, addCard, answerTestCard } from "client/state/actions/cards";
+import { getTestsForSubject } from "client/state/actions/tests";
 import { startTest } from "client/state/actions/tests";
 import FlashCard from "client/components/flash-card/flash-card";
 import FilterBox from "client/components/filter-box/filter-box";
@@ -18,7 +25,8 @@ class Cards extends PureComponent {
   static mapStateToProps(state) {
     return {
       cards: state.cards,
-      subjects: state.subjects
+      subjects: state.subjects,
+      tests: state.tests
     };
   }
 
@@ -41,8 +49,9 @@ class Cards extends PureComponent {
   }
 
   componentDidMount() {
-    this.getSubject();
     this.getCards();
+    this.getSubject();
+    this.getTestsForSubject();
     if (this.props.test) {
       this.props.dispatch(startTest(this.props.subjectId, this.props.testId));
     }
@@ -57,6 +66,10 @@ class Cards extends PureComponent {
         )
       });
     }
+  }
+
+  getTestsForSubject() {
+    this.props.dispatch(getTestsForSubject(this.props.subjectId));
   }
 
   getSubject() {
@@ -244,6 +257,23 @@ class Cards extends PureComponent {
     );
   }
 
+  renderTestsSummary() {
+    if (this.props.tests.allIds.length > 0) {
+      const tests = Object.values(this.props.tests.byId).filter(
+        test => test.subjectId === this.props.subjectId
+      );
+      return (
+        <div className={styles.testsSummary}>
+          <Link to={`/subject/${this.props.subjectId}/tests`}>
+            {tests.length} {pluralize("test", tests.length)} for this subject
+          </Link>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     if (this.props.subjects.allIds.length > 0) {
       const subject = this.props.subjects.byId[this.props.subjectId];
@@ -256,9 +286,8 @@ class Cards extends PureComponent {
               onChange={this.onChangeSubjectTitle}
             />
             {this.renderControls()}
-            {this.props.test
-              ? this.renderTestContainer()
-              : this.renderCardList()}
+            {this.renderTestsSummary()}
+            {this.renderCardList()}
           </div>
         );
       } else {
@@ -274,7 +303,7 @@ Cards.propTypes = {
   dispatch: PropTypes.func.isRequired,
   cards: CARDS_PROPTYPE,
   subjects: SUBJECTS_PROPTYPE,
-  test: PropTypes.object,
+  tests: TESTS_PROPTYPE,
   subjectId: PropTypes.string,
   testId: PropTypes.string
 };

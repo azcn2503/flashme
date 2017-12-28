@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import classNames from "classnames";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
@@ -53,7 +53,13 @@ class SubjectCard extends PureComponent {
   }
 
   onClickTest() {
-    this.props.dispatch(addTest(this.props.subject.id));
+    this.props
+      .dispatch(addTest(this.props.subject.id))
+      .then(test =>
+        this.props.history.push(
+          `/subject/${this.props.subject.id}/test/${test.id}`
+        )
+      );
   }
 
   onCloseDeleteDialog() {
@@ -159,7 +165,7 @@ class SubjectCard extends PureComponent {
               </NavLink>
             </div>
             <div className={styles.controls}>
-              <Button small primary disabled onClick={this.onClickTest}>
+              <Button small primary onClick={this.onClickTest}>
                 Test
               </Button>
               <Button
@@ -184,7 +190,10 @@ class SubjectCard extends PureComponent {
 SubjectCard.propTypes = {
   subject: SUBJECT_PROPTYPE,
   cards: CARDS_PROPTYPE,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
 };
 
 SubjectCard.defaultProps = {
@@ -192,4 +201,4 @@ SubjectCard.defaultProps = {
   onChange: () => null
 };
 
-export default connect(SubjectCard.mapStateToProps)(SubjectCard);
+export default withRouter(connect(SubjectCard.mapStateToProps)(SubjectCard));

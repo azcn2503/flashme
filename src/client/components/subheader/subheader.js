@@ -10,7 +10,7 @@ class Subheader extends PureComponent {
     return (
       <EditableContent
         className={styles.subheader}
-        value={this.props.label}
+        value={this.props.label || this.props.children}
         editable={this.props.editable}
         onChange={this.props.onChange}
         blurOnEnter={this.props.editable}
@@ -20,6 +20,7 @@ class Subheader extends PureComponent {
 }
 
 Subheader.propTypes = {
+  children: PropTypes.node,
   label: PropTypes.string,
   editable: PropTypes.bool,
   onChange: PropTypes.func

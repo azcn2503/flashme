@@ -1,3 +1,5 @@
+import { keyBy, uniq } from "lodash";
+
 import * as actions from "../actions/tests";
 
 const status = {
@@ -62,6 +64,56 @@ const reducer = (state = defaultState, action) => {
       };
 
     case actions.START_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
+      };
+
+    case actions.GET_TEST_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.GET_TEST_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.testId]: action.test
+        },
+        allIds: uniq([...state.allIds, action.testId])
+      };
+
+    case actions.GET_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err
+      };
+
+    case actions.GET_TESTS_FOR_SUBJECT_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+
+    case actions.GET_TESTS_FOR_SUBJECT_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          ...keyBy(action.tests, "id")
+        },
+        allIds: uniq(...state.allIds, action.tests.map(test => test.id))
+      };
+
+    case actions.GET_TESTS_FOR_SUBJECT_FAILURE:
       return {
         ...state,
         requesting: false,

@@ -49,25 +49,49 @@ class Navigation extends PureComponent {
     });
   }
 
-  renderSegment(path, url, index) {
+  /**
+   * Build a link
+   * @param {array} splitPath
+   * @param {array} splitUrl
+   * @param {number} index
+   * @param {string} text
+   * @param {string} segmentOverride
+   */
+  buildLink(splitPath, splitUrl, index, text, segmentOverride) {
+    const url = [
+      ...splitUrl.slice(0, index + (segmentOverride ? 0 : 1)),
+      segmentOverride
+    ].join("/");
+    return <Link to={url}>{text}</Link>;
+  }
+
+  renderSegment(splitPath, splitUrl, index) {
+    const path = splitPath[index];
+    const url = splitUrl[index];
     switch (path) {
       case "subject":
       case "subjects":
-        return <Link to="../subjects">Subjects</Link>;
+        return this.buildLink(
+          splitPath,
+          splitUrl,
+          index,
+          "Subjects",
+          "subjects"
+        );
       case ":subjectId":
         const subject = this.props.subjects.byId[url];
         if (subject) {
-          return <Link to={`../subject/${url}`}>{subject.title}</Link>;
+          return this.buildLink(splitPath, splitUrl, index, subject.title);
         } else {
           return null;
         }
       case "test":
       case "tests":
-        return <Link to="../tests">Tests</Link>;
+        return this.buildLink(splitPath, splitUrl, index, "Tests", "tests");
       case ":testId":
         const test = this.props.tests.byId[url];
         if (test) {
-          return <Link to={`../test/${url}`}>{test.id}</Link>;
+          return this.buildLink(splitPath, splitUrl, index, test.id);
         } else {
           return null;
         }
@@ -90,7 +114,7 @@ class Navigation extends PureComponent {
     const splitUrl = url.split("/");
     return splitPath.map((p, key) => [
       <div key={`segment-${key}`}>
-        {this.renderSegment(splitPath[key], splitUrl[key], key)}
+        {this.renderSegment(splitPath, splitUrl, key)}
       </div>,
       key > 0 && key < splitPath.length - 1 ? (
         <div key={`separator-${key}`}>&gt;</div>

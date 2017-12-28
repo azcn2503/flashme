@@ -10,6 +10,12 @@ export const SUBJECTS_PROPTYPE = PropTypes.shape({
   allIds: PropTypes.arrayOf(PropTypes.string)
 });
 
+export const TESTS_PROPTYPE = PropTypes.shape({
+  byId: PropTypes.object,
+  allIds: PropTypes.arrayOf(PropTypes.string),
+  cards: PropTypes.array
+});
+
 export const CARD_PROPTYPE = PropTypes.shape({
   id: PropTypes.string,
   question: PropTypes.string,
