@@ -35,16 +35,6 @@ class Navigation extends PureComponent {
     this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
     this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
     this.onSubmitLogin = this.onSubmitLogin.bind(this);
-    this.onChangeLogin = this.onChangeLogin.bind(this);
-    this.onLoginSuccess = this.onLoginSuccess.bind(this);
-  }
-
-  componentDidMount() {
-    if (this._login) {
-      this.setState({
-        loginActions: this._login.renderActions(true)
-      });
-    }
   }
 
   onClickLoginOrRegister() {
@@ -56,12 +46,6 @@ class Navigation extends PureComponent {
   onCloseLoginDialog() {
     this.setState({
       loginDialogOpen: false
-    });
-  }
-
-  onChangeLogin() {
-    this.setState({
-      loginActions: this._login.renderActions(true)
     });
   }
 
@@ -175,9 +159,6 @@ class Navigation extends PureComponent {
             <Login
               ref={el => (this._login = el)}
               dispatch={this.props.dispatch}
-              onSubmit={this.onSubmitLogin}
-              onChange={this.onChangeLogin}
-              onLoginSuccess={this.onLoginSuccess}
             />
           }
         />

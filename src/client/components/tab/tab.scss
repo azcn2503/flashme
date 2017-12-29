@@ -1,3 +1,37 @@
+@import "~client/styles/variables";
+
 .tab {
-  padding: 20px;
+  padding: 10px 20px;
+  border-top-right-radius: $border-radius-large;
+  border-top-left-radius: $border-radius-large;
+  border: 1px solid $light-grey;
+  color: $dark-grey;
+  cursor: pointer;
+
+  &:hover {
+    color: black;
+  }
+
+  &.between {
+    cursor: inherit;
+    padding: 0;
+    width: 12px;
+    margin-left: -1px;
+    margin-right: -1px;
+    border-color: transparent;
+    border-bottom-color: $light-grey;
+  }
+
+  &.spacer {
+    cursor: inherit;
+    padding: 0;
+    flex-grow: 1;
+    border-color: transparent;
+    border-bottom-color: $light-grey;
+  }
+
+  &.active {
+    color: black;
+    border-bottom-color: transparent;
+  }
 }

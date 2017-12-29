@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
-import { login } from "client/state/actions/user";
+import { login, register } from "client/state/actions/user";
 import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
@@ -9,16 +9,28 @@ import Tab from "client/components/tab/tab";
 
 import styles from "./login.scss";
 
+const tabEnum = {
+  LOGIN: "LOGIN",
+  REGISTER: "REGISTER"
+};
+
 class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      confirmPassword: "",
+      email: "",
+      activeTabId: tabEnum.LOGIN
     };
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onSubmitForm = this.onSubmitForm.bind(this);
+    this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onSubmitLoginForm = this.onSubmitLoginForm.bind(this);
+    this.onSubmitRegisterForm = this.onSubmitRegisterForm.bind(this);
+    this.onChangeTabs = this.onChangeTabs.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,9 +44,14 @@ class Login extends PureComponent {
     }
   }
 
-  onSubmitForm(e) {
+  onSubmitLoginForm(e) {
     e.preventDefault();
-    this.submit();
+    this.submitLoginForm();
+  }
+
+  onSubmitRegisterForm(e) {
+    e.preventDefault();
+    this.submitRegisterForm();
   }
 
   onChangeUsername(e) {
@@ -49,38 +66,54 @@ class Login extends PureComponent {
     });
   }
 
-  submit() {
-    if (this.state.username && this.state.password) {
-      this.props.dispatch(login(this.state.username, this.state.password));
-      if (this.props.onSubmit) {
-        this.props.onSubmit();
-      }
-    }
+  onChangeConfirmPassword(e) {
+    this.setState({
+      confirmPassword: e.target.value
+    });
   }
 
-  renderActions() {
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value
+    });
+  }
+
+  onChangeTabs(tabId) {
+    this.setState({
+      activeTabId: tabId
+    });
+  }
+
+  canLogin() {
+    return this.state.username !== "" && this.state.password !== "";
+  }
+
+  canRegister() {
     return (
-      <div className={styles.actions}>
-        <Button
-          primary
-          submit
-          disabled={this.state.username === "" || this.state.password === ""}
-        >
-          Log in
-        </Button>
-      </div>
+      this.state.username !== "" &&
+      this.state.password !== "" &&
+      this.state.confirmPassword !== "" &&
+      this.state.email !== "" &&
+      this.state.password === this.state.confirmPassword
     );
   }
 
-  render() {
-    return (
-      <div className={styles.login}>
-        <p>Please note that login is not working yet!</p>
-        <Tabs>
-          <Tab>Login</Tab>
-          <Tab>Register</Tab>
-        </Tabs>
-        <form onSubmit={this.onSubmitForm}>
+  submitLoginForm() {
+    if (this.canLogin()) {
+      this.props.dispatch(login(this.state.username, this.state.password));
+    }
+  }
+
+  submitRegisterForm() {
+    if (this.canRegister()) {
+      this.props.dispatch(register(this.state.username, this.state.password));
+    }
+  }
+
+  renderLogin() {
+    if (this.state.activeTabId === tabEnum.LOGIN) {
+      return (
+        <form onSubmit={this.onSubmitLoginForm}>
           <TextField
             placeholder="Username"
             type="text"
@@ -95,8 +128,72 @@ class Login extends PureComponent {
             onChange={this.onChangePassword}
             fullWidth
           />
-          {this.renderActions()}
+          <div className={styles.actions}>
+            <Button primary submit disabled={!this.canLogin()}>
+              Log in
+            </Button>
+          </div>
         </form>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderRegister() {
+    if (this.state.activeTabId === tabEnum.REGISTER) {
+      return (
+        <form onSubmit={this.onSubmitRegisterForm}>
+          <TextField
+            placeholder="Username"
+            type="text"
+            value={this.state.username}
+            onChange={this.onChangeUsername}
+            fullWidth
+          />
+          <TextField
+            placeholder="Email address"
+            type="text"
+            value={this.state.email}
+            onChange={this.onChangeEmail}
+            fullWidth
+          />
+          <TextField
+            placeholder="Password"
+            type="password"
+            value={this.state.password}
+            onChange={this.onChangePassword}
+            fullWidth
+          />
+          <TextField
+            placeholder="Confirm password"
+            type="password"
+            value={this.state.confirmPassword}
+            onChange={this.onChangeConfirmPassword}
+            fullWidth
+          />
+          <div className={styles.actions}>
+            <Button primary submit disabled={!this.canRegister()}>
+              Register
+            </Button>
+          </div>
+        </form>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  render() {
+    return (
+      <div className={styles.login}>
+        <p>Please note that login is not working yet!</p>
+        <Tabs onChange={this.onChangeTabs} active={this.state.activeTabId}>
+          <Tab value={tabEnum.LOGIN}>Login</Tab>
+          <Tab value={tabEnum.REGISTER}>Register</Tab>
+        </Tabs>
+        {this.renderLogin()}
+        {this.renderRegister()}
       </div>
     );
   }
