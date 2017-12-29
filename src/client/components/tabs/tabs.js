@@ -40,7 +40,7 @@ class Tabs extends PureComponent {
               onClick: () => this.onClickTab(tabId),
               active: this.state.activeTabId === tabId
             }),
-            <Tab between />
+            key < this.props.children.length - 1 ? <Tab between /> : null
           ];
         })}
         <Tab spacer />
