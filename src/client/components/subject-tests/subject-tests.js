@@ -1,10 +1,15 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import moment from "moment";
 import pluralize from "pluralize";
 
+import Subheader from "client/components/subheader/subheader";
+import { getSubject } from "client/state/actions/subjects";
+import { getTestsForSubject } from "client/state/actions/tests";
+import { SUBJECTS_PROPTYPE, TESTS_PROPTYPE } from "client/proptypes";
+
 import styles from "./subject-tests.scss";
-import Subheader from "../subheader/subheader";
 
 class SubjectTests extends PureComponent {
   static mapStateToProps(state) {
@@ -12,6 +17,15 @@ class SubjectTests extends PureComponent {
       subjects: state.subjects,
       tests: state.tests
     };
+  }
+
+  componentDidMount() {
+    if (!this.props.subjects.byId[this.props.subjectId]) {
+      this.props.dispatch(getSubject(this.props.subjectId));
+    }
+    if (this.props.tests.allIds.length === 0) {
+      this.props.dispatch(getTestsForSubject(this.props.subjectId));
+    }
   }
 
   renderTestsList(tests = []) {
@@ -48,5 +62,12 @@ class SubjectTests extends PureComponent {
     }
   }
 }
+
+SubjectTests.propTypes = {
+  dispatch: PropTypes.func,
+  subjectId: PropTypes.string,
+  subjects: SUBJECTS_PROPTYPE,
+  tests: TESTS_PROPTYPE
+};
 
 export default connect(SubjectTests.mapStateToProps)(SubjectTests);

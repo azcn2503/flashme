@@ -1,9 +1,8 @@
 const cardApi = ({ app, logger, cardService }) => {
   app.get("/api/subject/:subjectId/cards", (req, res) => {
-    logger.info("Getting cards");
-    return cardService
-      .getCards(req.params.subjectId)
-      .then(cards => res.json(cards));
+    const { subjectId } = req.params;
+    logger.info(`Getting cards for subject ${subjectId}`);
+    return cardService.getCards(subjectId).then(cards => res.json(cards));
   });
 
   app.post("/api/card", (req, res) => {

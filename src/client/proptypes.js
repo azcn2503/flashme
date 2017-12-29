@@ -1,19 +1,18 @@
 import PropTypes from "prop-types";
 
 export const CARDS_PROPTYPE = PropTypes.shape({
-  byId: PropTypes.object,
-  allIds: PropTypes.arrayOf(PropTypes.string)
+  byId: PropTypes.object.isRequired,
+  allIds: PropTypes.arrayOf(PropTypes.string).isRequired
 });
 
 export const SUBJECTS_PROPTYPE = PropTypes.shape({
-  byId: PropTypes.object,
-  allIds: PropTypes.arrayOf(PropTypes.string)
+  byId: PropTypes.object.isRequired,
+  allIds: PropTypes.arrayOf(PropTypes.string).isRequired
 });
 
 export const TESTS_PROPTYPE = PropTypes.shape({
-  byId: PropTypes.object,
-  allIds: PropTypes.arrayOf(PropTypes.string),
-  cards: PropTypes.array
+  byId: PropTypes.object.isRequired,
+  allIds: PropTypes.arrayOf(PropTypes.string).isRequired
 });
 
 export const CARD_PROPTYPE = PropTypes.shape({

@@ -69,15 +69,31 @@ class Cards extends PureComponent {
   }
 
   getTestsForSubject() {
-    this.props.dispatch(getTestsForSubject(this.props.subjectId));
+    if (
+      this.props.tests.allIds.length === 0 ||
+      !Object.values(this.props.tests.byId).find(
+        test => test.subjectId === this.props.subjectId
+      )
+    ) {
+      this.props.dispatch(getTestsForSubject(this.props.subjectId));
+    }
   }
 
   getSubject() {
-    this.props.dispatch(getSubject(this.props.subjectId));
+    if (!this.props.subjects.byId[this.props.subjectId]) {
+      this.props.dispatch(getSubject(this.props.subjectId));
+    }
   }
 
   getCards() {
-    this.props.dispatch(getCards(this.props.subjectId));
+    if (
+      this.props.cards.allIds.length === 0 ||
+      !Object.values(this.props.cards.byId).find(
+        card => card.subjectId === this.props.subjectId
+      )
+    ) {
+      this.props.dispatch(getCards(this.props.subjectId));
+    }
   }
 
   addCard(card) {

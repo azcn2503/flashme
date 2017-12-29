@@ -96,7 +96,7 @@ class SubjectCard extends PureComponent {
 
   getCardCount() {
     return (
-      Object.keys(this.props.cards.byId).filter(
+      Object.values(this.props.cards.byId).filter(
         card => card.subjectId === this.props.subject.id
       ).length ||
       this.props.subject.cardCount ||

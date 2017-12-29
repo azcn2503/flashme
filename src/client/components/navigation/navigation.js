@@ -2,11 +2,16 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { isEqual } from "lodash";
 
 import { login } from "client/state/actions/user";
 import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
-import { SUBJECTS_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
+import {
+  SUBJECTS_PROPTYPE,
+  CARDS_PROPTYPE,
+  TESTS_PROPTYPE
+} from "../../proptypes";
 import Button from "../button/button";
 
 import styles from "./navigation.scss";
@@ -23,17 +28,22 @@ class Navigation extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      loginDialogOpen: false
+      loginDialogOpen: false,
+      loginActions: null
     };
     this._login = null;
     this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
-    this.onClickLoginButton = this.onClickLoginButton.bind(this);
     this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
+    this.onSubmitLogin = this.onSubmitLogin.bind(this);
+    this.onChangeLogin = this.onChangeLogin.bind(this);
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
-  onClickLoginButton() {
+  componentDidMount() {
     if (this._login) {
-      this._login.submit();
+      this.setState({
+        loginActions: this._login.renderActions(true)
+      });
     }
   }
 
@@ -44,6 +54,20 @@ class Navigation extends PureComponent {
   }
 
   onCloseLoginDialog() {
+    this.setState({
+      loginDialogOpen: false
+    });
+  }
+
+  onChangeLogin() {
+    this.setState({
+      loginActions: this._login.renderActions(true)
+    });
+  }
+
+  onSubmitLogin() {}
+
+  onLoginSuccess() {
     this.setState({
       loginDialogOpen: false
     });
@@ -65,6 +89,18 @@ class Navigation extends PureComponent {
     return <Link to={url}>{text}</Link>;
   }
 
+  /**
+   * Render a loading message for the state object
+   * @param {object} obj
+   */
+  renderLoadingMessage(obj) {
+    if (obj.allIds.length === 0 && obj.requesting) {
+      return "Loading...";
+    } else {
+      return null;
+    }
+  }
+
   renderSegment(splitPath, splitUrl, index) {
     const path = splitPath[index];
     const url = splitUrl[index];
@@ -83,7 +119,7 @@ class Navigation extends PureComponent {
         if (subject) {
           return this.buildLink(splitPath, splitUrl, index, subject.title);
         } else {
-          return null;
+          return this.renderLoadingMessage(this.props.subjects);
         }
       case "test":
       case "tests":
@@ -93,7 +129,7 @@ class Navigation extends PureComponent {
         if (test) {
           return this.buildLink(splitPath, splitUrl, index, test.id);
         } else {
-          return null;
+          return this.renderLoadingMessage(this.props.tests);
         }
       default:
         return null;
@@ -139,12 +175,10 @@ class Navigation extends PureComponent {
             <Login
               ref={el => (this._login = el)}
               dispatch={this.props.dispatch}
+              onSubmit={this.onSubmitLogin}
+              onChange={this.onChangeLogin}
+              onLoginSuccess={this.onLoginSuccess}
             />
-          }
-          footer={
-            <Button primary disabled onClick={this.onClickLoginButton}>
-              Login
-            </Button>
           }
         />
       </div>
@@ -155,6 +189,7 @@ class Navigation extends PureComponent {
 Navigation.propTypes = {
   cards: CARDS_PROPTYPE,
   subjects: SUBJECTS_PROPTYPE,
+  tests: TESTS_PROPTYPE,
   routerProps: PropTypes.object,
   dispatch: PropTypes.func.isRequired
 };

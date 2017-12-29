@@ -30,7 +30,9 @@ class Subjects extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.dispatch(getSubjects());
+    if (this.props.subjects.allIds.length === 0) {
+      this.props.dispatch(getSubjects());
+    }
   }
 
   onChangeFilter(e) {

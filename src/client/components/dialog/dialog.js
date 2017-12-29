@@ -16,9 +16,11 @@ class Dialog extends PureComponent {
     this._container = null;
     this.onClickBackground = this.onClickBackground.bind(this);
     this.onContainerTransitionEnd = this.onContainerTransitionEnd.bind(this);
+    this.onKeyDownWindow = this.onKeyDownWindow.bind(this);
   }
 
   componentDidMount() {
+    window.addEventListener("keydown", this.onKeyDownWindow);
     if (this._container) {
       this._container.addEventListener(
         "transitionend",
@@ -38,11 +40,18 @@ class Dialog extends PureComponent {
   }
 
   componentWillUnmount() {
+    window.removeEventListener("keydown", this.onKeyDownWindow);
     if (this._container) {
       this._container.removeEventListener(
         "transitionend",
         this.onContainerTransitionEnd
       );
+    }
+  }
+
+  onKeyDownWindow(e) {
+    if (e.keyCode === 27 && this.state.open && !this.state.closing) {
+      this.close();
     }
   }
 

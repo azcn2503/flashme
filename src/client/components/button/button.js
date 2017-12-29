@@ -11,7 +11,7 @@ class Button extends PureComponent {
   }
 
   onClick(e) {
-    if (!this.props.disabled) {
+    if (!this.props.disabled && this.props.onClick) {
       this.props.onClick(e);
     }
   }
@@ -26,6 +26,7 @@ class Button extends PureComponent {
           [styles.disabled]: this.props.disabled
         })}
         onClick={this.onClick}
+        type={this.props.submit ? "submit" : undefined}
       >
         {this.props.children || this.props.value}
       </button>
@@ -40,14 +41,16 @@ Button.propTypes = {
   primary: PropTypes.bool,
   delete: PropTypes.bool,
   disabled: PropTypes.bool,
-  small: PropTypes.bool
+  small: PropTypes.bool,
+  submit: PropTypes.bool
 };
 
 Button.defaultProps = {
   primary: false,
   disabled: false,
   delete: false,
-  small: false
+  small: false,
+  submit: false
 };
 
 export default Button;
