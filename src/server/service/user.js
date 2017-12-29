@@ -79,7 +79,10 @@ class UserService {
       .findUser(username)
       .then(user => {
         if (user) {
-          throw new Error("User already registered");
+          return Promise.reject({
+            message: "User already exists",
+            status: 409
+          });
         } else {
           return bcrypt.genSalt(10);
         }

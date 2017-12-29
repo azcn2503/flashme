@@ -22,7 +22,7 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
     return userService
       .registerUser(username, password, email)
       .then(user => res.json(user))
-      .catch(err => res.sendStatus(500));
+      .catch(err => res.sendStatus(err.status));
   });
 
   app.get("/api/user/logout", loggedIn, (req, res) => {
