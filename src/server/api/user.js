@@ -21,7 +21,8 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
     const { username, password, email } = req.body;
     return userService
       .registerUser(username, password, email)
-      .then(user => res.json(user));
+      .then(user => res.json(user))
+      .catch(err => res.sendStatus(500));
   });
 
   app.get("/api/user/logout", loggedIn, (req, res) => {

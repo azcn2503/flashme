@@ -75,8 +75,15 @@ class UserService {
    * @param {string} email
    */
   registerUser(username, password, email) {
-    return bcrypt
-      .genSalt(10)
+    return this.db
+      .findUser(username)
+      .then(user => {
+        if (user) {
+          throw new Error("User already registered");
+        } else {
+          return bcrypt.genSalt(10);
+        }
+      })
       .then(salt => bcrypt.hash(password, salt))
       .then(hash => {
         const user = {

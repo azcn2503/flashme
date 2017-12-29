@@ -88,7 +88,11 @@ class Login extends PureComponent {
   }
 
   canLogin() {
-    return this.state.username !== "" && this.state.password !== "";
+    return (
+      this.state.username !== "" &&
+      this.state.password !== "" &&
+      this.state.activeTabId === tabEnum.LOGIN
+    );
   }
 
   canRegister() {
@@ -97,7 +101,8 @@ class Login extends PureComponent {
       this.state.password !== "" &&
       this.state.confirmPassword !== "" &&
       this.state.email !== "" &&
-      this.state.password === this.state.confirmPassword
+      this.state.password === this.state.confirmPassword &&
+      this.state.activeTabId === tabEnum.REGISTER
     );
   }
 
