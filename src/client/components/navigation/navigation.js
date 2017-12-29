@@ -1,10 +1,8 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { isEqual } from "lodash";
+import { Link, withRouter } from "react-router-dom";
 
-import { login } from "client/state/actions/user";
 import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
 import {
@@ -32,6 +30,7 @@ class Navigation extends PureComponent {
       loginActions: null
     };
     this._login = null;
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
     this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
     this.onSubmitLogin = this.onSubmitLogin.bind(this);
@@ -55,6 +54,7 @@ class Navigation extends PureComponent {
     this.setState({
       loginDialogOpen: false
     });
+    this.props.history.push("/subjects");
   }
 
   /**
@@ -159,6 +159,7 @@ class Navigation extends PureComponent {
             <Login
               ref={el => (this._login = el)}
               dispatch={this.props.dispatch}
+              onSuccess={this.onLoginSuccess}
             />
           }
         />
@@ -172,7 +173,10 @@ Navigation.propTypes = {
   subjects: SUBJECTS_PROPTYPE,
   tests: TESTS_PROPTYPE,
   routerProps: PropTypes.object,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
 };
 
-export default connect(Navigation.mapStateToProps)(Navigation);
+export default withRouter(connect(Navigation.mapStateToProps)(Navigation));

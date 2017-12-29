@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 import { login, register } from "client/state/actions/user";
+import { getSubjects } from "client/state/actions/subjects";
 import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
@@ -100,15 +101,24 @@ class Login extends PureComponent {
 
   submitLoginForm() {
     if (this.canLogin()) {
-      this.props.dispatch(login(this.state.username, this.state.password));
+      this.props
+        .dispatch(login(this.state.username, this.state.password))
+        .then(() => {
+          this.props.dispatch(getSubjects());
+          if (this.props.onSuccess) {
+            this.props.onSuccess();
+          }
+        });
     }
   }
 
   submitRegisterForm() {
     if (this.canRegister()) {
-      this.props.dispatch(
-        register(this.state.username, this.state.password, this.state.email)
-      );
+      this.props
+        .dispatch(
+          register(this.state.username, this.state.password, this.state.email)
+        )
+        .then(() => this.submitLoginForm());
     }
   }
 
@@ -189,7 +199,6 @@ class Login extends PureComponent {
   render() {
     return (
       <div className={styles.login}>
-        <p>Please note that login is not working yet!</p>
         <Tabs onChange={this.onChangeTabs} active={this.state.activeTabId}>
           <Tab value={tabEnum.LOGIN}>Login</Tab>
           <Tab value={tabEnum.REGISTER}>Register</Tab>
@@ -204,7 +213,8 @@ class Login extends PureComponent {
 Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  onSuccess: PropTypes.func
 };
 
 export default Login;
