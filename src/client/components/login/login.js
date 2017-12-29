@@ -106,8 +106,8 @@ class Login extends PureComponent {
     );
   }
 
-  submitLoginForm() {
-    if (this.canLogin()) {
+  submitLoginForm(registerOverride = false) {
+    if (registerOverride || this.canLogin()) {
       this.props
         .dispatch(login(this.state.username, this.state.password))
         .then(() => {
@@ -128,7 +128,7 @@ class Login extends PureComponent {
         .dispatch(
           register(this.state.username, this.state.password, this.state.email)
         )
-        .then(() => this.submitLoginForm());
+        .then(() => this.submitLoginForm(true));
     }
   }
 
