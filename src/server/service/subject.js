@@ -11,33 +11,34 @@ class SubjectService {
     this.db = db;
   }
 
-  addSubject() {
+  addSubject(userId) {
     const subject = {
       id: uuidv4(),
       created: Date.now(),
-      title: "My subject"
+      title: "My subject",
+      userId
     };
     return this.db.addSubject(subject);
   }
 
-  getSubjects() {
-    return this.db.getSubjects();
+  getSubjects(userId) {
+    return this.db.getSubjects(userId);
   }
 
-  getSubject(id) {
-    return this.db.getSubject(id);
+  getSubject(userId, subjectId) {
+    return this.db.getSubject(userId, subjectId);
   }
 
-  updateSubjectTitle(id, title) {
-    return this.db.updateSubjectTitle(id, title);
+  updateSubjectTitle(userId, subjectId, title) {
+    return this.db.updateSubjectTitle(userId, subjectId, title);
   }
 
   /**
    * Remove a subject
    * @param {string} subjectId
    */
-  removeSubject(subjectId) {
-    return this.db.removeSubject(subjectId);
+  removeSubject(userId, subjectId) {
+    return this.db.removeSubject(userId, subjectId);
   }
 }
 

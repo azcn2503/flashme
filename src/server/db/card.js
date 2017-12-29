@@ -6,9 +6,15 @@ class CardController {
     this.logger = logger;
   }
 
-  getCards(subjectId) {
+  /**
+   * Get all cards for a subject
+   * @param {string} userId
+   * @param {string} subjectId
+   */
+  getCards(userId, subjectId) {
     return this.collection.find(
       {
+        userId,
         subjectId
       },
       (err, res) =>
@@ -24,10 +30,12 @@ class CardController {
 
   /**
    * Get card counts for a subject
+   * @param {string} userId
    * @param {string} subjectId
    */
-  getCardCount(subjectId) {
+  getCardCount(userId, subjectId) {
     return this.collection.count({
+      userId,
       subjectId
     });
   }
@@ -45,10 +53,10 @@ class CardController {
    * @param {string} id
    * @param {object} card
    */
-  updateCard(id, card) {
+  updateCard(userId, cardId, card) {
     return this.collection
       .findOneAndUpdate(
-        { id },
+        { userId, id: cardId },
         {
           $set: {
             ...card
@@ -63,18 +71,20 @@ class CardController {
 
   /**
    * Remove a card by ID
+   * @param {string} userId
    * @param {string} id
    */
-  removeCard(id) {
-    return this.collection.remove({ id }).then(res => res);
+  removeCard(userId, cardId) {
+    return this.collection.remove({ userId, id: cardId }).then(res => res);
   }
 
   /**
    * Remove all cards matching a specific subject ID
+   * @param {string} userId
    * @param {string} subjectId
    */
-  removeSubjectCards(subjectId) {
-    return this.collection.remove({ subjectId }).then(res => res);
+  removeSubjectCards(userId, subjectId) {
+    return this.collection.remove({ userId, subjectId }).then(res => res);
   }
 }
 

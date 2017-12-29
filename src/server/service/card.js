@@ -15,17 +15,17 @@ class CardService {
    * Get all cards for a specific subject
    * @param {string} subjectId
    */
-  getCards(subjectId) {
-    return this.db.getCards(subjectId);
+  getCards(userId, subjectId) {
+    return this.db.getCards(userId, subjectId);
   }
 
   /**
    * Get card count for subjects
    * @param {{ id: String }[]} subjectIds
    */
-  getCardCount(subjects) {
+  getCardCount(userId, subjects) {
     const countsPromises = subjects.map(subject =>
-      this.db.getCardCount(subject.id)
+      this.db.getCardCount(userId, subject.id)
     );
     return Promise.all(countsPromises).then(counts =>
       subjects.map((subject, key) => ({
@@ -40,10 +40,11 @@ class CardService {
    * @param {object} card
    * @param {string} subjectId
    */
-  addCard(card, subjectId) {
+  addCard(userId, card, subjectId) {
     const enrichedCard = {
       ...card,
       subjectId,
+      userId,
       id: uuidv4(),
       created: Date.now(),
       question: card.question || "",
@@ -57,29 +58,29 @@ class CardService {
    * @param {string} cardId
    * @param {object} card
    */
-  updateCard(cardId, card) {
+  updateCard(userId, cardId, card) {
     const enrichedCard = {
       ...card,
       updated: Date.now()
     };
-    return this.db.updateCard(cardId, enrichedCard);
+    return this.db.updateCard(userId, cardId, enrichedCard);
   }
 
   /**
    * Remove a card
    * @param {string} cardId
    */
-  removeCard(cardId) {
-    return this.db.removeCard(cardId);
+  removeCard(userId, cardId) {
+    return this.db.removeCard(userId, cardId);
   }
 
   /**
    * Remove all cards with the specified subject ID
    * @param {string} subjectId
    */
-  removeSubjectCards(subjectId) {
+  removeSubjectCards(userId, subjectId) {
     this.logger.debug(`Removing all cards for subject ${subjectId}`);
-    return this.db.removeSubjectCards(subjectId);
+    return this.db.removeSubjectCards(userId, subjectId);
   }
 }
 

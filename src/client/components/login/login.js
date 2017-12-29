@@ -106,7 +106,9 @@ class Login extends PureComponent {
 
   submitRegisterForm() {
     if (this.canRegister()) {
-      this.props.dispatch(register(this.state.username, this.state.password));
+      this.props.dispatch(
+        register(this.state.username, this.state.password, this.state.email)
+      );
     }
   }
 

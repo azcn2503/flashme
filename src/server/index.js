@@ -6,17 +6,16 @@ import { getLogger } from "log4js";
 import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 import passport from "passport";
-import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 
 import {
-  authApi as initialiseAuthApi,
+  userApi as initialiseUserApi,
   cardApi as initialiseCardApi,
   subjectApi as initialiseSubjectApi,
   testApi as initialiseTestApi
 } from "./api";
 import {
-  authService,
+  userService,
   cardService,
   subjectService,
   testService
@@ -39,23 +38,21 @@ databaseController
   .initialise({ logger })
   .catch(err => logger.error("Could not connect to Mongo", err.message))
   .then(db => {
-    authService.initialise({
+    userService.initialise({
       logger,
-      db: db.getAuth(),
+      db: db.getUsers(),
       passport,
-      LocalStrategy,
-      FacebookStrategy
+      LocalStrategy
     });
     cardService.initialise({ logger, db: db.getCards() });
     subjectService.initialise({ logger, db: db.getSubjects() });
     testService.initialise({ logger, db: db.getTests() });
 
-    initialiseAuthApi({
+    initialiseUserApi({
       app,
       logger,
-      authService,
+      userService,
       passport,
-      FacebookStrategy,
       LocalStrategy
     });
     initialiseCardApi({ app, logger, cardService });

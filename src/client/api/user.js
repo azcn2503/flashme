@@ -9,6 +9,18 @@ import { apiUrl } from "./api";
  */
 export const login = (username, password) => {
   return axios
-    .post(apiUrl("/login"), { username, password })
+    .post(apiUrl("/user/login"), { username, password })
+    .then(({ data }) => data);
+};
+
+/**
+ * Register a new user
+ * @param {string} username
+ * @param {string} password
+ * @param {string} email
+ */
+export const register = (username, password, email) => {
+  return axios
+    .post(apiUrl("/user/register"), { username, password, email })
     .then(({ data }) => data);
 };

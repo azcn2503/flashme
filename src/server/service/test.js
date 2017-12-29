@@ -13,10 +13,11 @@ class TestService {
 
   /**
    * Create a test against a subject ID with the specified cards
+   * @param {string} userId
    * @param {string} subjectId
    * @param {array} cards
    */
-  addTest(subjectId, cards) {
+  addTest(userId, subjectId, cards) {
     // Strip down the cards to the bare essentials
     const testCards = cards.map(card => ({
       id: card.id,
@@ -27,25 +28,28 @@ class TestService {
       id: uuidv4(),
       created: Date.now(),
       cards: testCards,
-      subjectId
+      subjectId,
+      userId
     };
     return this.db.addTest(test);
   }
 
   /**
    * Get a test by its ID
+   * @param {string} userId
    * @param {string} testId
    */
-  getTest(testId) {
-    return this.db.getTest(testId);
+  getTest(userId, testId) {
+    return this.db.getTest(userId, testId);
   }
 
   /**
    * Get all tests for a specific subject ID
+   * @param {string} userId
    * @param {string} subjectId
    */
-  getTestsForSubject(subjectId) {
-    return this.db.getTestsForSubject(subjectId);
+  getTestsForSubject(userId, subjectId) {
+    return this.db.getTestsForSubject(userId, subjectId);
   }
 }
 

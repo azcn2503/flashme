@@ -16,18 +16,22 @@ class TestController {
 
   /**
    * Get a test
+   * @param {string} userId
    * @param {string} testId
    */
-  getTest(testId) {
-    return this.collection.findOne({ id: testId });
+  getTest(userId, testId) {
+    return this.collection.findOne({ userId, id: testId });
   }
 
   /**
    * Get all tests for a subject
+   * @param {string} userId
    * @param {string} subjectId
    */
-  getTestsForSubject(subjectId) {
-    return this.collection.findAsync({ subjectId }).then(res => res.toArray());
+  getTestsForSubject(userId, subjectId) {
+    return this.collection
+      .findAsync({ userId, subjectId })
+      .then(res => res.toArray());
   }
 }
 

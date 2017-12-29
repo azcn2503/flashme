@@ -48,6 +48,7 @@
     "webpack-source-map-support": "^2.0.1"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "config": "^1.26.1",
     "express": "^4.15.3",

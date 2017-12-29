@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 import config from "config";
 import Promise from "bluebird";
 
-import AuthController from "./auth";
+import UserController from "./user";
 import CardController from "./card";
 import SubjectController from "./subject";
 import TestController from "./test";
@@ -21,7 +21,7 @@ class DatabaseController {
     return client.connectAsync(config.db.url).then(db => {
       this.logger.debug("Database initialised");
       this.db = db;
-      this.auth = new AuthController({ db, logger });
+      this.users = new UserController({ db, logger });
       this.cards = new CardController({ db, logger });
       this.subjects = new SubjectController({ db, logger });
       this.tests = new TestController({ db, logger });
@@ -29,8 +29,8 @@ class DatabaseController {
     });
   }
 
-  getAuth() {
-    return this.auth;
+  getUsers() {
+    return this.users;
   }
 
   getCards() {

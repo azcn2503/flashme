@@ -1,6 +1,6 @@
-import authService from "./auth";
+import userService from "./user";
 import cardService from "./card";
 import subjectService from "./subject";
 import testService from "./test";
 
-export { authService, cardService, subjectService, testService };
+export { userService, cardService, subjectService, testService };

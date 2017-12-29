@@ -6,13 +6,21 @@ class SubjectsController {
     this.logger = logger;
   }
 
+  /**
+   * Add a subject
+   * @param {object} subject
+   */
   addSubject(subject) {
     return this.collection.insertOne(subject).then(res => res.ops[0]);
   }
 
-  getSubjects() {
+  /**
+   * Get all subjects
+   * @param {string} userId
+   */
+  getSubjects(userId) {
     return this.collection.find(
-      {},
+      { userId },
       (err, res) =>
         new Promise((resolve, reject) => {
           if (err) {
@@ -24,14 +32,25 @@ class SubjectsController {
     );
   }
 
-  getSubject(id) {
-    return this.collection.findOne({ id });
+  /**
+   * Get a subject by ID
+   * @param {string} userId
+   * @param {string} subjectId
+   */
+  getSubject(userId, subjectId) {
+    return this.collection.findOne({ userId, id: subjectId });
   }
 
-  updateSubjectTitle(id, title) {
+  /**
+   * Update a subject title
+   * @param {string} userId
+   * @param {string} subjectId
+   * @param {string} title
+   */
+  updateSubjectTitle(userId, subjectId, title) {
     return this.collection
       .findOneAndUpdate(
-        { id },
+        { userId, id: subjectId },
         {
           $set: {
             title
@@ -46,10 +65,11 @@ class SubjectsController {
 
   /**
    * Remove a subject by ID
-   * @param {string} id
+   * @param {string} userId
+   * @param {string} subjectId
    */
-  removeSubject(id) {
-    return this.collection.remove({ id }).then(res => res);
+  removeSubject(userId, subjectId) {
+    return this.collection.remove({ userId, id: subjectId }).then(res => res);
   }
 }
 
