@@ -19,9 +19,9 @@ import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
 
-import styles from "./cards.scss";
+import styles from "./subject-cards.scss";
 
-class Cards extends PureComponent {
+class SubjectCards extends PureComponent {
   static mapStateToProps(state) {
     return {
       cards: state.cards,
@@ -295,7 +295,7 @@ class Cards extends PureComponent {
       const subject = this.props.subjects.byId[this.props.subjectId];
       if (subject) {
         return (
-          <div className={styles.cards}>
+          <div className={styles.subjectCards}>
             <Subheader
               editable
               label={`${subject.title}`}
@@ -315,7 +315,7 @@ class Cards extends PureComponent {
   }
 }
 
-Cards.propTypes = {
+SubjectCards.propTypes = {
   dispatch: PropTypes.func.isRequired,
   cards: CARDS_PROPTYPE,
   subjects: SUBJECTS_PROPTYPE,
@@ -324,4 +324,4 @@ Cards.propTypes = {
   testId: PropTypes.string
 };
 
-export default connect(Cards.mapStateToProps)(Cards);
+export default connect(SubjectCards.mapStateToProps)(SubjectCards);

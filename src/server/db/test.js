@@ -33,6 +33,27 @@ class TestController {
       .findAsync({ userId, subjectId })
       .then(res => res.toArray());
   }
+
+  /**
+   * Remove all tests matching a specific subject ID
+   * @param {string} userId
+   * @param {string} subjectId
+   */
+  removeSubjectTests(userId, subjectId) {
+    return this.collection.remove({ userId, subjectId }).then(res => res);
+  }
+
+  /**
+   * Get test counts for a subject
+   * @param {string} userId
+   * @param {string} subjectId
+   */
+  getTestCount(userId, subjectId) {
+    return this.collection.count({
+      userId,
+      subjectId
+    });
+  }
 }
 
 export default TestController;

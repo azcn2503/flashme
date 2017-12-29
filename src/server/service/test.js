@@ -51,6 +51,31 @@ class TestService {
   getTestsForSubject(userId, subjectId) {
     return this.db.getTestsForSubject(userId, subjectId);
   }
+
+  /**
+   * Remove all tests with the specified subject ID
+   * @param {string} subjectId
+   */
+  removeSubjectTests(userId, subjectId) {
+    this.logger.debug(`Removing all tests for subject ${subjectId}`);
+    return this.db.removeSubjectTests(userId, subjectId);
+  }
+
+  /**
+   * Get test count for subjects
+   * @param {{ id: String }[]} subjectIds
+   */
+  getTestCount(userId, subjects) {
+    const countsPromises = subjects.map(subject =>
+      this.db.getTestCount(userId, subject.id)
+    );
+    return Promise.all(countsPromises).then(counts =>
+      subjects.map((subject, key) => ({
+        ...subject,
+        testCount: counts[key]
+      }))
+    );
+  }
 }
 
 export default new TestService();

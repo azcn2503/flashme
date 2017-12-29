@@ -1,5 +1,5 @@
-const testApi = ({ app, logger, testService, cardService }) => {
-  app.get("/api/test/:testId", (req, res) => {
+const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
+  app.get("/api/test/:testId", loggedIn, (req, res) => {
     const { testId } = req.params;
     logger.info(`Getting test ${testId}`);
     return testService
@@ -7,7 +7,7 @@ const testApi = ({ app, logger, testService, cardService }) => {
       .then(test => res.json(test));
   });
 
-  app.get("/api/tests/subject/:subjectId", (req, res) => {
+  app.get("/api/tests/subject/:subjectId", loggedIn, (req, res) => {
     const { subjectId } = req.params;
     logger.info(`Getting tests for subject ${subjectId}`);
     return testService
@@ -15,7 +15,7 @@ const testApi = ({ app, logger, testService, cardService }) => {
       .then(tests => res.json(tests));
   });
 
-  app.post("/api/test/:subjectId", (req, res) => {
+  app.post("/api/test/:subjectId", loggedIn, (req, res) => {
     const { subjectId } = req.params;
     logger.info(`Adding test to subject ${subjectId}`);
     return cardService

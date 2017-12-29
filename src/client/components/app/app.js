@@ -1,28 +1,37 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import Dialog from "client/components/dialog/dialog";
-import Cards from "client/components/cards/cards";
+import SubjectCards from "client/components/subject-cards/subject-cards";
 import Navigation from "client/components/navigation/navigation";
 import Subjects from "client/components/subjects/subjects";
 import SubjectTests from "client/components/subject-tests/subject-tests";
 import Test from "client/components/test/test";
+import Subheader from "client/components/subheader/subheader";
+import { getCurrentUser } from "client/state/actions/user";
 
 import styles from "./app.scss";
 
 class App extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      user: state.user
+    };
+  }
+
   constructor(props) {
     super(props);
-    this.renderCards = this.renderCards.bind(this);
     this.renderSubjects = this.renderSubjects.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
     this.renderTest = this.renderTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
   }
 
-  renderCards() {
-    return <Cards />;
+  componentWillMount() {
+    if (!this.props.user.loggedIn) {
+      this.props.dispatch(getCurrentUser());
+    }
   }
 
   renderSubjects() {
@@ -31,7 +40,7 @@ class App extends PureComponent {
 
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
-    return <Cards subjectId={subjectId} />;
+    return <SubjectCards subjectId={subjectId} />;
   }
 
   renderSubjectTests(routerProps) {
@@ -46,6 +55,41 @@ class App extends PureComponent {
 
   renderNavigation(routerProps) {
     return <Navigation routerProps={routerProps} />;
+  }
+
+  renderLoggedInContent() {
+    if (this.props.user.loggedIn) {
+      return (
+        <Switch>
+          <Route path="/subjects" component={this.renderSubjects} exact />
+          <Route
+            path="/subject/:subjectId/test/:testId"
+            component={this.renderTest}
+            exact
+          />
+          <Route
+            path="/subject/:subjectId/tests"
+            component={this.renderSubjectTests}
+            exact
+          />
+          <Route
+            path="/subject/:subjectId"
+            component={this.renderSubjectCards}
+            exact
+          />
+          <Redirect to="/subjects" />
+        </Switch>
+      );
+    } else {
+      return (
+        <div className={styles.content}>
+          <div className={styles.notLoggedIn}>
+            <Subheader label="Welcome to FlashMe!" />
+            <p>Please login to start using the app.</p>
+          </div>
+        </div>
+      );
+    }
   }
 
   render() {
@@ -73,35 +117,19 @@ class App extends PureComponent {
             component={this.renderNavigation}
             exact
           />
+          <Route component={this.renderNavigation} />
         </Switch>
-        <Switch>
-          <Route path="/subjects" component={this.renderSubjects} exact />
-          <Route
-            path="/subject/:subjectId/test/:testId"
-            component={this.renderTest}
-            exact
-          />
-          <Route
-            path="/subject/:subjectId/tests"
-            component={this.renderSubjectTests}
-            exact
-          />
-          <Route
-            path="/subject/:subjectId"
-            component={this.renderSubjectCards}
-            exact
-          />
-          <Redirect to="/subjects" />
-        </Switch>
+        {this.renderLoggedInContent()}
       </div>
     );
   }
 }
 
 App.propTypes = {
+  dispatch: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func
   })
 };
 
-export default App;
+export default connect(App.mapStateToProps)(App);

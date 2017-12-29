@@ -46,7 +46,10 @@ const reducer = (state = defaultState, action) => {
         error: null,
         byId: {
           ...state.byId,
-          [action.subject.id]: action.subject
+          [action.subject.id]: {
+            ...state.byId[action.subject.id],
+            ...action.subject
+          }
         },
         allIds: uniq([...state.allIds, action.subject.id])
       };
@@ -152,6 +155,9 @@ const reducer = (state = defaultState, action) => {
           }
         }
       };
+
+    case actions.RESET_SUBJECTS:
+      return defaultState;
 
     default:
       return state;

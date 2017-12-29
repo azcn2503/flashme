@@ -10,4 +10,11 @@
 .content {
   flex-grow: 1;
   padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notLoggedIn {
+  text-align: center;
 }

@@ -5,7 +5,11 @@ import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
-import { SUBJECT_PROPTYPE, CARDS_PROPTYPE } from "../../proptypes";
+import {
+  SUBJECT_PROPTYPE,
+  CARDS_PROPTYPE,
+  TESTS_PROPTYPE
+} from "../../proptypes";
 import Button from "../button/button";
 import Dialog from "../dialog/dialog";
 
@@ -17,7 +21,8 @@ import styles from "./subject-card.scss";
 class SubjectCard extends PureComponent {
   static mapStateToProps(state) {
     return {
-      cards: state.cards
+      cards: state.cards,
+      tests: state.tests
     };
   }
 
@@ -104,6 +109,16 @@ class SubjectCard extends PureComponent {
     );
   }
 
+  getTestCount() {
+    return (
+      Object.values(this.props.tests.byId).filter(
+        test => test.subjectId === this.props.subject.id
+      ).length ||
+      this.props.subject.testCount ||
+      0
+    );
+  }
+
   renderFakeCards() {
     return [
       <div
@@ -121,6 +136,7 @@ class SubjectCard extends PureComponent {
 
   renderDeleteDialog() {
     const cardCount = this.getCardCount();
+    const testCount = this.getTestCount();
     return (
       <Dialog
         open={this.state.deleteDialogOpen}
@@ -129,16 +145,19 @@ class SubjectCard extends PureComponent {
         body={
           <div>
             <p>
-              Are you sure you want to delete this subject and all of its cards?
+              Are you sure you want to delete this subject and all of its cards
+              and tests?
             </p>
             <p>{`${this.props.subject.title ||
-              "No title"} (${cardCount} ${pluralize("card", cardCount)})`}</p>
+              "No title"} (${cardCount} ${pluralize(
+              "card",
+              cardCount
+            )} and ${testCount} ${pluralize("test", testCount)})`}</p>
           </div>
         }
         footer={[
           <Button key={0} delete onClick={this.onClickConfirmDelete}>
-            Yes, delete this subject and its {cardCount}{" "}
-            {pluralize("card", cardCount)}
+            Yes, delete this subject
           </Button>,
           <Button key={1} onClick={this.onClickCancelDelete}>
             No, cancel
@@ -190,6 +209,7 @@ class SubjectCard extends PureComponent {
 SubjectCard.propTypes = {
   subject: SUBJECT_PROPTYPE,
   cards: CARDS_PROPTYPE,
+  tests: TESTS_PROPTYPE,
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func

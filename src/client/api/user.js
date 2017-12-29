@@ -14,6 +14,13 @@ export const login = (username, password) => {
 };
 
 /**
+ * Logout
+ */
+export const logout = () => {
+  return axios.get(apiUrl("/user/logout")).then(({ data }) => data);
+};
+
+/**
  * Register a new user
  * @param {string} username
  * @param {string} password
@@ -23,4 +30,11 @@ export const register = (username, password, email) => {
   return axios
     .post(apiUrl("/user/register"), { username, password, email })
     .then(({ data }) => data);
+};
+
+/**
+ * Get the currently logged in user
+ */
+export const getCurrentUser = () => {
+  return axios.get(apiUrl("/user")).then(({ data }) => data);
 };

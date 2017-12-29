@@ -24,6 +24,14 @@ import databaseController from "./db";
 
 const app = express();
 
+const loggedIn = (req, res, next) => {
+  if (req.user) {
+    return next();
+  } else {
+    return res.send(401);
+  }
+};
+
 const logger = getLogger(config.server.name);
 logger.level = config.server.logLevel || "debug";
 
@@ -53,16 +61,19 @@ databaseController
       logger,
       userService,
       passport,
-      LocalStrategy
+      LocalStrategy,
+      loggedIn
     });
-    initialiseCardApi({ app, logger, cardService });
+    initialiseCardApi({ app, logger, cardService, loggedIn });
     initialiseSubjectApi({
       app,
       logger,
       subjectService,
-      cardService
+      cardService,
+      testService,
+      loggedIn
     });
-    initialiseTestApi({ app, logger, testService, cardService });
+    initialiseTestApi({ app, logger, testService, cardService, loggedIn });
 
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(config.client.path, "index.html"));

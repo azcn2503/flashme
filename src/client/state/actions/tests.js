@@ -20,6 +20,8 @@ export const GET_TESTS_FOR_SUBJECT_REQUEST = "GET_TESTS_FOR_SUBJECT_REQUEST";
 export const GET_TESTS_FOR_SUBJECT_SUCCESS = "GET_TESTS_FOR_SUBJECT_SUCCESS";
 export const GET_TESTS_FOR_SUBJECT_FAILURE = "GET_TESTS_FOR_SUBJECT_FAILURE";
 
+export const RESET_TESTS = "RESET_TESTS";
+
 /**
  * Get a specific test by its ID
  * @param {string} testId
@@ -74,4 +76,8 @@ export const answerTestCard = (testId, cardId, correct) => ({
   testId,
   cardId,
   correct
+});
+
+export const resetTests = () => ({
+  type: RESET_TESTS
 });

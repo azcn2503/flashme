@@ -3,12 +3,17 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 
+import { logout } from "client/state/actions/user";
+import { resetSubjects } from "client/state/actions/subjects";
+import { resetCards } from "client/state/actions/cards";
+import { resetTests } from "client/state/actions/tests";
 import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
 import {
   SUBJECTS_PROPTYPE,
   CARDS_PROPTYPE,
-  TESTS_PROPTYPE
+  TESTS_PROPTYPE,
+  USER_PROPTYPE
 } from "../../proptypes";
 import Button from "../button/button";
 
@@ -19,7 +24,8 @@ class Navigation extends PureComponent {
     return {
       cards: state.cards,
       subjects: state.subjects,
-      tests: state.tests
+      tests: state.tests,
+      user: state.user
     };
   }
 
@@ -33,7 +39,7 @@ class Navigation extends PureComponent {
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
     this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
-    this.onSubmitLogin = this.onSubmitLogin.bind(this);
+    this.onClickLogout = this.onClickLogout.bind(this);
   }
 
   onClickLoginOrRegister() {
@@ -42,13 +48,20 @@ class Navigation extends PureComponent {
     });
   }
 
+  onClickLogout() {
+    this.props.dispatch(logout()).then(() => {
+      this.props.dispatch(resetSubjects());
+      this.props.dispatch(resetCards());
+      this.props.dispatch(resetTests());
+      this.props.history.push("/");
+    });
+  }
+
   onCloseLoginDialog() {
     this.setState({
       loginDialogOpen: false
     });
   }
-
-  onSubmitLogin() {}
 
   onLoginSuccess() {
     this.setState({
@@ -142,15 +155,32 @@ class Navigation extends PureComponent {
     ]);
   }
 
-  render() {
-    return (
-      <div className={styles.navigation}>
-        <div className={styles.route}>{this.renderRoute()}</div>
+  renderUser() {
+    if (this.props.user.loggedIn) {
+      return (
+        <div className={styles.login}>
+          <div className={styles.currentUser}>
+            Logged in as <strong>{this.props.user.currentUser.username}</strong>
+          </div>
+          <Button onClick={this.onClickLogout}>Logout</Button>
+        </div>
+      );
+    } else {
+      return (
         <div className={styles.login}>
           <Button onClick={this.onClickLoginOrRegister}>
             Login / Register
           </Button>
         </div>
+      );
+    }
+  }
+
+  render() {
+    return (
+      <div className={styles.navigation}>
+        <div className={styles.route}>{this.renderRoute()}</div>
+        {this.renderUser()}
         <Dialog
           open={this.state.loginDialogOpen}
           onClose={this.onCloseLoginDialog}
@@ -172,6 +202,7 @@ Navigation.propTypes = {
   cards: CARDS_PROPTYPE,
   subjects: SUBJECTS_PROPTYPE,
   tests: TESTS_PROPTYPE,
+  user: USER_PROPTYPE,
   routerProps: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({

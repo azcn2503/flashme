@@ -131,6 +131,9 @@ const reducer = (state = defaultState, action) => {
         }
       };
 
+    case actions.RESET_CARDS:
+      return defaultState;
+
     default:
       return state;
   }

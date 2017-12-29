@@ -2,7 +2,9 @@ import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 import { login, register } from "client/state/actions/user";
-import { getSubjects } from "client/state/actions/subjects";
+import { resetSubjects, getSubjects } from "client/state/actions/subjects";
+import { resetCards } from "client/state/actions/cards";
+import { resetTests } from "client/state/actions/tests";
 import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
@@ -104,6 +106,9 @@ class Login extends PureComponent {
       this.props
         .dispatch(login(this.state.username, this.state.password))
         .then(() => {
+          this.props.dispatch(resetSubjects());
+          this.props.dispatch(resetCards());
+          this.props.dispatch(resetTests());
           this.props.dispatch(getSubjects());
           if (this.props.onSuccess) {
             this.props.onSuccess();

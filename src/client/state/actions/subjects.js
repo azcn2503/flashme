@@ -20,6 +20,8 @@ export const REMOVE_SUBJECT_REQUEST = "REMOVE_SUBJECT_REQUEST";
 export const REMOVE_SUBJECT_SUCCESS = "REMOVE_SUBJECT_SUCCESS";
 export const REMOVE_SUBJECT_FAILURE = "REMOVE_SUBJECT_FAILURE";
 
+export const RESET_SUBJECTS = "RESET_SUBJECTS";
+
 export const addSubject = () => dispatch => {
   dispatch({ type: ADD_SUBJECT_REQUEST });
   return api
@@ -59,3 +61,7 @@ export const removeSubject = subjectId => dispatch => {
     .then(() => dispatch({ type: REMOVE_SUBJECT_SUCCESS, subjectId }))
     .catch(err => dispatch({ type: REMOVE_SUBJECT_FAILURE, subjectId, err }));
 };
+
+export const resetSubjects = () => ({
+  type: RESET_SUBJECTS
+});

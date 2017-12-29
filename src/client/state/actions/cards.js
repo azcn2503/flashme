@@ -16,6 +16,8 @@ export const REMOVE_CARD_REQUEST = "REMOVE_CARD_REQUEST";
 export const REMOVE_CARD_SUCCESS = "REMOVE_CARD_SUCCESS";
 export const REMOVE_CARD_FAILURE = "REMOVE_CARD_FAILURE";
 
+export const RESET_CARDS = "RESET_CARDS";
+
 export const getCards = subjectId => dispatch => {
   dispatch({ type: GET_CARDS_REQUEST });
   return api
@@ -47,3 +49,7 @@ export const removeCard = cardId => dispatch => {
     .then(res => dispatch({ type: REMOVE_CARD_SUCCESS, cardId }))
     .catch(err => dispatch({ type: REMOVE_CARD_FAILURE, cardId, err }));
 };
+
+export const resetCards = () => ({
+  type: RESET_CARDS
+});

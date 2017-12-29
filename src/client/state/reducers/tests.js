@@ -120,6 +120,9 @@ const reducer = (state = defaultState, action) => {
         error: action.err
       };
 
+    case actions.RESET_TESTS:
+      return defaultState;
+
     default:
       return state;
   }
