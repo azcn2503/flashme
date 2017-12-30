@@ -76,7 +76,7 @@ class EditableContent extends PureComponent {
 
   getValue() {
     if (this._el) {
-      return this._el.textContent;
+      return this._el.innerHTML;
     } else {
       return this.state.value;
     }
