@@ -7,7 +7,9 @@ import moment from "moment";
 import pluralize from "pluralize";
 
 import Button from "client/components/button/button";
+import Dialog from "client/components/dialog/dialog";
 import Subheader from "client/components/subheader/subheader";
+import TestStatus from "client/components/test-status/test-status";
 import { getSubject } from "client/state/actions/subjects";
 import {
   getTestsForSubject,
@@ -30,9 +32,16 @@ class SubjectTests extends PureComponent {
 
   constructor(props) {
     super(props);
+    this.state = {
+      deleteDialogOpen: false,
+      deleteTest: null
+    };
     this._progressBars = {};
-    this.onClickRemoveTest = this.onClickRemoveTest.bind(this);
+    this.onClickDeleteTest = this.onClickDeleteTest.bind(this);
     this.onClickAddTest = this.onClickAddTest.bind(this);
+    this.onClickConfirmDeleteTest = this.onClickConfirmDeleteTest.bind(this);
+    this.onClickCancelDeleteTest = this.onClickCancelDeleteTest.bind(this);
+    this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
   }
 
   componentDidMount() {
@@ -65,8 +74,30 @@ class SubjectTests extends PureComponent {
     });
   }
 
-  onClickRemoveTest(testId) {
-    this.props.dispatch(removeTest(testId));
+  onClickDeleteTest(testId) {
+    this.setState({
+      deleteTest: this.props.tests.byId[testId],
+      deleteDialogOpen: true
+    });
+  }
+
+  onClickConfirmDeleteTest() {
+    this.props.dispatch(removeTest(this.state.deleteTest.id));
+    this.setState({
+      deleteDialogOpen: false
+    });
+  }
+
+  onClickCancelDeleteTest() {
+    this.setState({
+      deleteDialogOpen: false
+    });
+  }
+
+  onCloseDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false
+    });
   }
 
   onClickAddTest() {
@@ -76,21 +107,6 @@ class SubjectTests extends PureComponent {
   onClickStartTest(testId) {
     this.props.dispatch(startTest(testId));
     this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
-  }
-
-  testStatusText(status = testStatusEnum.NOT_STARTED) {
-    switch (status) {
-      case testStatusEnum.NOT_STARTED:
-        return "Not started";
-      case testStatusEnum.STARTED:
-        return "Started";
-      case testStatusEnum.COMPLETED:
-        return "Completed";
-      case testStatusEnum.ABANDONED:
-        return "Abandoned";
-      default:
-        return status;
-    }
   }
 
   getTestProgressPercent(test) {
@@ -144,20 +160,7 @@ class SubjectTests extends PureComponent {
                   </Link>
                 </td>
                 <td>
-                  <div
-                    className={classNames(styles.testStatus, {
-                      [styles.notStarted]:
-                        test.status === testStatusEnum.NOT_STARTED,
-                      [styles.started]: test.status === testStatusEnum.STARTED,
-                      [styles.completed]:
-                        test.status === testStatusEnum.COMPLETED,
-                      [styles.abandoned]:
-                        test.status === testStatusEnum.ABANDONED,
-                      [styles.unknown]: !test.status
-                    })}
-                  >
-                    {this.testStatusText(test.status)}
-                  </div>
+                  <TestStatus test={test} />
                 </td>
                 <td>{this.renderTestProgress(test)}</td>
                 <td>{test.cards.length}</td>
@@ -178,7 +181,7 @@ class SubjectTests extends PureComponent {
                     </Button>
                     <Button
                       delete
-                      onClick={() => this.onClickRemoveTest(test.id)}
+                      onClick={() => this.onClickDeleteTest(test.id)}
                     >
                       Delete
                     </Button>
@@ -206,6 +209,37 @@ class SubjectTests extends PureComponent {
     );
   }
 
+  renderDeleteDialog() {
+    const { deleteTest } = this.state;
+    return (
+      <Dialog
+        open={this.state.deleteDialogOpen}
+        onClose={this.onCloseDeleteDialog}
+        header="Delete test?"
+        body={
+          deleteTest ? (
+            <div>
+              <p>Are you sure you want to delete test {deleteTest.id}?</p>
+              <p>
+                This test was created {moment(deleteTest.created).fromNow()} and
+                contains {deleteTest.cards.length}{" "}
+                {pluralize("card", deleteTest.cards.length)}.
+              </p>
+            </div>
+          ) : null
+        }
+        footer={[
+          <Button key={0} delete onClick={this.onClickConfirmDeleteTest}>
+            Yes, delete this test
+          </Button>,
+          <Button key={1} onClick={this.onClickCancelDeleteTest}>
+            No, cancel
+          </Button>
+        ]}
+      />
+    );
+  }
+
   render() {
     if (this.props.subjects.byId[this.props.subjectId]) {
       const subject = this.props.subjects.byId[this.props.subjectId];
@@ -215,6 +249,7 @@ class SubjectTests extends PureComponent {
           <Subheader label={`${subject.title}: Tests (${tests.length})`} />
           {this.renderActions()}
           {this.renderTestList(tests)}
+          {this.renderDeleteDialog()}
         </div>
       );
     } else {

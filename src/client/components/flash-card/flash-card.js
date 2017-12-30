@@ -119,9 +119,9 @@ class FlashCard extends PureComponent {
     });
   }
 
-  onContinue(value) {
+  onAnswerTestCard(value) {
     this.flip();
-    this.props.onContinue(this.props.card.id, value);
+    this.props.onAnswerTestCard(value);
   }
 
   onKeyDownQuestion(e) {
@@ -225,10 +225,15 @@ class FlashCard extends PureComponent {
   renderTestButtons() {
     if (this.props.test && this.state.flipped) {
       return [
-        <Button small key={0} onClick={() => this.onContinue(true)} primary>
+        <Button
+          small
+          key={0}
+          onClick={() => this.onAnswerTestCard(true)}
+          primary
+        >
           Right
         </Button>,
-        <Button small key={1} onClick={() => this.onContinue(false)}>
+        <Button small key={1} onClick={() => this.onAnswerTestCard(false)}>
           Wrong
         </Button>
       ];
@@ -343,9 +348,6 @@ class FlashCard extends PureComponent {
           [styles.highlightUpdate]: this.state.highlightUpdate,
           [styles.deleting]: this.state.deleteDialogOpen,
           [styles.selected]: this.props.selected,
-          [styles.animated]:
-            !this.props.showBothSides ||
-            (this.props.test && this.state.flipped),
           [styles.test]: this.props.test,
           [styles.editable]: this.props.editable,
           [styles.selectable]: !this.props.editable && !this.props.test,
@@ -391,7 +393,7 @@ FlashCard.propTypes = {
   onSelect: PropTypes.func,
   showBothSides: PropTypes.bool,
   test: PropTypes.bool,
-  onContinue: PropTypes.func,
+  onAnswerTestCard: PropTypes.func,
   selected: PropTypes.bool,
   dispatch: PropTypes.func,
   showControls: PropTypes.bool
@@ -406,7 +408,7 @@ FlashCard.defaultProps = {
   onSelect: () => null,
   showBothSides: false,
   test: false,
-  onContinue: () => null,
+  onAnswerTestCard: () => null,
   selected: false,
   showControls: true
 };

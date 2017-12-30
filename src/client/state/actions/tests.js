@@ -78,11 +78,13 @@ export const removeTest = testId => dispatch => {
     .catch(err => dispatch({ type: REMOVE_TEST_FAILURE, testId, err }));
 };
 
-export const startTest = (subjectId, testId) => ({
-  type: START_TEST,
-  subjectId,
-  testId
-});
+export const startTest = testId => dispatch => {
+  dispatch({ type: START_TEST_REQUEST, testId });
+  return api
+    .startTest(testId)
+    .then(() => dispatch({ type: START_TEST_SUCCESS, testId }))
+    .catch(() => dispatch({ type: START_TEST_FAILURE, testId }));
+};
 
 export const answerTestCard = (testId, cardId, correct) => ({
   type: ANSWER_TEST_CARD,

@@ -31,19 +31,6 @@
     }
   }
 
-  .testStatus {
-    border: 1px solid transparent;
-    border-radius: $border-radius-small;
-    padding: 5px 10px;
-    display: inline-block;
-
-    &.notStarted,
-    &.unknown {
-      border-color: $dark-grey;
-      color: $dark-grey;
-    }
-  }
-
   .progressBar {
     @include transition(width);
     position: relative;

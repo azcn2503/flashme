@@ -63,6 +63,22 @@ class TestController {
       subjectId
     });
   }
+
+  setTestStatus(userId, testId, testStatus) {
+    return this.collection
+      .findOneAndUpdate(
+        { userId, id: testId },
+        {
+          $set: {
+            status: testStatus
+          }
+        },
+        {
+          returnOriginal: false
+        }
+      )
+      .then(({ value }) => value);
+  }
 }
 
 export default TestController;

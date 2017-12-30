@@ -21,3 +21,7 @@ export const addTest = (subjectId, cards) => {
 export const removeTest = testId => {
   return axios.delete(apiUrl(`/test/${testId}`)).then(({ data }) => data);
 };
+
+export const startTest = testId => {
+  return axios.put(apiUrl(`/test/${testId}/start`)).then(({ data }) => data);
+};

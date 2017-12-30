@@ -51,8 +51,8 @@ const reducer = (state = defaultState, action) => {
         error: null,
         byId: {
           ...state.byId,
-          [action.test.id]: {
-            ...state.byId[action.test.id],
+          [action.testId]: {
+            ...state.byId[action.testId],
             status: testStatusEnum.STARTED
           }
         }
@@ -141,6 +141,47 @@ const reducer = (state = defaultState, action) => {
       };
 
     case actions.REMOVE_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: false
+          }
+        }
+      };
+
+    case actions.START_TEST_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: requestTypeEnum.UPDATE
+          }
+        }
+      };
+
+    case actions.START_TEST_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            status: testStatusEnum.STARTED
+          }
+        }
+      };
+
+    case actions.START_TEST_FAILURE:
       return {
         ...state,
         requesting: false,

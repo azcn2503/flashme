@@ -21,6 +21,11 @@ export const CARD_PROPTYPE = PropTypes.shape({
   answer: PropTypes.string
 });
 
+export const TEST_PROPTYPE = PropTypes.shape({
+  id: PropTypes.string,
+  cards: PropTypes.arrayOf(CARD_PROPTYPE)
+});
+
 export const SUBJECT_PROPTYPE = PropTypes.shape({
   id: PropTypes.string,
   title: PropTypes.string

@@ -3,10 +3,13 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
-import { getTest } from "client/state/actions/tests";
+import { testStatusEnum } from "shared/tests";
+import { getTest, startTest } from "client/state/actions/tests";
 import { getSubject } from "client/state/actions/subjects";
 import Subheader from "client/components/subheader/subheader";
 import FlashCard from "client/components/flash-card/flash-card";
+import Button from "client/components/button/button";
+import TestStatus from "client/components/test-status/test-status";
 
 import styles from "./test.scss";
 
@@ -18,6 +21,11 @@ class Test extends PureComponent {
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.onClickStartTest = this.onClickStartTest.bind(this);
+  }
+
   componentDidMount() {
     if (!this.props.tests.byId[this.props.testId]) {
       this.props.dispatch(getTest(this.props.testId));
@@ -27,9 +35,42 @@ class Test extends PureComponent {
     }
   }
 
+  onClickStartTest() {
+    this.props.dispatch(startTest(this.props.testId));
+  }
+
+  onAnswerTestCard(value) {
+    console.log(value);
+  }
+
   renderTestCard() {
     const test = this.props.tests.byId[this.props.testId];
-    return <FlashCard card={test.cards[test.activeCard]} test />;
+    if (test.status === testStatusEnum.STARTED) {
+      return (
+        <FlashCard
+          card={test.cards[test.activeCard]}
+          onAnswerTestCard={this.onAnswerTestCard}
+          test
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderActions() {
+    const test = this.props.tests.byId[this.props.testId];
+    if (test.status === testStatusEnum.NOT_STARTED) {
+      return (
+        <Button primary onClick={this.onClickStartTest}>
+          Start Test
+        </Button>
+      );
+    } else if (test.status === testStatusEnum.STARTED) {
+      return <Button primary>Abandon Test</Button>;
+    } else {
+      return null;
+    }
   }
 
   render() {
@@ -41,12 +82,16 @@ class Test extends PureComponent {
       const subject = this.props.subjects.byId[this.props.subjectId];
       return (
         <div className={styles.test}>
-          <Subheader
-            label={`Test: ${subject.title} (${test.cards.length} ${pluralize(
-              "card",
-              test.cards.length
-            )})`}
-          />
+          <div className={styles.subheader}>
+            <Subheader
+              label={`Test: ${subject.title} (${test.cards.length} ${pluralize(
+                "card",
+                test.cards.length
+              )})`}
+            />
+            <TestStatus test={test} />
+          </div>
+          <div className={styles.actions}>{this.renderActions()}</div>
           <div className={styles.cardContainer}>{this.renderTestCard()}</div>
         </div>
       );

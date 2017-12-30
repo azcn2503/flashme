@@ -92,6 +92,15 @@ class TestService {
       }))
     );
   }
+
+  /**
+   * Start a test
+   * @param {string} userId
+   * @param {string} testId
+   */
+  startTest(userId, testId) {
+    return this.db.setTestStatus(userId, testId, testStatusEnum.STARTED);
+  }
 }
 
 export default new TestService();

@@ -1,0 +1,19 @@
+@import "~client/styles/variables";
+
+.testStatus {
+  border: 1px solid black;
+  border-radius: $border-radius-small;
+  padding: 5px 10px;
+  display: inline-block;
+  color: black;
+
+  &.NOT_STARTED {
+    border-color: $dark-grey;
+    color: $dark-grey;
+  }
+
+  &.STARTED {
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+}
