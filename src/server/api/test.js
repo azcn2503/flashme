@@ -25,6 +25,15 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
       .catch(err => res.json(err).sendStatus(500));
   });
 
+  app.delete("/api/test/:testId", loggedIn, (req, res) => {
+    const { testId } = req.params;
+    logger.info(`Removing test ${testId}`);
+    return testService
+      .removeTest(req.user.id, testId)
+      .then(() => res.sendStatus(200))
+      .catch(err => res.json(err).sendStatus(500));
+  });
+
   logger.debug("Tests API initialised");
 };
 

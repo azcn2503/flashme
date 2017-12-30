@@ -1,13 +1,8 @@
-import { keyBy, uniq } from "lodash";
+import { keyBy, uniq, omitBy } from "lodash";
 
-import * as actions from "../actions/tests";
-
-const status = {
-  STARTED: "STARTED",
-  NOT_STARTED: "NOT_STARTED",
-  COMPLETED: "COMPLETED",
-  ABANDONED: "ABANDONED"
-};
+import { testStatusEnum } from "shared/tests";
+import { requestTypeEnum } from "shared/requests";
+import * as actions from "client/state/actions/tests";
 
 const defaultState = {
   byId: {},
@@ -58,7 +53,7 @@ const reducer = (state = defaultState, action) => {
           ...state.byId,
           [action.test.id]: {
             ...state.byId[action.test.id],
-            status: status.STARTED
+            status: testStatusEnum.STARTED
           }
         }
       };
@@ -122,6 +117,42 @@ const reducer = (state = defaultState, action) => {
 
     case actions.RESET_TESTS:
       return defaultState;
+
+    case actions.REMOVE_TEST_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: requestTypeEnum.DELETE
+          }
+        }
+      };
+
+    case actions.REMOVE_TEST_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: omitBy(state.byId, test => test.id === action.testId),
+        allIds: [...state.allIds].filter(id => id !== action.testId)
+      };
+
+    case actions.REMOVE_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: false
+          }
+        }
+      };
 
     default:
       return state;

@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import Promise from "bluebird";
 
 import styles from "./editable-content.scss";
 
@@ -9,7 +10,8 @@ class EditableContent extends PureComponent {
     super(props);
     this.state = {
       focused: false,
-      value: props.value
+      value: props.value,
+      updateCount: 0
     };
     this._el = null;
     this.onFocus = this.onFocus.bind(this);
@@ -94,9 +96,29 @@ class EditableContent extends PureComponent {
     }
   }
 
+  /**
+   * Reset HTML editable content field
+   * React does not reconcile contentEditable fields during its
+   * normal render cycles, so this is used as a workaround.
+   * Components must call this method manually when it is expected
+   * to be cleared.
+   * @returns {Promise}
+   */
+  resetHTML() {
+    return new Promise(resolve =>
+      this.setState(
+        {
+          updateCount: this.state.updateCount + 1
+        },
+        () => resolve(this)
+      )
+    );
+  }
+
   render() {
     return (
       <div
+        key={this.state.updateCount}
         ref={el => (this._el = el)}
         className={classNames(
           styles.editableContent,

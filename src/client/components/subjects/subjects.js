@@ -30,7 +30,10 @@ class Subjects extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.subjects.allIds.length === 0) {
+    if (
+      this.props.subjects.allIds.length === 0 &&
+      !this.props.subjects.requesting
+    ) {
       this.props.dispatch(getSubjects());
     }
   }

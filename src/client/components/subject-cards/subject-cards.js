@@ -120,76 +120,6 @@ class SubjectCards extends PureComponent {
     this.addCard(value);
   }
 
-  onAnswerTestCard(cardId, correct) {
-    this.props.dispatch(
-      answerTestCard(this.props.subjectId, this.props.testId, cardId, correct)
-    );
-  }
-
-  renderTestContainer() {
-    if (this.state.cards.length === 0) {
-      return <div className={styles.testContainer}>Nothing to test!</div>;
-    } else if (this.props.test.activeCardIndex < this.state.cards.length) {
-      return (
-        <div className={styles.testContainer}>
-          <div className={styles.progressContainer}>
-            <div
-              className={styles.progressBar}
-              style={{
-                width: `${Math.floor(
-                  100 /
-                    this.state.cards.length *
-                    (this.props.test.activeCardIndex + 1)
-                )}%`
-              }}
-            />
-            <div className={styles.progressSummary}>
-              {this.state.testCard > 0 ? (
-                <div>
-                  {this.state.correct} of {this.state.testCard} ({Math.floor(
-                    100 / this.state.testCard * this.state.correct
-                  )}%)
-                </div>
-              ) : null}
-            </div>
-          </div>
-          <div className={styles.testStatus}>
-            Card {this.props.test.activeCardIndex + 1} of{" "}
-            {this.state.cards.length}
-          </div>
-          <div className={styles.testCard}>
-            <FlashCard
-              dispatch={this.props.dispatch}
-              card={this.state.cards[this.props.test.activeCardIndex]}
-              test
-            />
-          </div>
-        </div>
-      );
-    } else {
-      const correctCount = this.props.test.cards.filter(card => card.correct)
-        .length;
-      const totalCount = this.props.test.cards.length;
-      return (
-        <div className={styles.testContainer}>
-          Test completed - you scored {correctCount} of {totalCount} ({Math.floor(
-            100 / totalCount * correctCount
-          )}%)
-          {this.renderPostTestActions()}
-        </div>
-      );
-    }
-  }
-
-  renderPostTestActions() {
-    return (
-      <div className={styles.postTestActions}>
-        <Button primary>Why am I so bad?</Button>
-        <Button>Why am I so amazing?</Button>
-      </div>
-    );
-  }
-
   filterCardsBySubject(card) {
     return card.subjectId === this.props.subjectId;
   }
@@ -274,20 +204,16 @@ class SubjectCards extends PureComponent {
   }
 
   renderTestsSummary() {
-    if (this.props.tests.allIds.length > 0) {
-      const tests = Object.values(this.props.tests.byId).filter(
-        test => test.subjectId === this.props.subjectId
-      );
-      return (
-        <div className={styles.testsSummary}>
-          <Link to={`/subject/${this.props.subjectId}/tests`}>
-            {tests.length} {pluralize("test", tests.length)} for this subject
-          </Link>
-        </div>
-      );
-    } else {
-      return null;
-    }
+    const tests = Object.values(this.props.tests.byId).filter(
+      test => test.subjectId === this.props.subjectId
+    );
+    return (
+      <div className={styles.testsSummary}>
+        <Link to={`/subject/${this.props.subjectId}/tests`}>
+          {tests.length} {pluralize("test", tests.length)} for this subject
+        </Link>
+      </div>
+    );
   }
 
   render() {

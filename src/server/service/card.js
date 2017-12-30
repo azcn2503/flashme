@@ -13,6 +13,7 @@ class CardService {
 
   /**
    * Get all cards for a specific subject
+   * @param {string} userId
    * @param {string} subjectId
    */
   getCards(userId, subjectId) {
@@ -21,6 +22,7 @@ class CardService {
 
   /**
    * Get card count for subjects
+   * @param {string} userId
    * @param {{ id: String }[]} subjectIds
    */
   getCardCount(userId, subjects) {
@@ -37,6 +39,7 @@ class CardService {
 
   /**
    * Add a card
+   * @param {string} userId
    * @param {object} card
    * @param {string} subjectId
    */
@@ -55,6 +58,7 @@ class CardService {
 
   /**
    * Update a card
+   * @param {string} userId
    * @param {string} cardId
    * @param {object} card
    */
@@ -68,6 +72,7 @@ class CardService {
 
   /**
    * Remove a card
+   * @param {string} userId
    * @param {string} cardId
    */
   removeCard(userId, cardId) {
@@ -76,6 +81,7 @@ class CardService {
 
   /**
    * Remove all cards with the specified subject ID
+   * @param {string} userId
    * @param {string} subjectId
    */
   removeSubjectCards(userId, subjectId) {

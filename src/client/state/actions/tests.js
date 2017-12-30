@@ -1,4 +1,5 @@
 import * as api from "../../api/tests";
+import { REMOVE_CARD_FAILURE } from "./cards";
 
 export const ADD_TEST = "ADD_TEST";
 export const START_TEST = "START_TEST";
@@ -21,6 +22,10 @@ export const GET_TESTS_FOR_SUBJECT_SUCCESS = "GET_TESTS_FOR_SUBJECT_SUCCESS";
 export const GET_TESTS_FOR_SUBJECT_FAILURE = "GET_TESTS_FOR_SUBJECT_FAILURE";
 
 export const RESET_TESTS = "RESET_TESTS";
+
+export const REMOVE_TEST_REQUEST = "REMOVE_TEST_REQUEST";
+export const REMOVE_TEST_SUCCESS = "REMOVE_TEST_SUCCESS";
+export const REMOVE_TEST_FAILURE = "REMOVE_TEST_FAILURE";
 
 /**
  * Get a specific test by its ID
@@ -63,6 +68,14 @@ export const addTest = subjectId => dispatch => {
       return test;
     })
     .catch(err => dispatch({ type: ADD_TEST_FAILURE, err }));
+};
+
+export const removeTest = testId => dispatch => {
+  dispatch({ type: REMOVE_TEST_REQUEST, testId });
+  return api
+    .removeTest(testId)
+    .then(() => dispatch({ type: REMOVE_TEST_SUCCESS, testId }))
+    .catch(err => dispatch({ type: REMOVE_TEST_FAILURE, testId, err }));
 };
 
 export const startTest = (subjectId, testId) => ({

@@ -1,4 +1,7 @@
 import uuidv4 from "uuid/v4";
+import { shuffle } from "lodash";
+
+import { testStatusEnum } from "shared/tests";
 
 class TestService {
   constructor() {
@@ -19,17 +22,21 @@ class TestService {
    */
   addTest(userId, subjectId, cards) {
     // Strip down the cards to the bare essentials
-    const testCards = cards.map(card => ({
-      id: card.id,
-      question: card.question,
-      answer: card.answer
-    }));
+    const testCards = shuffle(
+      cards.map(card => ({
+        id: card.id,
+        question: card.question,
+        answer: card.answer
+      }))
+    );
     const test = {
       id: uuidv4(),
       created: Date.now(),
       cards: testCards,
       subjectId,
-      userId
+      userId,
+      status: testStatusEnum.NOT_STARTED,
+      activeCard: 0
     };
     return this.db.addTest(test);
   }
@@ -59,6 +66,15 @@ class TestService {
   removeSubjectTests(userId, subjectId) {
     this.logger.debug(`Removing all tests for subject ${subjectId}`);
     return this.db.removeSubjectTests(userId, subjectId);
+  }
+
+  /**
+   * Remove a test
+   * @param {string} userId
+   * @param {string} testId
+   */
+  removeTest(userId, testId) {
+    return this.db.removeTest(userId, testId);
   }
 
   /**

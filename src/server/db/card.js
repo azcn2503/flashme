@@ -50,7 +50,8 @@ class CardController {
 
   /**
    * Update a card by ID
-   * @param {string} id
+   * @param {string} userId
+   * @param {string} cardId
    * @param {object} card
    */
   updateCard(userId, cardId, card) {
@@ -72,7 +73,7 @@ class CardController {
   /**
    * Remove a card by ID
    * @param {string} userId
-   * @param {string} id
+   * @param {string} cardId
    */
   removeCard(userId, cardId) {
     return this.collection.remove({ userId, id: cardId }).then(res => res);

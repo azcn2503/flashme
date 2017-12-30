@@ -42,6 +42,7 @@ app.use(serveStatic(config.client.path));
 app.use(passport.initialize());
 app.use(passport.session());
 
+logger.info("Starting server");
 databaseController
   .initialise({ logger })
   .catch(err => logger.error("Could not connect to Mongo", err.message))

@@ -184,7 +184,12 @@ class SubjectCard extends PureComponent {
               </NavLink>
             </div>
             <div className={styles.controls}>
-              <Button small primary onClick={this.onClickTest}>
+              <Button
+                small
+                primary
+                disabled={this.props.tests.requesting}
+                onClick={this.onClickTest}
+              >
                 Test
               </Button>
               <Button

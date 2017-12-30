@@ -59,7 +59,8 @@ const baseConfig = {
   resolve: {
     alias: {
       client: path.resolve(__dirname, "src/client"),
-      server: path.resolve(__dirname, "src/server")
+      server: path.resolve(__dirname, "src/server"),
+      shared: path.resolve(__dirname, "src/shared")
     },
     extensions: [".js", ".jsx", ".json"]
   },

@@ -5,7 +5,8 @@ import pluralize from "pluralize";
 
 import { getTest } from "client/state/actions/tests";
 import { getSubject } from "client/state/actions/subjects";
-import Subheader from "../subheader/subheader";
+import Subheader from "client/components/subheader/subheader";
+import FlashCard from "client/components/flash-card/flash-card";
 
 import styles from "./test.scss";
 
@@ -18,14 +19,23 @@ class Test extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.dispatch(getSubject(this.props.subjectId));
-    this.props.dispatch(getTest(this.props.testId));
+    if (!this.props.tests.byId[this.props.testId]) {
+      this.props.dispatch(getTest(this.props.testId));
+    }
+    if (!this.props.subjects.byId[this.props.subjectId]) {
+      this.props.dispatch(getSubject(this.props.subjectId));
+    }
+  }
+
+  renderTestCard() {
+    const test = this.props.tests.byId[this.props.testId];
+    return <FlashCard card={test.cards[test.activeCard]} test />;
   }
 
   render() {
     if (
-      this.props.tests.allIds.length > 0 &&
-      this.props.subjects.allIds.length > 0
+      this.props.tests.byId[this.props.testId] &&
+      this.props.subjects.byId[this.props.subjectId]
     ) {
       const test = this.props.tests.byId[this.props.testId];
       const subject = this.props.subjects.byId[this.props.subjectId];
@@ -37,6 +47,7 @@ class Test extends PureComponent {
               test.cards.length
             )})`}
           />
+          <div className={styles.cardContainer}>{this.renderTestCard()}</div>
         </div>
       );
     } else {

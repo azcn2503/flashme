@@ -44,6 +44,15 @@ class TestController {
   }
 
   /**
+   * Remove a test by ID
+   * @param {string} userId
+   * @param {string} testId
+   */
+  removeTest(userId, testId) {
+    return this.collection.remove({ userId, id: testId }).then(res => res);
+  }
+
+  /**
    * Get test counts for a subject
    * @param {string} userId
    * @param {string} subjectId

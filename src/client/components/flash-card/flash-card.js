@@ -22,7 +22,6 @@ class FlashCard extends PureComponent {
       question: props.card.question || "",
       answer: props.card.answer || "",
       flipped: false,
-      focused: false,
       deleteDialogOpen: false,
       highlightUpdate: false
     };
@@ -196,7 +195,7 @@ class FlashCard extends PureComponent {
     } else {
       // Create
       this.props.dispatch(addCard(this.value(), this.props.subjectId));
-      this.clearValues();
+      this.resetCard();
     }
   }
 
@@ -205,20 +204,31 @@ class FlashCard extends PureComponent {
     return { question, answer };
   }
 
-  clearValues() {
-    this.setState({
-      question: "",
-      answer: ""
-    });
+  resetCard() {
+    this.setState(
+      {
+        question: "",
+        answer: "",
+        flipped: false
+      },
+      () => {
+        if (this._question && this._answer) {
+          Promise.all([
+            this._question.resetHTML(),
+            this._answer.resetHTML()
+          ]).then(() => this._question.focus());
+        }
+      }
+    );
   }
 
   renderTestButtons() {
-    if (this.props.test) {
+    if (this.props.test && this.state.flipped) {
       return [
-        <Button key={0} onClick={() => this.onContinue(true)} primary>
+        <Button small key={0} onClick={() => this.onContinue(true)} primary>
           Right
         </Button>,
-        <Button key={1} onClick={() => this.onContinue(false)}>
+        <Button small key={1} onClick={() => this.onContinue(false)}>
           Wrong
         </Button>
       ];
@@ -228,7 +238,7 @@ class FlashCard extends PureComponent {
   }
 
   renderDeleteButton() {
-    if (this.props.card.id) {
+    if (this.props.card.id && !this.props.test) {
       return (
         <Button
           small
@@ -282,7 +292,7 @@ class FlashCard extends PureComponent {
   }
 
   renderSubmitButton() {
-    if (!this.props.card.id) {
+    if (!this.props.card.id && !this.props.test) {
       return (
         <Button small primary onClick={this.onClickAddCard}>
           Add
@@ -294,7 +304,7 @@ class FlashCard extends PureComponent {
   }
 
   renderUpdateButton() {
-    if (this.props.card.id) {
+    if (this.props.card.id && !this.props.test) {
       return (
         <Button
           small

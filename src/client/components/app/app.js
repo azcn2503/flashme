@@ -10,6 +10,7 @@ import SubjectTests from "client/components/subject-tests/subject-tests";
 import Test from "client/components/test/test";
 import Subheader from "client/components/subheader/subheader";
 import { getCurrentUser } from "client/state/actions/user";
+import { USER_PROPTYPE } from "client/proptypes";
 
 import styles from "./app.scss";
 
@@ -81,14 +82,18 @@ class App extends PureComponent {
         </Switch>
       );
     } else {
-      return (
-        <div className={styles.content}>
-          <div className={styles.notLoggedIn}>
-            <Subheader label="Welcome to FlashMe!" />
-            <p>Please login to start using the app.</p>
+      if (!this.props.user.loggedIn && !this.props.user.requesting) {
+        return (
+          <div className={styles.content}>
+            <div className={styles.notLoggedIn}>
+              <Subheader label="Welcome to FlashMe!" />
+              <p>Please login to start using the app.</p>
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        return null;
+      }
     }
   }
 
@@ -127,6 +132,7 @@ class App extends PureComponent {
 
 App.propTypes = {
   dispatch: PropTypes.func,
+  user: USER_PROPTYPE,
   history: PropTypes.shape({
     push: PropTypes.func
   })
