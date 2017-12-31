@@ -1,3 +1,5 @@
+@import "~client/styles/variables";
+
 .test {
   flex-grow: 1;
   display: flex;
@@ -16,14 +18,51 @@
     justify-content: flex-end;
   }
 
-  .cardContainer {
+  .testCard {
     flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
+  .testPreparation {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .testSummary {
+    flex-grow: 1;
+    padding: 20px;
+  }
+
   .testProgressContainer {
     padding: 0 20px;
+  }
+
+  .summaryTable {
+    width: 100%;
+    border-spacing: 0;
+
+    th,
+    td {
+      text-align: left;
+      padding: 10px 20px;
+      border: 1px solid transparent;
+      border-bottom-color: $light-grey;
+    }
+
+    .correct {
+      color: $success-color;
+    }
+
+    .incorrect {
+      color: $delete-color;
+    }
+
+    .notAnswered {
+      color: $dark-grey;
+    }
   }
 }

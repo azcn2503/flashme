@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
@@ -77,21 +78,74 @@ class Test extends PureComponent {
   }
 
   renderTestSummary() {
-    return null;
+    const test = this.props.tests.byId[this.props.testId];
+    if (
+      test.status === testStatusEnum.COMPLETED ||
+      test.status === testStatusEnum.ABANDONED
+    ) {
+      return (
+        <div className={styles.testSummary}>
+          <table className={styles.summaryTable}>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Correct</th>
+              </tr>
+            </thead>
+            <tbody>
+              {test.cards.map(card => (
+                <tr>
+                  <td>{card.question}</td>
+                  <td>{card.answer}</td>
+                  <td>
+                    <div
+                      className={classNames({
+                        [styles.correct]: card.correct,
+                        [styles.incorrect]:
+                          card.hasOwnProperty("correct") && !card.correct,
+                        [styles.notAnswered]: !card.hasOwnProperty("correct")
+                      })}
+                    >
+                      {card.hasOwnProperty("correct")
+                        ? card.correct ? "Yes" : "No"
+                        : "Not answered"}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+  }
+
+  renderTestPreparation() {
+    const test = this.props.tests.byId[this.props.testId];
+    if (test.status === testStatusEnum.NOT_STARTED) {
+      return (
+        <div className={styles.testPreparation}>
+          Get ready to start the test!
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 
   renderTestCard() {
     const test = this.props.tests.byId[this.props.testId];
     if (test.status === testStatusEnum.STARTED && test.cards[test.activeCard]) {
       return (
-        <FlashCard
-          card={test.cards[test.activeCard]}
-          onAnswerTestCard={this.onAnswerTestCard}
-          test
-        />
+        <div className={styles.testCard}>
+          <FlashCard
+            card={test.cards[test.activeCard]}
+            onAnswerTestCard={this.onAnswerTestCard}
+            test
+          />
+        </div>
       );
-    } else if (test.status === testStatusEnum.NOT_STARTED) {
-      return <div>Get ready to start the test!</div>;
     } else {
       return null;
     }
@@ -138,7 +192,9 @@ class Test extends PureComponent {
           <div className={styles.testProgressContainer}>
             <TestProgress test={test} />
           </div>
-          <div className={styles.cardContainer}>{this.renderTestCard()}</div>
+          {this.renderTestCard()}
+          {this.renderTestPreparation()}
+          {this.renderTestSummary()}
         </div>
       );
     } else {
