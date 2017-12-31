@@ -101,6 +101,12 @@ class TestService {
   startTest(userId, testId) {
     return this.db.setTestStatus(userId, testId, testStatusEnum.STARTED);
   }
+
+  answerTestCard(userId, testId, cardIndex, correct) {
+    return this.db
+      .answerTestCard(userId, testId, cardIndex, correct)
+      .then(test => ({ activeCard: test.activeCard }));
+  }
 }
 
 export default new TestService();

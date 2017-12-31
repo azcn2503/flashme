@@ -10,6 +10,7 @@ import Button from "client/components/button/button";
 import Dialog from "client/components/dialog/dialog";
 import Subheader from "client/components/subheader/subheader";
 import TestStatus from "client/components/test-status/test-status";
+import TestProgress from "client/components/test-progress/test-progress";
 import { getSubject } from "client/state/actions/subjects";
 import {
   getTestsForSubject,
@@ -109,10 +110,6 @@ class SubjectTests extends PureComponent {
     this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
   }
 
-  getTestProgressPercent(test) {
-    return Math.round(100 / (test.cards.length || 1) * (test.activeCard || 0));
-  }
-
   getSubjectFilteredTests() {
     return Object.values(this.props.tests.byId).filter(
       test => test.subjectId === this.props.subjectId
@@ -162,7 +159,9 @@ class SubjectTests extends PureComponent {
                 <td>
                   <TestStatus test={test} />
                 </td>
-                <td>{this.renderTestProgress(test)}</td>
+                <td>
+                  <TestProgress test={test} />
+                </td>
                 <td>{test.cards.length}</td>
                 <td>{moment(test.created).fromNow()}</td>
                 <td>
@@ -246,8 +245,10 @@ class SubjectTests extends PureComponent {
       const tests = this.getSubjectFilteredTests();
       return (
         <div className={styles.subjectTests}>
-          <Subheader label={`${subject.title}: Tests (${tests.length})`} />
-          {this.renderActions()}
+          <div className={styles.subheader}>
+            <Subheader label={`${subject.title}: Tests (${tests.length})`} />
+            {this.renderActions()}
+          </div>
           {this.renderTestList(tests)}
           {this.renderDeleteDialog()}
         </div>

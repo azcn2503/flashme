@@ -89,12 +89,14 @@ class Subjects extends PureComponent {
   render() {
     return (
       <div className={styles.subjects}>
-        <Subheader label={`Subjects (${this.getSubjectCount()})`} />
-        <div className={styles.controls}>
-          {this.renderFilters()}
-          <Button primary onClick={this.onClickAddSubject}>
-            Add Subject
-          </Button>
+        <div className={styles.subheader}>
+          <Subheader label={`Subjects (${this.getSubjectCount()})`} />
+          <div className={styles.controls}>
+            {this.renderFilters()}
+            <Button primary onClick={this.onClickAddSubject}>
+              Add Subject
+            </Button>
+          </div>
         </div>
         <div className={styles.subjectList}>{this.renderSubjects()}</div>
       </div>

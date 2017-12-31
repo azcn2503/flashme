@@ -43,6 +43,15 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
       .catch(err => res.json(err).sendStatus(500));
   });
 
+  app.put("/api/test/:testId/answer", loggedIn, (req, res) => {
+    const { testId } = req.params;
+    const { cardIndex, correct } = req.body;
+    return testService
+      .answerTestCard(req.user.id, testId, cardIndex, correct)
+      .then(test => res.json(test).sendStatus(200))
+      .catch(err => res.json(err).sendStatus(500));
+  });
+
   logger.debug("Tests API initialised");
 };
 

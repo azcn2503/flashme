@@ -222,12 +222,14 @@ class SubjectCards extends PureComponent {
       if (subject) {
         return (
           <div className={styles.subjectCards}>
-            <Subheader
-              editable
-              label={`${subject.title}`}
-              onChange={this.onChangeSubjectTitle}
-            />
-            {this.renderControls()}
+            <div className={styles.subheader}>
+              <Subheader
+                editable
+                label={`${subject.title}`}
+                onChange={this.onChangeSubjectTitle}
+              />
+              {this.renderControls()}
+            </div>
             {this.renderTestsSummary()}
             {this.renderCardList()}
           </div>

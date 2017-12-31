@@ -6,6 +6,12 @@
   display: flex;
   flex-direction: column;
 
+  .subheader {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
   .testsSummary {
     padding: 20px;
   }
@@ -65,25 +71,18 @@
   }
 
   .controls {
-    background-color: white;
+    flex-grow: 1;
     padding: 10px;
     display: flex;
     justify-content: flex-end;
-    flex-shrink: 0;
-    box-shadow: $box-shadow-large;
-    border-radius: 2px;
     z-index: 1;
-  }
 
-  .filterContainer {
-    padding: 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-width: 0 0 1px 0;
+    & > * {
+      margin-right: 10px;
 
-    .filter {
-      padding: 10px;
-      border: 0;
-      width: 100%;
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }

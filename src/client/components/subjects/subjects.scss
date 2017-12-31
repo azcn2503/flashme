@@ -5,15 +5,27 @@
   flex-direction: column;
   flex-grow: 1;
 
+  .subheader {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
   .controls {
-    background-color: white;
+    flex-grow: 1;
     padding: 10px;
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
-    box-shadow: $box-shadow-large;
     z-index: 1;
-    border-radius: 2px;
+
+    & > * {
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 
   .subjectList {

@@ -25,3 +25,9 @@ export const removeTest = testId => {
 export const startTest = testId => {
   return axios.put(apiUrl(`/test/${testId}/start`)).then(({ data }) => data);
 };
+
+export const answerTestCard = (testId, cardIndex, correct) => {
+  return axios
+    .put(apiUrl(`/test/${testId}/answer`), { cardIndex, correct })
+    .then(({ data }) => data);
+};

@@ -4,12 +4,13 @@ import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
 import { testStatusEnum } from "shared/tests";
-import { getTest, startTest } from "client/state/actions/tests";
+import { getTest, startTest, answerTestCard } from "client/state/actions/tests";
 import { getSubject } from "client/state/actions/subjects";
 import Subheader from "client/components/subheader/subheader";
 import FlashCard from "client/components/flash-card/flash-card";
 import Button from "client/components/button/button";
 import TestStatus from "client/components/test-status/test-status";
+import TestProgress from "client/components/test-progress/test-progress";
 
 import styles from "./test.scss";
 
@@ -24,6 +25,7 @@ class Test extends PureComponent {
   constructor(props) {
     super(props);
     this.onClickStartTest = this.onClickStartTest.bind(this);
+    this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
   }
 
   componentDidMount() {
@@ -40,12 +42,15 @@ class Test extends PureComponent {
   }
 
   onAnswerTestCard(value) {
-    console.log(value);
+    const test = this.props.tests.byId[this.props.testId];
+    this.props.dispatch(
+      answerTestCard(this.props.testId, test.activeCard, value)
+    );
   }
 
   renderTestCard() {
     const test = this.props.tests.byId[this.props.testId];
-    if (test.status === testStatusEnum.STARTED) {
+    if (test.status === testStatusEnum.STARTED && test.cards[test.activeCard]) {
       return (
         <FlashCard
           card={test.cards[test.activeCard]}
@@ -90,8 +95,11 @@ class Test extends PureComponent {
               )})`}
             />
             <TestStatus test={test} />
+            <div className={styles.actions}>{this.renderActions()}</div>
           </div>
-          <div className={styles.actions}>{this.renderActions()}</div>
+          <div className={styles.testProgressContainer}>
+            <TestProgress test={test} />
+          </div>
           <div className={styles.cardContainer}>{this.renderTestCard()}</div>
         </div>
       );

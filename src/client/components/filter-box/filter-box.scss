@@ -5,12 +5,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 
   .input {
     flex-grow: 1;
-    border: 0;
-    outline: none;
-    padding: 10px;
+    background-color: transparent;
   }
 
   .summary {

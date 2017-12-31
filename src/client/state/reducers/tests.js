@@ -195,6 +195,54 @@ const reducer = (state = defaultState, action) => {
         }
       };
 
+    case actions.ANSWER_TEST_CARD_REQUEST:
+      return {
+        ...state,
+        requesting: requestTypeEnum.UPDATE,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: requestTypeEnum.UPDATE
+          }
+        }
+      };
+
+    case actions.ANSWER_TEST_CARD_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            activeCard: action.activeCard,
+            cards: [
+              ...state.byId[action.testId].cards.slice(0, action.cardIndex),
+              {
+                ...state.byId[action.testId].cards[action.cardIndex],
+                correct: action.correct
+              },
+              ...state.byId[action.testId].cards.slice(action.cardIndex + 1)
+            ]
+          }
+        }
+      };
+
+    case actions.ANSWER_TEST_CARD_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: false
+          }
+        }
+      };
+
     default:
       return state;
   }

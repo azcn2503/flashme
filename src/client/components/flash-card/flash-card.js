@@ -40,6 +40,7 @@ class FlashCard extends PureComponent {
     this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
     this.onClickAddCard = this.onClickAddCard.bind(this);
     this.onClickUpdateCard = this.onClickUpdateCard.bind(this);
+    this.onWindowKeyDown = this.onWindowKeyDown.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -70,12 +71,39 @@ class FlashCard extends PureComponent {
     }
   }
 
+  componentWillMount() {
+    window.addEventListener("keydown", this.onWindowKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.onWindowKeyDown);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.card.question !== this.props.card.question) {
       this.setState({ question: nextProps.card.question });
     }
     if (nextProps.card.answer !== this.props.card.answer) {
       this.setState({ answer: nextProps.card.answer });
+    }
+  }
+
+  onWindowKeyDown(e) {
+    if (this.props.test) {
+      if (this.state.flipped) {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          this.onAnswerTestCard(true);
+        } else if (e.keyCode === 9) {
+          e.preventDefault();
+          this.onAnswerTestCard(false);
+        }
+      } else {
+        if (e.keyCode === 9) {
+          e.preventDefault();
+          this.flip();
+        }
+      }
     }
   }
 
@@ -134,24 +162,7 @@ class FlashCard extends PureComponent {
 
   onKeyDown(e, face) {
     const modifierKey = e.metaKey || e.ctrlKey;
-    if (this.props.test) {
-      if (e.keyCode === 9) {
-        // Tab
-        if (face === faceEnum.ANSWER) {
-          e.preventDefault();
-          this.onContinue(false);
-        } else {
-          e.preventDefault();
-          this.flip();
-        }
-      } else if (e.keyCode === 13) {
-        // Enter
-        if (face === faceEnum.ANSWER) {
-          e.preventDefault();
-          this.onContinue(true);
-        }
-      }
-    } else if (this.props.editable) {
+    if (this.props.editable) {
       if (e.keyCode === 9) {
         e.preventDefault();
         this.flip();

@@ -79,6 +79,25 @@ class TestController {
       )
       .then(({ value }) => value);
   }
+
+  answerTestCard(userId, testId, cardIndex, correct) {
+    return this.collection
+      .findOneAndUpdate(
+        { userId, id: testId },
+        {
+          $set: {
+            [`cards.${cardIndex}.correct`]: correct
+          },
+          $inc: {
+            activeCard: 1
+          }
+        },
+        {
+          returnOriginal: false
+        }
+      )
+      .then(({ value }) => value);
+  }
 }
 
 export default TestController;

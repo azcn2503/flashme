@@ -1,0 +1,44 @@
+@import "~client/styles/variables";
+@import "~client/styles/tools";
+
+.progressBar {
+  @include transition(width);
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: $border-radius-small;
+  max-width: 100%;
+  min-width: 1%;
+  height: 100%;
+}
+
+.testProgress {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+
+  .totalProgressBar {
+    @include transition(width);
+    @extend .progressBar;
+    background-color: $primary-color;
+    z-index: 1;
+  }
+
+  .correctProgressBar {
+    @include transition(width);
+    @extend .progressBar;
+    background-color: $success-color;
+    z-index: 2;
+  }
+
+  .label {
+    position: relative;
+    font-size: $font-size-small;
+    color: white;
+    text-shadow: 0px 0px 1px black;
+    z-index: 3;
+    left: 5px;
+  }
+}
