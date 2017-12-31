@@ -4,3 +4,8 @@ export const testStatusEnum = {
   COMPLETED: "COMPLETED",
   ABANDONED: "ABANDONED"
 };
+
+export const testTypeEnum = {
+  SUBJECT_TEST: "SUBJECT_TEST",
+  SUBJECT_RETEST: "SUBJECT_RETEST"
+};

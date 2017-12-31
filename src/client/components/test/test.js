@@ -33,6 +33,7 @@ class Test extends PureComponent {
     super(props);
     this.onClickStartTest = this.onClickStartTest.bind(this);
     this.onClickAbandonTest = this.onClickAbandonTest.bind(this);
+    this.onClickRetest = this.onClickRetest.bind(this);
     this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
   }
 
@@ -62,6 +63,8 @@ class Test extends PureComponent {
   onClickAbandonTest() {
     this.props.dispatch(abandonTest(this.props.testId));
   }
+
+  onClickRetest() {}
 
   onAnswerTestCard(value) {
     const test = this.props.tests.byId[this.props.testId];
@@ -174,8 +177,17 @@ class Test extends PureComponent {
       );
     } else if (test.status === testStatusEnum.STARTED) {
       return (
-        <Button primary onClick={this.onClickAbandonTest}>
+        <Button delete onClick={this.onClickAbandonTest}>
           Abandon Test
+        </Button>
+      );
+    } else if (
+      test.status === testStatusEnum.COMPLETED ||
+      test.status === testStatusEnum.ABANDONED
+    ) {
+      return (
+        <Button primary disabled onClick={this.onClickRetest}>
+          Retest
         </Button>
       );
     } else {
