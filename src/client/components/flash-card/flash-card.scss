@@ -115,14 +115,5 @@
   padding: 10px;
   flex-grow: 1;
   z-index: 1;
-}
-
-@keyframes flip {
-  from: {
-    transform: rotateY(0deg);
-  }
-
-  to: {
-    transform: rotateY(180deg);
-  }
+  overflow: auto;
 }
