@@ -76,6 +76,10 @@ class Test extends PureComponent {
     }
   }
 
+  renderTestSummary() {
+    return null;
+  }
+
   renderTestCard() {
     const test = this.props.tests.byId[this.props.testId];
     if (test.status === testStatusEnum.STARTED && test.cards[test.activeCard]) {
@@ -86,6 +90,8 @@ class Test extends PureComponent {
           test
         />
       );
+    } else if (test.status === testStatusEnum.NOT_STARTED) {
+      return <div>Get ready to start the test!</div>;
     } else {
       return null;
     }
