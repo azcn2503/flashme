@@ -155,6 +155,8 @@ const reducer = (state = defaultState, action) => {
       };
 
     case actions.START_TEST_REQUEST:
+    case actions.COMPLETE_TEST_REQUEST:
+    case actions.ABANDON_TEST_REQUEST:
       return {
         ...state,
         requesting: true,
@@ -163,6 +165,22 @@ const reducer = (state = defaultState, action) => {
           [action.testId]: {
             ...state.byId[action.testId],
             requesting: requestTypeEnum.UPDATE
+          }
+        }
+      };
+
+    case actions.START_TEST_FAILURE:
+    case actions.COMPLETE_TEST_FAILURE:
+    case actions.ABANDON_TEST_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: action.err,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            requesting: false
           }
         }
       };
@@ -181,16 +199,30 @@ const reducer = (state = defaultState, action) => {
         }
       };
 
-    case actions.START_TEST_FAILURE:
+    case actions.COMPLETE_TEST_SUCCESS:
       return {
         ...state,
         requesting: false,
-        error: action.err,
+        error: null,
         byId: {
           ...state.byId,
           [action.testId]: {
             ...state.byId[action.testId],
-            requesting: false
+            status: testStatusEnum.COMPLETED
+          }
+        }
+      };
+
+    case actions.ABANDON_TEST_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null,
+        byId: {
+          ...state.byId,
+          [action.testId]: {
+            ...state.byId[action.testId],
+            status: testStatusEnum.ABANDONED
           }
         }
       };

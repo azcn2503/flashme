@@ -4,7 +4,13 @@ import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
 import { testStatusEnum } from "shared/tests";
-import { getTest, startTest, answerTestCard } from "client/state/actions/tests";
+import {
+  getTest,
+  startTest,
+  completeTest,
+  abandonTest,
+  answerTestCard
+} from "client/state/actions/tests";
 import { getSubject } from "client/state/actions/subjects";
 import Subheader from "client/components/subheader/subheader";
 import FlashCard from "client/components/flash-card/flash-card";
@@ -25,15 +31,26 @@ class Test extends PureComponent {
   constructor(props) {
     super(props);
     this.onClickStartTest = this.onClickStartTest.bind(this);
+    this.onClickAbandonTest = this.onClickAbandonTest.bind(this);
     this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
   }
 
   componentDidMount() {
     if (!this.props.tests.byId[this.props.testId]) {
       this.props.dispatch(getTest(this.props.testId));
+    } else {
+      this.checkTestCompleted();
     }
     if (!this.props.subjects.byId[this.props.subjectId]) {
       this.props.dispatch(getSubject(this.props.subjectId));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevTest = prevProps.tests.byId[prevProps.testId];
+    const test = this.props.tests.byId[this.props.testId];
+    if (prevTest && test && prevTest.activeCard !== test.activeCard) {
+      this.checkTestCompleted();
     }
   }
 
@@ -41,11 +58,22 @@ class Test extends PureComponent {
     this.props.dispatch(startTest(this.props.testId));
   }
 
+  onClickAbandonTest() {
+    this.props.dispatch(abandonTest(this.props.testId));
+  }
+
   onAnswerTestCard(value) {
     const test = this.props.tests.byId[this.props.testId];
     this.props.dispatch(
       answerTestCard(this.props.testId, test.activeCard, value)
     );
+  }
+
+  checkTestCompleted() {
+    const test = this.props.tests.byId[this.props.testId];
+    if (test && test.activeCard >= test.cards.length) {
+      this.props.dispatch(completeTest(this.props.testId));
+    }
   }
 
   renderTestCard() {
@@ -72,7 +100,11 @@ class Test extends PureComponent {
         </Button>
       );
     } else if (test.status === testStatusEnum.STARTED) {
-      return <Button primary>Abandon Test</Button>;
+      return (
+        <Button primary onClick={this.onClickAbandonTest}>
+          Abandon Test
+        </Button>
+      );
     } else {
       return null;
     }

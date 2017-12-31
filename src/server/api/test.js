@@ -43,6 +43,24 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
       .catch(err => res.json(err).sendStatus(500));
   });
 
+  app.put("/api/test/:testId/complete", loggedIn, (req, res) => {
+    const { testId } = req.params;
+    logger.info(`Completing test ${testId}`);
+    return testService
+      .completeTest(req.user.id, testId)
+      .then(() => res.sendStatus(200))
+      .catch(err => res.json(err).sendStatus(500));
+  });
+
+  app.put("/api/test/:testId/abandon", loggedIn, (req, res) => {
+    const { testId } = req.params;
+    logger.info(`Abandoning test ${testId}`);
+    return testService
+      .abandonTest(req.user.id, testId)
+      .then(() => res.sendStatus(200))
+      .catch(err => res.json(err).sendStatus(500));
+  });
+
   app.put("/api/test/:testId/answer", loggedIn, (req, res) => {
     const { testId } = req.params;
     const { cardIndex, correct } = req.body;

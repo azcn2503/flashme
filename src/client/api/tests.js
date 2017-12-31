@@ -26,6 +26,14 @@ export const startTest = testId => {
   return axios.put(apiUrl(`/test/${testId}/start`)).then(({ data }) => data);
 };
 
+export const completeTest = testId => {
+  return axios.put(apiUrl(`/test/${testId}/complete`)).then(({ data }) => data);
+};
+
+export const abandonTest = testId => {
+  return axios.put(apiUrl(`/test/${testId}/abandon`)).then(({ data }) => data);
+};
+
 export const answerTestCard = (testId, cardIndex, correct) => {
   return axios
     .put(apiUrl(`/test/${testId}/answer`), { cardIndex, correct })

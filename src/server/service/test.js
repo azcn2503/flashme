@@ -102,6 +102,24 @@ class TestService {
     return this.db.setTestStatus(userId, testId, testStatusEnum.STARTED);
   }
 
+  /**
+   * Complete a test
+   * @param {string} userId
+   * @param {string} testId
+   */
+  completeTest(userId, testId) {
+    return this.db.setTestStatus(userId, testId, testStatusEnum.COMPLETED);
+  }
+
+  /**
+   * Abandon a test
+   * @param {string} userId
+   * @param {string} testId
+   */
+  abandonTest(userId, testId) {
+    return this.db.setTestStatus(userId, testId, testStatusEnum.ABANDONED);
+  }
+
   answerTestCard(userId, testId, cardIndex, correct) {
     return this.db
       .answerTestCard(userId, testId, cardIndex, correct)

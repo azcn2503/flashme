@@ -16,4 +16,14 @@
     border-color: $primary-color;
     color: $primary-color;
   }
+
+  &.COMPLETED {
+    border-color: $success-color;
+    color: $success-color;
+  }
+
+  &.ABANDONED {
+    border-color: $delete-color;
+    color: $delete-color;
+  }
 }

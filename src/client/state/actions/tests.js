@@ -1,5 +1,4 @@
 import * as api from "../../api/tests";
-import { REMOVE_CARD_FAILURE } from "./cards";
 
 export const ADD_TEST_REQUEST = "ADD_TEST_REQUEST";
 export const ADD_TEST_SUCCESS = "ADD_TEST_SUCCESS";
@@ -8,6 +7,14 @@ export const ADD_TEST_FAILURE = "ADD_TEST_FAILURE";
 export const START_TEST_REQUEST = "START_TEST_REQUEST";
 export const START_TEST_SUCCESS = "START_TEST_SUCCESS";
 export const START_TEST_FAILURE = "START_TEST_FAILURE";
+
+export const COMPLETE_TEST_REQUEST = "COMPLETE_TEST_REQUEST";
+export const COMPLETE_TEST_SUCCESS = "COMPLETE_TEST_SUCCESS";
+export const COMPLETE_TEST_FAILURE = "COMPLETE_TEST_FAILURE";
+
+export const ABANDON_TEST_REQUEST = "ABANDON_TEST_REQUEST";
+export const ABANDON_TEST_SUCCESS = "ABANDON_TEST_SUCCESS";
+export const ABANDON_TEST_FAILURE = "ABANDON_TEST_FAILURE";
 
 export const GET_TEST_REQUEST = "GET_TEST_REQUEST";
 export const GET_TEST_SUCCESS = "GET_TEST_SUCCESS";
@@ -84,6 +91,22 @@ export const startTest = testId => dispatch => {
     .startTest(testId)
     .then(() => dispatch({ type: START_TEST_SUCCESS, testId }))
     .catch(err => dispatch({ type: START_TEST_FAILURE, testId, err }));
+};
+
+export const completeTest = testId => dispatch => {
+  dispatch({ type: COMPLETE_TEST_REQUEST, testId });
+  return api
+    .completeTest(testId)
+    .then(() => dispatch({ type: COMPLETE_TEST_SUCCESS, testId }))
+    .catch(err => dispatch({ type: COMPLETE_TEST_FAILURE, testId, err }));
+};
+
+export const abandonTest = testId => dispatch => {
+  dispatch({ type: ABANDON_TEST_REQUEST, testId });
+  return api
+    .abandonTest(testId)
+    .then(() => dispatch({ type: ABANDON_TEST_SUCCESS, testId }))
+    .catch(err => dispatch({ type: ABANDON_TEST_FAILURE, testId, err }));
 };
 
 /**
