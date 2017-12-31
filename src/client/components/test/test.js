@@ -77,6 +77,18 @@ class Test extends PureComponent {
     }
   }
 
+  getQuestionMarkup(card) {
+    return {
+      __html: card.question
+    };
+  }
+
+  getAnswerMarkup(card) {
+    return {
+      __html: card.answer
+    };
+  }
+
   renderTestSummary() {
     const test = this.props.tests.byId[this.props.testId];
     if (
@@ -96,8 +108,8 @@ class Test extends PureComponent {
             <tbody>
               {test.cards.map(card => (
                 <tr>
-                  <td>{card.question}</td>
-                  <td>{card.answer}</td>
+                  <td dangerouslySetInnerHTML={this.getQuestionMarkup(card)} />
+                  <td dangerouslySetInnerHTML={this.getAnswerMarkup(card)} />
                   <td>
                     <div
                       className={classNames({
@@ -142,6 +154,7 @@ class Test extends PureComponent {
           <FlashCard
             card={test.cards[test.activeCard]}
             onAnswerTestCard={this.onAnswerTestCard}
+            requesting={this.props.tests.requesting}
             test
           />
         </div>

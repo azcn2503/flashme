@@ -44,18 +44,24 @@ class FlashCard extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // Highlight when the card is updated
     if (
       prevProps.card.id === this.props.card.id &&
       prevProps.card.updated !== this.props.card.updated
     ) {
       this.highlightUpdate();
     }
-    if (prevProps.test !== this.props.test) {
+
+    // Reset flipped state when card changes
+    if (prevProps.card.id !== this.props.card.id) {
       this.setState({
         flipped: false
       });
     }
+
+    // Focus and select the question/answer when flipped
     if (
+      this.props.editable &&
       this._question &&
       this._answer &&
       prevState.flipped !== this.state.flipped
@@ -148,7 +154,6 @@ class FlashCard extends PureComponent {
   }
 
   onAnswerTestCard(value) {
-    this.flip();
     this.props.onAnswerTestCard(value);
   }
 
@@ -241,10 +246,16 @@ class FlashCard extends PureComponent {
           key={0}
           onClick={() => this.onAnswerTestCard(true)}
           primary
+          disabled={this.props.requesting}
         >
           Right
         </Button>,
-        <Button small key={1} onClick={() => this.onAnswerTestCard(false)}>
+        <Button
+          small
+          key={1}
+          onClick={() => this.onAnswerTestCard(false)}
+          disabled={this.props.requesting}
+        >
           Wrong
         </Button>
       ];
@@ -407,7 +418,8 @@ FlashCard.propTypes = {
   onAnswerTestCard: PropTypes.func,
   selected: PropTypes.bool,
   dispatch: PropTypes.func,
-  showControls: PropTypes.bool
+  showControls: PropTypes.bool,
+  requesting: PropTypes.bool
 };
 
 FlashCard.defaultProps = {
@@ -421,7 +433,8 @@ FlashCard.defaultProps = {
   test: false,
   onAnswerTestCard: () => null,
   selected: false,
-  showControls: true
+  showControls: true,
+  requesting: false
 };
 
 export default FlashCard;
