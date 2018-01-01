@@ -6,7 +6,7 @@
   align-items: center;
   flex-shrink: 0;
   overflow-y: auto;
-  padding: 10px;
+  padding: $padding-medium;
   box-shadow: $box-shadow-large;
 
   .route {
@@ -14,7 +14,7 @@
     flex-grow: 1;
 
     & > * {
-      margin-right: 10px;
+      margin-right: $margin-medium;
 
       &:last-child {
         margin-right: 0;
@@ -28,7 +28,7 @@
     justify-content: center;
 
     & > * {
-      margin-right: 10px;
+      margin-right: $margin-medium;
 
       &:last-child {
         margin-right: 0;
@@ -38,11 +38,11 @@
 }
 
 .navItem {
-  padding: 10px;
+  padding: $padding-medium;
 }
 
 .header {
-  padding: 10px;
+  padding: $padding-medium;
   background-color: rgba(0, 0, 0, 0.1);
   font-weight: bold;
 }

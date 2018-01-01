@@ -8,15 +8,15 @@
 .button {
   @include transition("background-color, box-shadow");
 
-  padding: 10px 20px;
+  padding: $padding-medium $padding-large;
   cursor: pointer;
   color: black;
   background-color: $light-grey;
   border: 1px solid $light-grey;
-  border-radius: 2px;
+  border-radius: $border-radius-small;
   outline: none;
   font-size: inherit;
-  margin-right: 10px;
+  margin-right: $margin-medium;
   white-space: nowrap;
 
   &:hover {
@@ -25,13 +25,13 @@
   }
 
   &.small {
-    padding: 5px 10px;
+    padding: $padding-small $padding-medium;
     font-size: $font-size-small;
   }
 
   &.primary {
     color: white;
-    font-weight: bold;
+    font-weight: $font-weight-medium;
     background-color: $primary-color;
     border-color: $primary-color;
 

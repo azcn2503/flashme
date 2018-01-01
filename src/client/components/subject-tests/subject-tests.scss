@@ -13,7 +13,7 @@
 
   .actions {
     flex-grow: 1;
-    padding: 10px;
+    padding: $padding-medium;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -22,7 +22,7 @@
   .testList {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: $padding-large;
 
     .testTable {
       width: 100%;
@@ -31,7 +31,7 @@
       th,
       td {
         text-align: left;
-        padding: 10px 20px;
+        padding: $padding-medium $padding-large;
         border: 1px solid transparent;
         border-bottom-color: $light-grey;
       }

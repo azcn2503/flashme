@@ -3,7 +3,7 @@
 .testStatus {
   border: 1px solid black;
   border-radius: $border-radius-small;
-  padding: 5px 10px;
+  padding: $padding-small $padding-medium;
   display: inline-block;
   color: black;
   white-space: nowrap;

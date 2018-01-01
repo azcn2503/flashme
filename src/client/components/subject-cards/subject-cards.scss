@@ -13,14 +13,14 @@
   }
 
   .testsSummary {
-    padding: 20px;
+    padding: $padding-large;
   }
 
   .cardList {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
-    padding: 20px;
+    padding: $padding-large;
     flex-grow: 1;
   }
 
@@ -32,7 +32,7 @@
     justify-content: center;
 
     .postTestActions {
-      margin-top: 20px;
+      margin-top: $margin-large;
     }
   }
 
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: $padding-large;
   }
 
   .testCard {
@@ -51,34 +51,15 @@
     justify-content: center;
   }
 
-  .progressContainer {
-    width: 100%;
-    height: 40px;
-    position: relative;
-
-    .progressBar {
-      height: 100%;
-      @include transition(width);
-      background-color: fade-out($primary-color, 0.5);
-    }
-
-    .progressSummary {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-
   .controls {
     flex-grow: 1;
-    padding: 10px;
+    padding: $padding-large;
     display: flex;
     justify-content: flex-end;
     z-index: 1;
 
     & > * {
-      margin-right: 10px;
+      margin-right: $margin-medium;
 
       &:last-child {
         margin-right: 0;

@@ -17,11 +17,12 @@ input,
 button {
   font-size: $font-size-medium;
   font-family: $font-family-sans-serif;
+  font-weight: $font-weight-normal;
 }
 
 a {
   color: $primary-color;
-  font-weight: bold;
+  font-weight: $font-weight-medium;
 
   &:hover {
     color: lighten($primary-color, 10%);

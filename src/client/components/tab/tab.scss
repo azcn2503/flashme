@@ -1,7 +1,7 @@
 @import "~client/styles/variables";
 
 .tab {
-  padding: 10px 20px;
+  padding: $padding-medium $padding-large;
   border-top-right-radius: $border-radius-large;
   border-top-left-radius: $border-radius-large;
   border: 1px solid $light-grey;
@@ -15,7 +15,7 @@
   &.between {
     cursor: inherit;
     padding: 0;
-    width: 12px;
+    width: $padding-medium + 2px;
     margin-left: -1px;
     margin-right: -1px;
     border-color: transparent;

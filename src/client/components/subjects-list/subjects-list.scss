@@ -7,7 +7,7 @@
   }
 
   .controls {
-    padding: 10px;
+    padding: $padding-medium;
     flex-shrink: 0;
   }
 
@@ -16,7 +16,7 @@
 
     .filter {
       width: 100%;
-      padding: 10px;
+      padding: $padding-medium;
       border: 0;
     }
   }

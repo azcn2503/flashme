@@ -31,7 +31,7 @@
     opacity: 0;
 
     .window {
-      transform: translateY(-20px);
+      transform: translateY(-$margin-medium);
       opacity: 0;
     }
   }
@@ -50,7 +50,7 @@
   .window {
     @include transition("transform, opacity");
 
-    transform: translateY(-20px);
+    transform: translateY(-$margin-medium);
     opacity: 0;
 
     box-shadow: $box-shadow-large;
@@ -64,22 +64,22 @@
 
     .header {
       background-color: $light-grey;
-      padding: 20px;
+      padding: $padding-large;
       font-size: 1.5em;
     }
 
     .body {
-      padding: 20px;
+      padding: $padding-large;
     }
 
     .footer {
-      padding: 20px;
+      padding: $padding-large;
       display: flex;
       align-items: center;
       justify-content: center;
 
       & > * {
-        margin-right: 10px;
+        margin-right: $margin-medium;
 
         &:last-child {
           margin-right: 0;

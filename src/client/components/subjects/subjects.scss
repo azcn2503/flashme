@@ -13,14 +13,14 @@
 
   .controls {
     flex-grow: 1;
-    padding: 10px;
+    padding: $padding-medium;
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
     z-index: 1;
 
     & > * {
-      margin-right: 10px;
+      margin-right: $margin-medium;
 
       &:last-child {
         margin-right: 0;
@@ -29,7 +29,7 @@
   }
 
   .subjectList {
-    padding: 20px;
+    padding: $padding-large;
     display: flex;
     flex-wrap: wrap;
     overflow: auto;

@@ -7,6 +7,14 @@ $light-tan: rgb(240, 235, 232);
 
 $card-gradient: linear-gradient(135deg, $light-tan, white);
 
+$padding-small: 5px;
+$padding-medium: 10px;
+$padding-large: 20px;
+
+$margin-small: 5px;
+$margin-medium: 10px;
+$margin-large: 20px;
+
 $box-shadow-large: 0px 4px 10px rgba(0, 0, 0, 0.1);
 $box-shadow-small: 0px 2px 5px rgba(0, 0, 0, 0.1);
 
@@ -16,6 +24,12 @@ $border-radius-large: 4px;
 $font-size-small: 8pt;
 $font-size-medium: 10pt;
 $font-size-large: 12pt;
+$font-size-larger: 16pt;
+$font-size-huge: 24pt;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
 
 $font-family-serif: "Alegreya", "Times New Roman";
 $font-family-sans-serif: "Roboto", "Helvetica", "Arial";

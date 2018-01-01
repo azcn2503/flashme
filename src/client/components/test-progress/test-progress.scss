@@ -43,7 +43,7 @@
   height: 20px;
   display: flex;
   align-items: center;
-  border-radius: 2px;
+  border-radius: $border-radius-small;
   background-color: $light-grey;
 
   .totalProgressBar {

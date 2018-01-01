@@ -1,4 +1,6 @@
+@import "~client/styles/variables";
+
 .subheader {
-  font-size: 3em;
-  padding: 20px;
+  font-size: $font-size-huge;
+  padding: $padding-large;
 }

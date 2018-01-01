@@ -15,10 +15,10 @@
   height: 300px;
   display: flex;
   flex-direction: column;
-  margin: 0 20px 20px 0;
+  margin: 0 $margin-large $margin-large 0;
   border: 2px solid transparent;
   box-shadow: $box-shadow-small;
-  border-radius: 2px;
+  border-radius: $border-radius-small;
   background-color: white;
 
   &.test {
@@ -70,7 +70,7 @@
     @include transition(opacity);
 
     flex-shrink: 0;
-    padding: 10px;
+    padding: $padding-medium;
     z-index: 1;
     width: 100%;
     bottom: 0;
@@ -83,7 +83,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  border-radius: 2px;
+  border-radius: $border-radius-small;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -100,7 +100,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3em;
+    font-size: $font-size-huge;
     font-family: $font-family-serif;
     pointer-events: none;
   }
@@ -113,7 +113,7 @@
   position: relative;
   outline: none;
   text-align: center;
-  padding: 10px;
+  padding: $padding-medium;
   flex-grow: 1;
   z-index: 1;
   overflow: auto;

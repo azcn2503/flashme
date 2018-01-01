@@ -1,12 +1,14 @@
+@import "~client/styles/variables";
+
 .login {
   .actions {
-    margin-top: 20px;
+    margin-top: $margin-large;
     display: flex;
     align-items: center;
     justify-content: center;
 
     & > * {
-      margin-right: 10px;
+      margin-right: $margin-medium;
 
       &:last-child {
         margin-right: 0;
