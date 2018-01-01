@@ -5,7 +5,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
-import { testStatusEnum } from "shared/tests";
+import { testStatusEnum, testTypeEnum } from "shared/tests";
 import {
   getTest,
   startTest,
@@ -101,6 +101,16 @@ class Test extends PureComponent {
     return {
       __html: card.answer
     };
+  }
+
+  testTypeLabel(test) {
+    if (test.type === testTypeEnum.SUBJECT_TEST) {
+      return "Test";
+    } else if (test.type === testTypeEnum.SUBJECT_RETEST) {
+      return "Retest";
+    } else {
+      return "Test";
+    }
   }
 
   renderTestSummary() {
@@ -231,10 +241,9 @@ class Test extends PureComponent {
         <div className={styles.test}>
           <div className={styles.subheader}>
             <Subheader
-              label={`Test: ${subject.title} (${test.cards.length} ${pluralize(
-                "card",
+              label={`${this.testTypeLabel(test)}: ${subject.title} (${
                 test.cards.length
-              )})`}
+              } ${pluralize("card", test.cards.length)})`}
             />
             <TestStatus test={test} />
             {this.renderCardNumbers()}

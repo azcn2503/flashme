@@ -18,7 +18,7 @@ import {
   addRetest,
   startTest
 } from "client/state/actions/tests";
-import { testStatusEnum } from "shared/tests";
+import { testStatusEnum, testTypeEnum } from "shared/tests";
 import { SUBJECTS_PROPTYPE, TESTS_PROPTYPE } from "client/proptypes";
 
 import styles from "./subject-tests.scss";
@@ -111,6 +111,16 @@ class SubjectTests extends PureComponent {
     );
   }
 
+  renderTestType(test) {
+    if (test.type === testTypeEnum.SUBJECT_TEST) {
+      return "Test";
+    } else if (test.type === testTypeEnum.SUBJECT_RETEST) {
+      return "Retest";
+    } else {
+      return "Test";
+    }
+  }
+
   renderTestProgress(test) {
     return (
       <div className={styles.testProgress}>
@@ -189,6 +199,7 @@ class SubjectTests extends PureComponent {
         <table className={styles.testTable}>
           <thead>
             <tr>
+              <th>Type</th>
               <th>Status</th>
               <th>Progress</th>
               <th>Cards</th>
@@ -199,6 +210,7 @@ class SubjectTests extends PureComponent {
           <tbody>
             {tests.map(test => (
               <tr key={test.id}>
+                <td>{this.renderTestType(test)}</td>
                 <td>
                   <TestStatus test={test} />
                 </td>
