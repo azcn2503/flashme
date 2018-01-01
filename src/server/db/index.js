@@ -18,15 +18,17 @@ class DatabaseController {
   initialise({ logger }) {
     const client = Promise.promisifyAll(MongoClient);
     this.logger = logger;
-    return client.connectAsync(config.db.url).then(db => {
-      this.logger.debug("Database initialised");
-      this.db = db;
-      this.users = new UserController({ db, logger });
-      this.cards = new CardController({ db, logger });
-      this.subjects = new SubjectController({ db, logger });
-      this.tests = new TestController({ db, logger });
-      return this;
-    });
+    return client
+      .connectAsync(process.env.MONGO_URL || config.db.url)
+      .then(db => {
+        this.logger.debug("Database initialised");
+        this.db = db;
+        this.users = new UserController({ db, logger });
+        this.cards = new CardController({ db, logger });
+        this.subjects = new SubjectController({ db, logger });
+        this.tests = new TestController({ db, logger });
+        return this;
+      });
   }
 
   getUsers() {

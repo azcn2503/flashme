@@ -22,6 +22,8 @@ import {
 } from "./service";
 import databaseController from "./db";
 
+const port = process.env.PORT || config.http.port;
+
 const app = express();
 
 const loggedIn = (req, res, next) => {
@@ -42,7 +44,7 @@ app.use(serveStatic(config.client.path));
 app.use(passport.initialize());
 app.use(passport.session());
 
-logger.info("Starting server");
+logger.info(`Starting server on port ${port}`);
 databaseController
   .initialise({ logger })
   .catch(err => logger.error("Could not connect to Mongo", err.message))
@@ -81,9 +83,7 @@ databaseController
     });
   })
   .then(() => {
-    app.listen(config.http.port, () => {
-      logger.info(
-        `${config.server.name} listening on HTTP port ${config.http.port}`
-      );
+    app.listen(port, () => {
+      logger.info(`${config.server.name} listening on HTTP port ${port}`);
     });
   });

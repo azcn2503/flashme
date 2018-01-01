@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import config from "config";
 
 import { mergeWith, isArray } from "lodash";
 import webpack from "webpack";
@@ -65,14 +66,7 @@ const baseConfig = {
     },
     extensions: [".js", ".jsx", ".json"]
   },
-  plugins: [
-    new HardSourceWebpackPlugin(),
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || "development")
-      }
-    })
-  ]
+  plugins: [new HardSourceWebpackPlugin()]
 };
 
 const serverConfig = mergeWith(
@@ -86,7 +80,14 @@ const serverConfig = mergeWith(
       path: path.resolve(__dirname, "dist/server"),
       filename: "[name].bundle.js"
     },
-    plugins: [],
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env.MONGO_URL": JSON.stringify(process.env.MONGO_URL),
+        "process.env.NODE_ENV": JSON.stringify(
+          process.env.NODE_ENV || "development"
+        )
+      })
+    ],
     target: "node",
     externals: nodeModules
   },
@@ -114,6 +115,11 @@ const clientConfig = mergeWith(
       new ExtractTextPlugin("styles.css"),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "src/client/index.html")
+      }),
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(
+          process.env.NODE_ENV || "development"
+        )
       })
     ]
   },
