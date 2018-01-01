@@ -1,8 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import moment from "moment";
 import pluralize from "pluralize";
 
@@ -16,6 +15,7 @@ import {
   getTestsForSubject,
   removeTest,
   addTest,
+  addRetest,
   startTest
 } from "client/state/actions/tests";
 import { testStatusEnum } from "shared/tests";
@@ -52,27 +52,10 @@ class SubjectTests extends PureComponent {
     if (!this.props.tests.requesting) {
       this.props.dispatch(getTestsForSubject(this.props.subjectId));
     }
-    this.updateTestProgressBars();
   }
 
   componentWillUpdate() {
     this._progressBars = {};
-  }
-
-  componentDidUpdate() {
-    this.updateTestProgressBars();
-  }
-
-  updateTestProgressBars() {
-    requestAnimationFrame(() => {
-      this.getSubjectFilteredTests().forEach(test => {
-        if (this._progressBars[test.id]) {
-          this._progressBars[
-            test.id
-          ].style.width = `${this.getTestProgressPercent(test)}%`;
-        }
-      });
-    });
   }
 
   onClickDeleteTest(testId) {
@@ -105,8 +88,20 @@ class SubjectTests extends PureComponent {
     this.props.dispatch(addTest(this.props.subjectId));
   }
 
+  onClickRetest(testId) {
+    this.props.dispatch(addRetest(this.props.subjectId, testId));
+  }
+
   onClickStartTest(testId) {
     this.props.dispatch(startTest(testId));
+    this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
+  }
+
+  onClickContinueTest(testId) {
+    this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
+  }
+
+  onClickReviewTest(testId) {
     this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
   }
 
@@ -132,14 +127,68 @@ class SubjectTests extends PureComponent {
     );
   }
 
+  renderTestAction(test) {
+    const actions = [];
+    if (test.status === testStatusEnum.NOT_STARTED) {
+      actions.push(
+        <Button
+          key="startButton"
+          small
+          primary
+          onClick={() => this.onClickStartTest(test.id)}
+        >
+          Start
+        </Button>
+      );
+    } else if (test.status === testStatusEnum.STARTED) {
+      actions.push(
+        <Button
+          key="continueButton"
+          small
+          primary
+          onClick={() => this.onClickContinueTest(test.id)}
+        >
+          Continue
+        </Button>
+      );
+    } else if (
+      test.status === testStatusEnum.COMPLETED ||
+      test.status === testStatusEnum.ABANDONED
+    ) {
+      actions.push(
+        <Button
+          key="reviewButton"
+          small
+          primary
+          onClick={() => this.onClickReviewTest(test.id)}
+        >
+          Review
+        </Button>
+      );
+      if (test.cards.find(card => card.correct === false)) {
+        actions.push(
+          <Button
+            key="retestButton"
+            small
+            primary
+            onClick={() => this.onClickRetest(test.id)}
+          >
+            Retest
+          </Button>
+        );
+      }
+    } else {
+      return null;
+    }
+    return actions;
+  }
+
   renderTestList(tests = []) {
     return (
       <div className={styles.testList}>
         <table className={styles.testTable}>
           <thead>
             <tr>
-              <th>#</th>
-              <th>ID</th>
               <th>Status</th>
               <th>Progress</th>
               <th>Cards</th>
@@ -148,14 +197,8 @@ class SubjectTests extends PureComponent {
             </tr>
           </thead>
           <tbody>
-            {tests.map((test, key) => (
+            {tests.map(test => (
               <tr key={test.id}>
-                <td>{key + 1}</td>
-                <td>
-                  <Link to={`/subject/${this.props.subjectId}/test/${test.id}`}>
-                    {test.id}
-                  </Link>
-                </td>
                 <td>
                   <TestStatus test={test} />
                 </td>
@@ -166,19 +209,9 @@ class SubjectTests extends PureComponent {
                 <td>{moment(test.created).fromNow()}</td>
                 <td>
                   <div className={styles.testActions}>
+                    {this.renderTestAction(test)}
                     <Button
-                      primary
-                      onClick={() => this.onClickStartTest(test.id)}
-                      disabled={
-                        test.status === testStatusEnum.COMPLETED ||
-                        test.status === testStatusEnum.ABANDONED
-                      }
-                    >
-                      {test.status === testStatusEnum.STARTED
-                        ? "Continue"
-                        : "Start"}
-                    </Button>
-                    <Button
+                      small
                       delete
                       onClick={() => this.onClickDeleteTest(test.id)}
                     >

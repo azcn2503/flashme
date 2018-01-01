@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
@@ -10,7 +11,8 @@ import {
   startTest,
   completeTest,
   abandonTest,
-  answerTestCard
+  answerTestCard,
+  addRetest
 } from "client/state/actions/tests";
 import { getSubject } from "client/state/actions/subjects";
 import Subheader from "client/components/subheader/subheader";
@@ -64,7 +66,16 @@ class Test extends PureComponent {
     this.props.dispatch(abandonTest(this.props.testId));
   }
 
-  onClickRetest() {}
+  onClickRetest() {
+    this.props
+      .dispatch(addRetest(this.props.subjectId, this.props.testId))
+      .then(test => {
+        console.log(test);
+        this.props.history.push(
+          `/subject/${this.props.subjectId}/test/${test.id}`
+        );
+      });
+  }
 
   onAnswerTestCard(value) {
     const test = this.props.tests.byId[this.props.testId];
@@ -110,7 +121,7 @@ class Test extends PureComponent {
             </thead>
             <tbody>
               {test.cards.map(card => (
-                <tr>
+                <tr key={card.id}>
                   <td dangerouslySetInnerHTML={this.getQuestionMarkup(card)} />
                   <td dangerouslySetInnerHTML={this.getAnswerMarkup(card)} />
                   <td>
@@ -182,13 +193,27 @@ class Test extends PureComponent {
         </Button>
       );
     } else if (
-      test.status === testStatusEnum.COMPLETED ||
-      test.status === testStatusEnum.ABANDONED
+      test.cards.find(card => card.correct === false) &&
+      (test.status === testStatusEnum.COMPLETED ||
+        test.status === testStatusEnum.ABANDONED)
     ) {
       return (
-        <Button primary disabled onClick={this.onClickRetest}>
+        <Button primary onClick={this.onClickRetest}>
           Retest
         </Button>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderCardNumbers() {
+    const test = this.props.tests.byId[this.props.testId];
+    if (test.status === testStatusEnum.STARTED) {
+      return (
+        <div className={styles.cardNumbers}>
+          Card {test.activeCard + 1} / {test.cards.length}
+        </div>
       );
     } else {
       return null;
@@ -212,6 +237,7 @@ class Test extends PureComponent {
               )})`}
             />
             <TestStatus test={test} />
+            {this.renderCardNumbers()}
             <div className={styles.actions}>{this.renderActions()}</div>
           </div>
           <div className={styles.testProgressContainer}>
@@ -233,7 +259,10 @@ Test.propTypes = {
   testId: PropTypes.string,
   subjectId: PropTypes.string,
   tests: PropTypes.object,
-  subjects: PropTypes.object
+  subjects: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
 };
 
-export default connect(Test.mapStateToProps)(Test);
+export default withRouter(connect(Test.mapStateToProps)(Test));

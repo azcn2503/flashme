@@ -14,24 +14,27 @@ const defaultState = {
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actions.ADD_TEST_REQUEST:
+    case actions.ADD_RETEST_REQUEST:
       return {
         ...state,
         requesting: true
       };
 
     case actions.ADD_TEST_SUCCESS:
+    case actions.ADD_RETEST_SUCCESS:
       return {
         ...state,
         requesting: false,
         error: false,
         byId: {
-          ...state.byId,
-          [action.test.id]: action.test
+          [action.test.id]: action.test,
+          ...state.byId
         },
         allIds: [...state.allIds, action.test.id]
       };
 
     case actions.ADD_TEST_FAILURE:
+    case actions.ADD_RETEST_FAILURE:
       return {
         ...state,
         requesting: false,

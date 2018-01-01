@@ -1,7 +1,7 @@
 import uuidv4 from "uuid/v4";
 import { shuffle } from "lodash";
 
-import { testStatusEnum } from "shared/tests";
+import { testStatusEnum, testTypeEnum } from "shared/tests";
 
 class TestService {
   constructor() {
@@ -26,7 +26,8 @@ class TestService {
       cards.map(card => ({
         id: card.id,
         question: card.question,
-        answer: card.answer
+        answer: card.answer,
+        answered: false
       }))
     );
     const test = {
@@ -36,9 +37,36 @@ class TestService {
       subjectId,
       userId,
       status: testStatusEnum.NOT_STARTED,
-      activeCard: 0
+      activeCard: 0,
+      type: testTypeEnum.SUBJECT_TEST
     };
     return this.db.addTest(test);
+  }
+
+  addRetest(userId, subjectId, testId, cards) {
+    return this.db.getTest(userId, testId).then(test => {
+      const testCards = shuffle(
+        test.cards.filter(card => card.correct === false).map(card => ({
+          id: card.id,
+          question: card.question,
+          answer: card.answer,
+          answered: false,
+          correct: null
+        }))
+      );
+      const retest = {
+        id: uuidv4(),
+        created: Date.now(),
+        cards: testCards,
+        subjectId,
+        userId,
+        parentTestId: testId,
+        status: testStatusEnum.NOT_STARTED,
+        activeCard: 0,
+        type: testTypeEnum.SUBJECT_RETEST
+      };
+      return this.db.addTest(retest);
+    });
   }
 
   /**

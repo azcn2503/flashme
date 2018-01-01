@@ -25,6 +25,15 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
       .catch(err => res.json(err).sendStatus(500));
   });
 
+  app.post("/api/test/:subjectId/retest/:testId", loggedIn, (req, res) => {
+    const { subjectId, testId } = req.params;
+    logger.info(`Adding retest of ${testId} to subject ${subjectId}`);
+    return testService
+      .addRetest(req.user.id, subjectId, testId)
+      .then(test => res.json(test))
+      .catch(err => res.json(err).sendStatus(500));
+  });
+
   app.delete("/api/test/:testId", loggedIn, (req, res) => {
     const { testId } = req.params;
     logger.info(`Removing test ${testId}`);

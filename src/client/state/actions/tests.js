@@ -4,6 +4,10 @@ export const ADD_TEST_REQUEST = "ADD_TEST_REQUEST";
 export const ADD_TEST_SUCCESS = "ADD_TEST_SUCCESS";
 export const ADD_TEST_FAILURE = "ADD_TEST_FAILURE";
 
+export const ADD_RETEST_REQUEST = "ADD_RETEST_REQUEST";
+export const ADD_RETEST_SUCCESS = "ADD_RETEST_SUCCESS";
+export const ADD_RETEST_FAILURE = "ADD_RETEST_FAILURE";
+
 export const START_TEST_REQUEST = "START_TEST_REQUEST";
 export const START_TEST_SUCCESS = "START_TEST_SUCCESS";
 export const START_TEST_FAILURE = "START_TEST_FAILURE";
@@ -136,6 +140,19 @@ export const answerTestCard = (testId, cardIndex, correct) => dispatch => {
         correct,
         err
       })
+    );
+};
+
+export const addRetest = (subjectId, testId) => dispatch => {
+  dispatch({ type: ADD_RETEST_REQUEST, subjectId, testId });
+  return api
+    .addRetest(subjectId, testId)
+    .then(test => {
+      dispatch({ type: ADD_RETEST_SUCCESS, subjectId, testId, test });
+      return test;
+    })
+    .catch(err =>
+      dispatch({ type: ADD_RETEST_FAILURE, subjectId, testId, err })
     );
 };
 

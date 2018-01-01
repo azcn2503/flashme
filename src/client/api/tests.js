@@ -18,6 +18,12 @@ export const addTest = (subjectId, cards) => {
     .then(({ data }) => data);
 };
 
+export const addRetest = (subjectId, testId, cards) => {
+  return axios
+    .post(apiUrl(`/test/${subjectId}/retest/${testId}`), { cards })
+    .then(({ data }) => data);
+};
+
 export const removeTest = testId => {
   return axios.delete(apiUrl(`/test/${testId}`)).then(({ data }) => data);
 };

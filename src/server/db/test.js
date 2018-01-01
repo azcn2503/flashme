@@ -30,7 +30,7 @@ class TestController {
    */
   getTestsForSubject(userId, subjectId) {
     return this.collection
-      .findAsync({ userId, subjectId })
+      .findAsync({ userId, subjectId }, { sort: { created: -1 } })
       .then(res => res.toArray());
   }
 
@@ -86,10 +86,9 @@ class TestController {
         { userId, id: testId },
         {
           $set: {
-            [`cards.${cardIndex}.correct`]: correct
-          },
-          $inc: {
-            activeCard: 1
+            [`cards.${cardIndex}.correct`]: correct,
+            [`cards.${cardIndex}.answered`]: true,
+            activeCard: cardIndex + 1
           }
         },
         {
