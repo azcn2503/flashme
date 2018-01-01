@@ -246,7 +246,7 @@ class FlashCard extends PureComponent {
           key={0}
           onClick={() => this.onAnswerTestCard(true)}
           primary
-          disabled={this.props.requesting}
+          disabled={!!this.props.requesting}
         >
           Right
         </Button>,
@@ -254,7 +254,7 @@ class FlashCard extends PureComponent {
           small
           key={1}
           onClick={() => this.onAnswerTestCard(false)}
-          disabled={this.props.requesting}
+          disabled={!!this.props.requesting}
         >
           Wrong
         </Button>
@@ -270,7 +270,7 @@ class FlashCard extends PureComponent {
         <Button
           small
           delete
-          disabled={this.props.card.requesting}
+          disabled={!!this.props.card.requesting}
           onClick={this.onClickDelete}
         >
           Delete
@@ -336,7 +336,7 @@ class FlashCard extends PureComponent {
         <Button
           small
           primary
-          disabled={this.props.card.requesting}
+          disabled={!!this.props.card.requesting}
           onClick={this.onClickUpdateCard}
         >
           Update
@@ -419,7 +419,7 @@ FlashCard.propTypes = {
   selected: PropTypes.bool,
   dispatch: PropTypes.func,
   showControls: PropTypes.bool,
-  requesting: PropTypes.bool
+  requesting: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 
 FlashCard.defaultProps = {
