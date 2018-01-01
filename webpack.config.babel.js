@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { merge, isArray } from "lodash";
+import { mergeWith, isArray } from "lodash";
 import webpack from "webpack";
 
 import ExtractTextPlugin from "extract-text-webpack-plugin";
@@ -12,7 +12,7 @@ import HardSourceWebpackPlugin from "hard-source-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 
 const mergeCustomiser = (a, b) => {
-  if (isArray(a)) {
+  if (isArray(a) && isArray(b)) {
     return a.concat(b);
   }
 };
@@ -75,7 +75,7 @@ const baseConfig = {
   ]
 };
 
-const serverConfig = merge(
+const serverConfig = mergeWith(
   {},
   baseConfig,
   {
@@ -93,7 +93,7 @@ const serverConfig = merge(
   mergeCustomiser
 );
 
-const clientConfig = merge(
+const clientConfig = mergeWith(
   {},
   baseConfig,
   {
