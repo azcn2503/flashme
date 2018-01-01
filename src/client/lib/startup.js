@@ -1,7 +1,7 @@
 import Promise from "bluebird";
 import WebFont from "webfontloader";
 
-const fonts = ["Roboto:400,500", "Alegreya Sans:400"];
+const fonts = ["Roboto:400,500", "Alegreya:400"];
 let loadedFonts = 0;
 
 const startup = () =>

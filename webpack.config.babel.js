@@ -9,6 +9,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import WebpackSourceMapSupportPlugin from "webpack-source-map-support";
 import WebpackExternalModule from "webpack-external-module";
 import HardSourceWebpackPlugin from "hard-source-webpack-plugin";
+import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 
 const mergeCustomiser = (a, b) => {
   if (isArray(a)) {
@@ -71,8 +72,7 @@ const baseConfig = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || "development")
       }
     })
-  ],
-  devtool: "source-map"
+  ]
 };
 
 const serverConfig = merge(
@@ -86,7 +86,7 @@ const serverConfig = merge(
       path: path.resolve(__dirname, "dist/server"),
       filename: "[name].bundle.js"
     },
-    plugins: [new WebpackSourceMapSupportPlugin()],
+    plugins: [],
     target: "node",
     externals: nodeModules
   },
@@ -119,5 +119,14 @@ const clientConfig = merge(
   },
   mergeCustomiser
 );
+
+if (process.env.NODE_ENV === "production") {
+  clientConfig.plugins.push(new UglifyJsPlugin());
+  serverConfig.plugins.push(new UglifyJsPlugin());
+} else {
+  clientConfig.devtool = "source-map";
+  serverConfig.devtool = "source-map";
+  serverConfig.plugins.push(new WebpackSourceMapSupportPlugin());
+}
 
 export default [serverConfig, clientConfig];
