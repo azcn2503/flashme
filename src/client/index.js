@@ -1,11 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import Root from './components/root/root';
+import Root from "./components/root/root";
 
-import './index.scss';
+import startup from "./lib/startup";
 
-ReactDOM.render(
-  <Root />,
-  document.querySelector('#react-root')
+import "./index.scss";
+
+startup().then(() =>
+  ReactDOM.render(<Root />, document.querySelector("#react-root"))
 );
