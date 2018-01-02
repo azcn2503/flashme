@@ -5,9 +5,6 @@ import classNames from "classnames";
 
 import { USER_PROPTYPE } from "client/proptypes";
 import { login, register } from "client/state/actions/user";
-import { resetSubjects, getSubjects } from "client/state/actions/subjects";
-import { resetCards } from "client/state/actions/cards";
-import { resetTests } from "client/state/actions/tests";
 import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
@@ -142,7 +139,8 @@ class Login extends PureComponent {
         })
         .catch(err => {
           this.setState({
-            loginError: err.message
+            loginError:
+              "Unable to login, please check your details and try again"
           });
         });
     }
@@ -159,7 +157,7 @@ class Login extends PureComponent {
         })
         .catch(err => {
           this.setState({
-            registerError: err.message
+            registerError: `Unable to register: ${err.message}`
           });
         });
     }
