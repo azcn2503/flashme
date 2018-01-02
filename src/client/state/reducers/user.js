@@ -14,6 +14,7 @@ const reducer = (state = defaultState, action) => {
 
     case actions.LOGIN_REQUEST:
     case actions.LOGOUT_REQUEST:
+    case actions.REGISTER_REQUEST:
       return {
         ...state,
         requesting: true
@@ -30,6 +31,7 @@ const reducer = (state = defaultState, action) => {
 
     case actions.LOGIN_FAILURE:
     case actions.LOGOUT_FAILURE:
+    case actions.REGISTER_FAILURE:
       return {
         ...state,
         requesting: false,
@@ -43,6 +45,13 @@ const reducer = (state = defaultState, action) => {
         requesting: false,
         error: null,
         currentUser: {}
+      };
+
+    case actions.REGISTER_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        error: null
       };
 
     case actions.GET_CURRENT_USER_REQUEST:

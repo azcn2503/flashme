@@ -1,4 +1,5 @@
 import axios from "axios";
+import Promise from "bluebird";
 
 import { apiUrl } from "./api";
 
@@ -10,7 +11,10 @@ import { apiUrl } from "./api";
 export const login = (username, password) => {
   return axios
     .post(apiUrl("/user/login"), { username, password })
-    .then(({ data }) => data);
+    .then(({ data }) => data)
+    .catch(({ response }) => {
+      throw new Error(response.data);
+    });
 };
 
 /**
@@ -29,7 +33,10 @@ export const logout = () => {
 export const register = (username, password, email) => {
   return axios
     .post(apiUrl("/user/register"), { username, password, email })
-    .then(({ data }) => data);
+    .then(({ data }) => data)
+    .catch(({ response }) => {
+      throw new Error(response.data);
+    });
 };
 
 /**

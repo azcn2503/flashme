@@ -7,6 +7,10 @@
   height: 100%;
 }
 
+.appDescription {
+  padding: $padding-large;
+}
+
 .content {
   flex-grow: 1;
   padding: $padding-large;
@@ -17,4 +21,9 @@
 
 .notLoggedIn {
   text-align: center;
+}
+
+.login {
+  height: 300px;
+  margin-top: $margin-large;
 }

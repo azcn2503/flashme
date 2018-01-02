@@ -22,17 +22,26 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
     return userService
       .registerUser(username, password, email)
       .then(user => res.json(user))
-      .catch(err => res.sendStatus(err.status));
+      .catch(err => {
+        return res.status(err.status).json(err.message);
+      });
   });
 
   app.get("/api/user/logout", loggedIn, (req, res) => {
-    req.logout();
-    req.session.destroy();
-    return res.sendStatus(200);
+    try {
+      req.logout();
+      req.session.destroy();
+      return res.sendStatus(200);
+    } catch (ex) {
+      return res.sendStatus(500);
+    }
   });
 
   app.get("/api/user", loggedIn, (req, res) => {
-    return res.json(req.user);
+    return userService
+      .findUserById(req.user.id)
+      .then(user => res.json(user))
+      .catch(() => res.sendStatus(404));
   });
 
   logger.debug("User API initialised");

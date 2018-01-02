@@ -22,7 +22,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
       .getCards(req.user.id, subjectId)
       .then(cards => testService.addTest(req.user.id, subjectId, cards))
       .then(test => res.json(test))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.post("/api/test/:subjectId/retest/:testId", loggedIn, (req, res) => {
@@ -31,7 +31,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     return testService
       .addRetest(req.user.id, subjectId, testId)
       .then(test => res.json(test))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.delete("/api/test/:testId", loggedIn, (req, res) => {
@@ -40,7 +40,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     return testService
       .removeTest(req.user.id, testId)
       .then(() => res.sendStatus(200))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.put("/api/test/:testId/start", loggedIn, (req, res) => {
@@ -49,7 +49,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     return testService
       .startTest(req.user.id, testId)
       .then(() => res.sendStatus(200))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.put("/api/test/:testId/complete", loggedIn, (req, res) => {
@@ -58,7 +58,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     return testService
       .completeTest(req.user.id, testId)
       .then(() => res.sendStatus(200))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.put("/api/test/:testId/abandon", loggedIn, (req, res) => {
@@ -67,7 +67,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     return testService
       .abandonTest(req.user.id, testId)
       .then(() => res.sendStatus(200))
-      .catch(err => res.json(err).sendStatus(500));
+      .catch(err => res.sendStatus(500));
   });
 
   app.put("/api/test/:testId/answer", loggedIn, (req, res) => {
@@ -75,8 +75,8 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { cardIndex, correct } = req.body;
     return testService
       .answerTestCard(req.user.id, testId, cardIndex, correct)
-      .then(test => res.json(test).sendStatus(200))
-      .catch(err => res.json(err).sendStatus(500));
+      .then(test => res.status(200).json(test))
+      .catch(err => res.sendStatus(500));
   });
 
   logger.debug("Tests API initialised");

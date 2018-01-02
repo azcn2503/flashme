@@ -20,8 +20,14 @@ export const login = (username, password) => dispatch => {
   dispatch({ type: LOGIN_REQUEST });
   return api
     .login(username, password)
-    .then(user => dispatch({ type: LOGIN_SUCCESS, user }))
-    .catch(err => dispatch({ type: LOGIN_FAILURE, err }));
+    .then(user => {
+      dispatch({ type: LOGIN_SUCCESS, user });
+      return user;
+    })
+    .catch(err => {
+      dispatch({ type: LOGIN_FAILURE, err: err.message });
+      throw err;
+    });
 };
 
 export const logout = () => dispatch => {
@@ -29,15 +35,24 @@ export const logout = () => dispatch => {
   return api
     .logout()
     .then(() => dispatch({ type: LOGOUT_SUCCESS }))
-    .catch(err => dispatch({ type: LOGOUT_FAILURE, err }));
+    .catch(err => {
+      dispatch({ type: LOGOUT_FAILURE, err: err.message });
+      throw err;
+    });
 };
 
 export const register = (username, password, email) => dispatch => {
   dispatch({ type: REGISTER_REQUEST });
   return api
     .register(username, password, email)
-    .then(user => dispatch({ type: REGISTER_SUCCESS, user }))
-    .catch(err => dispatch({ type: REGISTER_FAILURE, err }));
+    .then(user => {
+      dispatch({ type: REGISTER_SUCCESS, user });
+      return user;
+    })
+    .catch(err => {
+      dispatch({ type: REGISTER_FAILURE, err: err.message });
+      throw err;
+    });
 };
 
 export const getCurrentUser = () => dispatch => {

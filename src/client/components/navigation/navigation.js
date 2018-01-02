@@ -4,9 +4,6 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 
 import { logout } from "client/state/actions/user";
-import { resetSubjects } from "client/state/actions/subjects";
-import { resetCards } from "client/state/actions/cards";
-import { resetTests } from "client/state/actions/tests";
 import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
 import {
@@ -50,9 +47,6 @@ class Navigation extends PureComponent {
 
   onClickLogout() {
     this.props.dispatch(logout()).then(() => {
-      this.props.dispatch(resetSubjects());
-      this.props.dispatch(resetCards());
-      this.props.dispatch(resetTests());
       this.props.history.push("/");
     });
   }
@@ -158,17 +152,25 @@ class Navigation extends PureComponent {
   renderUser() {
     if (this.props.user.loggedIn) {
       return (
-        <div className={styles.login}>
+        <div className={styles.userActions}>
           <div className={styles.currentUser}>
             Logged in as <strong>{this.props.user.currentUser.username}</strong>
           </div>
-          <Button onClick={this.onClickLogout}>Logout</Button>
+          <Button
+            onClick={this.onClickLogout}
+            disabled={this.props.user.requesting}
+          >
+            Logout
+          </Button>
         </div>
       );
     } else {
       return (
         <div className={styles.login}>
-          <Button onClick={this.onClickLoginOrRegister}>
+          <Button
+            onClick={this.onClickLoginOrRegister}
+            disabled={this.props.user.requesting}
+          >
             Login / Register
           </Button>
         </div>
@@ -187,6 +189,7 @@ class Navigation extends PureComponent {
           header="Login / Register"
           body={
             <Login
+              className={styles.login}
               ref={el => (this._login = el)}
               dispatch={this.props.dispatch}
               onSuccess={this.onLoginSuccess}

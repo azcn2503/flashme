@@ -2,6 +2,8 @@ import Promise from "bluebird";
 import bcrypt from "bcryptjs";
 import uuidv4 from "uuid/v4";
 
+import { UserExistsError, LoginError } from "server/errors";
+
 class UserService {
   constructor() {
     this.db = null;
@@ -55,7 +57,7 @@ class UserService {
             email: user.email
           });
         } else {
-          throw new Error("Bad password");
+          throw new LoginError("Bad password", 404);
         }
       });
   }
@@ -65,7 +67,11 @@ class UserService {
    * @param {string} userId
    */
   findUserById(userId) {
-    return this.db.findUserById(userId);
+    return this.db.findUserById(userId).then(user => ({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    }));
   }
 
   /**
@@ -79,10 +85,7 @@ class UserService {
       .findUser(username)
       .then(user => {
         if (user) {
-          return Promise.reject({
-            message: "User already exists",
-            status: 409
-          });
+          throw new UserExistsError("User already exists", 409);
         } else {
           return bcrypt.genSalt(10);
         }
