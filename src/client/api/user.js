@@ -29,7 +29,10 @@ export const logout = () => {
 export const register = (username, password, email) => {
   return axios
     .post(apiUrl("/user/register"), { username, password, email })
-    .then(({ data }) => data);
+    .then(({ data }) => data)
+    .catch(err => {
+      throw new Error(err.response);
+    });
 };
 
 /**

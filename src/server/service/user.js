@@ -65,7 +65,11 @@ class UserService {
    * @param {string} userId
    */
   findUserById(userId) {
-    return this.db.findUserById(userId);
+    return this.db.findUserById(userId).then(user => ({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    }));
   }
 
   /**

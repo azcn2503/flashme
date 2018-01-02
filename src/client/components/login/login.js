@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
+import { USER_PROPTYPE } from "client/proptypes";
 import { login, register } from "client/state/actions/user";
 import { resetSubjects, getSubjects } from "client/state/actions/subjects";
 import { resetCards } from "client/state/actions/cards";
@@ -18,6 +20,12 @@ const tabEnum = {
 };
 
 class Login extends PureComponent {
+  static mapStateToProps(state) {
+    return {
+      user: state.user
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -128,7 +136,12 @@ class Login extends PureComponent {
         .dispatch(
           register(this.state.username, this.state.password, this.state.email)
         )
-        .then(() => this.submitLoginForm(true));
+        .then(user => {
+          this.submitLoginForm(true);
+        })
+        .catch(err => {
+          // Handle register error
+        });
     }
   }
 
@@ -151,7 +164,11 @@ class Login extends PureComponent {
             fullWidth
           />
           <div className={styles.actions}>
-            <Button primary submit disabled={!this.canLogin()}>
+            <Button
+              primary
+              submit
+              disabled={this.props.user.requesting || !this.canLogin()}
+            >
               Log in
             </Button>
           </div>
@@ -195,7 +212,11 @@ class Login extends PureComponent {
             fullWidth
           />
           <div className={styles.actions}>
-            <Button primary submit disabled={!this.canRegister()}>
+            <Button
+              primary
+              submit
+              disabled={this.props.user.requesting || !this.canRegister()}
+            >
               Register
             </Button>
           </div>
@@ -224,7 +245,8 @@ Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
-  onSuccess: PropTypes.func
+  onSuccess: PropTypes.func,
+  user: USER_PROPTYPE
 };
 
-export default Login;
+export default connect(Login.mapStateToProps)(Login);

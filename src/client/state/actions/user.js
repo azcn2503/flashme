@@ -1,3 +1,5 @@
+import Promise from "bluebird";
+
 import * as api from "client/api/user";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -36,8 +38,14 @@ export const register = (username, password, email) => dispatch => {
   dispatch({ type: REGISTER_REQUEST });
   return api
     .register(username, password, email)
-    .then(user => dispatch({ type: REGISTER_SUCCESS, user }))
-    .catch(err => dispatch({ type: REGISTER_FAILURE, err }));
+    .then(user => {
+      dispatch({ type: REGISTER_SUCCESS, user });
+      return Promise.resolve(user);
+    })
+    .catch(err => {
+      dispatch({ type: REGISTER_FAILURE, err });
+      return Promise.reject(err);
+    });
 };
 
 export const getCurrentUser = () => dispatch => {

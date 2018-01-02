@@ -32,7 +32,10 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
   });
 
   app.get("/api/user", loggedIn, (req, res) => {
-    return res.json(req.user);
+    return userService
+      .findUserById(req.user.id)
+      .then(user => res.json(user))
+      .catch(err => res.sendStatus(404));
   });
 
   logger.debug("User API initialised");

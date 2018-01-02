@@ -162,13 +162,21 @@ class Navigation extends PureComponent {
           <div className={styles.currentUser}>
             Logged in as <strong>{this.props.user.currentUser.username}</strong>
           </div>
-          <Button onClick={this.onClickLogout}>Logout</Button>
+          <Button
+            onClick={this.onClickLogout}
+            disabled={this.props.user.requesting}
+          >
+            Logout
+          </Button>
         </div>
       );
     } else {
       return (
         <div className={styles.login}>
-          <Button onClick={this.onClickLoginOrRegister}>
+          <Button
+            onClick={this.onClickLoginOrRegister}
+            disabled={this.props.user.requesting}
+          >
             Login / Register
           </Button>
         </div>
