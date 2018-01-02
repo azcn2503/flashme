@@ -11,6 +11,9 @@ import Test from "client/components/test/test";
 import Subheader from "client/components/subheader/subheader";
 import Login from "client/components/login/login";
 import { getCurrentUser } from "client/state/actions/user";
+import { resetSubjects } from "client/state/actions/subjects";
+import { resetCards } from "client/state/actions/cards";
+import { resetTests } from "client/state/actions/tests";
 import { USER_PROPTYPE } from "client/proptypes";
 
 import styles from "./app.scss";
@@ -33,6 +36,17 @@ class App extends PureComponent {
   componentWillMount() {
     if (!this.props.user.loggedIn) {
       this.props.dispatch(getCurrentUser());
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.user.loggedIn !== this.props.user.loggedIn &&
+      !this.props.user.loggedIn
+    ) {
+      this.props.dispatch(resetSubjects());
+      this.props.dispatch(resetCards());
+      this.props.dispatch(resetTests());
     }
   }
 

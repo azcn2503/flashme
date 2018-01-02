@@ -4,9 +4,6 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 
 import { logout } from "client/state/actions/user";
-import { resetSubjects } from "client/state/actions/subjects";
-import { resetCards } from "client/state/actions/cards";
-import { resetTests } from "client/state/actions/tests";
 import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
 import {
@@ -50,9 +47,6 @@ class Navigation extends PureComponent {
 
   onClickLogout() {
     this.props.dispatch(logout()).then(() => {
-      this.props.dispatch(resetSubjects());
-      this.props.dispatch(resetCards());
-      this.props.dispatch(resetTests());
       this.props.history.push("/");
     });
   }
