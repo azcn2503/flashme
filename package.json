@@ -65,8 +65,13 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "start": "nodemon --watch dist/server/server.bundle.js --exec \"node dist/server/server.bundle.js\"",
+    "start":
+      "nodemon --watch dist/server/server.bundle.js --exec \"node dist/server/server.bundle.js\"",
     "build": "webpack",
-    "lint": "eslint"
+    "lint": "eslint",
+    "heroku-postbuild": "yarn run build"
+  },
+  "engines": {
+    "node": ">=6.9.5 <7"
   }
 }
