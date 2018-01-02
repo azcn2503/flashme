@@ -65,8 +65,9 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "start":
-      "nodemon --watch dist/server/server.bundle.js --exec \"node dist/server/server.bundle.js\"",
+    "start": "node dist/server/server.bundle.js",
+    "start:debug": "nodemon --inspect dist/server/server.bundle.js",
+    "start:dev": "nodemon dist/server/server.bundle.js",
     "build": "webpack",
     "lint": "eslint",
     "heroku-postbuild": "yarn run build"

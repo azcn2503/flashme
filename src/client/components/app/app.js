@@ -9,6 +9,7 @@ import Subjects from "client/components/subjects/subjects";
 import SubjectTests from "client/components/subject-tests/subject-tests";
 import Test from "client/components/test/test";
 import Subheader from "client/components/subheader/subheader";
+import Login from "client/components/login/login";
 import { getCurrentUser } from "client/state/actions/user";
 import { USER_PROPTYPE } from "client/proptypes";
 
@@ -82,12 +83,19 @@ class App extends PureComponent {
         </Switch>
       );
     } else {
-      if (!this.props.user.loggedIn && !this.props.user.requesting) {
+      if (!this.props.user.loggedIn) {
         return (
           <div className={styles.content}>
             <div className={styles.notLoggedIn}>
               <Subheader label="Welcome to FlashMe!" />
-              <p>Please login to start using the app.</p>
+              <div className={styles.appDescription}>
+                <p>A flash card app.</p>
+                <p>
+                  Please login or register to start creating subjects, cards and
+                  tests.
+                </p>
+              </div>
+              <Login className={styles.login} />
             </div>
           </div>
         );

@@ -1,6 +1,19 @@
 @import "~client/styles/variables";
 
 .login {
+  width: 500px;
+  height: 300px;
+
+  .form {
+    margin-top: $margin-large;
+  }
+
+  .errors {
+    margin-top: $margin-large;
+    color: $delete-color;
+    text-align: center;
+  }
+
   .actions {
     margin-top: $margin-large;
     display: flex;

@@ -158,7 +158,7 @@ class Navigation extends PureComponent {
   renderUser() {
     if (this.props.user.loggedIn) {
       return (
-        <div className={styles.login}>
+        <div className={styles.userActions}>
           <div className={styles.currentUser}>
             Logged in as <strong>{this.props.user.currentUser.username}</strong>
           </div>
@@ -195,6 +195,7 @@ class Navigation extends PureComponent {
           header="Login / Register"
           body={
             <Login
+              className={styles.login}
               ref={el => (this._login = el)}
               dispatch={this.props.dispatch}
               onSuccess={this.onLoginSuccess}

@@ -12,28 +12,32 @@ const subjectApi = ({
       .getSubjects(req.user.id)
       .then(subjects => cardService.getCardCount(req.user.id, subjects))
       .then(subjects => testService.getTestCount(req.user.id, subjects))
-      .then(subjects => res.json(subjects));
+      .then(subjects => res.json(subjects))
+      .catch(err => res.sendStatus(500));
   });
 
   app.get("/api/subject/:subjectId", loggedIn, (req, res) => {
     logger.info(`Getting subject ${req.params.subjectId}`);
     return subjectService
       .getSubject(req.user.id, req.params.subjectId)
-      .then(subject => res.json(subject));
+      .then(subject => res.json(subject))
+      .catch(err => res.sendStatus(500));
   });
 
   app.post("/api/subject", loggedIn, (req, res) => {
     logger.info("Adding subject");
     return subjectService
       .addSubject(req.user.id)
-      .then(subject => res.json(subject));
+      .then(subject => res.json(subject))
+      .catch(err => res.sendStatus(500));
   });
 
   app.put("/api/subject/:subjectId/title", loggedIn, (req, res) => {
     logger.info(`Updating subject title for ${req.params.subjectId}`);
     return subjectService
       .updateSubjectTitle(req.user.id, req.params.subjectId, req.body.title)
-      .then(subject => res.json(subject));
+      .then(subject => res.json(subject))
+      .catch(err => res.sendStatus(500));
   });
 
   app.delete("/api/subject/:subjectId", loggedIn, (req, res) => {

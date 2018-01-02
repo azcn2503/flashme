@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import classNames from "classnames";
 
 import { USER_PROPTYPE } from "client/proptypes";
 import { login, register } from "client/state/actions/user";
@@ -33,7 +34,9 @@ class Login extends PureComponent {
       password: "",
       confirmPassword: "",
       email: "",
-      activeTabId: tabEnum.LOGIN
+      activeTabId: tabEnum.LOGIN,
+      loginError: null,
+      registerError: null
     };
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -41,6 +44,8 @@ class Login extends PureComponent {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onSubmitLoginForm = this.onSubmitLoginForm.bind(this);
     this.onSubmitRegisterForm = this.onSubmitRegisterForm.bind(this);
+    this.onChangeLoginForm = this.onChangeLoginForm.bind(this);
+    this.onChangeRegisterForm = this.onChangeRegisterForm.bind(this);
     this.onChangeTabs = this.onChangeTabs.bind(this);
   }
 
@@ -63,6 +68,18 @@ class Login extends PureComponent {
   onSubmitRegisterForm(e) {
     e.preventDefault();
     this.submitRegisterForm();
+  }
+
+  onChangeLoginForm() {
+    this.setState({
+      loginError: null
+    });
+  }
+
+  onChangeRegisterForm() {
+    this.setState({
+      registerError: null
+    });
   }
 
   onChangeUsername(e) {
@@ -119,13 +136,14 @@ class Login extends PureComponent {
       this.props
         .dispatch(login(this.state.username, this.state.password))
         .then(() => {
-          this.props.dispatch(resetSubjects());
-          this.props.dispatch(resetCards());
-          this.props.dispatch(resetTests());
-          this.props.dispatch(getSubjects());
           if (this.props.onSuccess) {
             this.props.onSuccess();
           }
+        })
+        .catch(err => {
+          this.setState({
+            loginError: err.message
+          });
         });
     }
   }
@@ -140,7 +158,9 @@ class Login extends PureComponent {
           this.submitLoginForm(true);
         })
         .catch(err => {
-          // Handle register error
+          this.setState({
+            registerError: err.message
+          });
         });
     }
   }
@@ -148,7 +168,11 @@ class Login extends PureComponent {
   renderLogin() {
     if (this.state.activeTabId === tabEnum.LOGIN) {
       return (
-        <form onSubmit={this.onSubmitLoginForm}>
+        <form
+          className={styles.form}
+          onChange={this.onChangeLoginForm}
+          onSubmit={this.onSubmitLoginForm}
+        >
           <TextField
             placeholder="Username"
             type="text"
@@ -163,6 +187,7 @@ class Login extends PureComponent {
             onChange={this.onChangePassword}
             fullWidth
           />
+          <div className={styles.errors}>{this.state.loginError}</div>
           <div className={styles.actions}>
             <Button
               primary
@@ -182,7 +207,11 @@ class Login extends PureComponent {
   renderRegister() {
     if (this.state.activeTabId === tabEnum.REGISTER) {
       return (
-        <form onSubmit={this.onSubmitRegisterForm}>
+        <form
+          className={styles.form}
+          onChange={this.onChangeRegisterForm}
+          onSubmit={this.onSubmitRegisterForm}
+        >
           <TextField
             placeholder="Username"
             type="text"
@@ -211,6 +240,7 @@ class Login extends PureComponent {
             onChange={this.onChangeConfirmPassword}
             fullWidth
           />
+          <div className={styles.errors}>{this.state.registerError}</div>
           <div className={styles.actions}>
             <Button
               primary
@@ -229,7 +259,7 @@ class Login extends PureComponent {
 
   render() {
     return (
-      <div className={styles.login}>
+      <div className={classNames(styles.login, this.props.className)}>
         <Tabs onChange={this.onChangeTabs} active={this.state.activeTabId}>
           <Tab value={tabEnum.LOGIN}>Login</Tab>
           <Tab value={tabEnum.REGISTER}>Register</Tab>
@@ -242,6 +272,7 @@ class Login extends PureComponent {
 }
 
 Login.propTypes = {
+  className: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,

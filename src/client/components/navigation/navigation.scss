@@ -22,7 +22,7 @@
     }
   }
 
-  .login {
+  .userActions {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,6 +34,10 @@
         margin-right: 0;
       }
     }
+  }
+
+  .login {
+    height: auto;
   }
 }
 
