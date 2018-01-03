@@ -1,0 +1,21 @@
+@import "~client/styles/variables";
+@import "~client/styles/tools";
+
+.tooltipElement {
+  @include transition();
+  transition-property: opacity, transform;
+  position: fixed;
+  z-index: 9999;
+  background-color: black;
+  color: white;
+  padding: $padding-small $padding-medium;
+  border-radius: $border-radius-small;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-5px);
+
+  &.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

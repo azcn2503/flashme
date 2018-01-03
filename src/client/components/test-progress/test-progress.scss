@@ -2,7 +2,8 @@
 @import "~client/styles/tools";
 
 .progressBar {
-  @include transition(width);
+  @include transition();
+  transition-property: width;
   position: absolute;
   top: 0;
   left: 0;
@@ -19,7 +20,8 @@
 }
 
 .progressLabel {
-  @include transition(opacity);
+  @include transition();
+  transition-property: opacity;
   position: absolute;
   right: 5px;
   top: 50%;
@@ -47,7 +49,6 @@
   background-color: $light-grey;
 
   .totalProgressBar {
-    @include transition(width);
     @extend .progressBar;
     background-color: $primary-color;
     z-index: 1;
@@ -58,7 +59,6 @@
   }
 
   .correctProgressBar {
-    @include transition(width);
     @extend .progressBar;
     background-color: $success-color;
     z-index: 2;

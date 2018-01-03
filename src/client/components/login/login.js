@@ -9,7 +9,7 @@ import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
 import Tab from "client/components/tab/tab";
-import { Tooltip } from "client/components/tooltip/tooltip";
+import Tooltip from "client/components/tooltip/tooltip";
 
 import styles from "./login.scss";
 

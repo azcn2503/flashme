@@ -6,7 +6,8 @@
 }
 
 .button {
-  @include transition("background-color, box-shadow");
+  @include transition();
+  transition-property: background-color, box-shadow;
 
   padding: $padding-medium $padding-large;
   cursor: pointer;

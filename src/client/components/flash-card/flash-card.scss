@@ -8,7 +8,8 @@
 }
 
 .flashCard {
-  @include transition(border-color);
+  @include transition();
+  transition-property: border-color;
 
   position: relative;
   width: 200px;
@@ -67,7 +68,8 @@
 
   .controls {
     @extend .centered;
-    @include transition(opacity);
+    @include transition();
+    transition-property: opacity;
 
     flex-shrink: 0;
     padding: $padding-medium;

@@ -2,7 +2,8 @@
 @import "../../styles/tools";
 
 .dialog {
-  @include transition(opacity);
+  @include transition();
+  transition-property: opacity;
 
   opacity: 0;
 
@@ -48,7 +49,8 @@
   }
 
   .window {
-    @include transition("transform, opacity");
+    @include transition();
+    transition-property: transform, opacity;
 
     transform: translateY(-$margin-medium);
     opacity: 0;

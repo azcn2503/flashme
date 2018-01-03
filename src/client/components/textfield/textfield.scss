@@ -2,7 +2,8 @@
 @import "../../styles/tools";
 
 .textField {
-  @include transition(border-color);
+  @include transition();
+  transition-property: border-color;
 
   outline: none;
   border: 1px solid transparent;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import { TooltipElement } from "client/components/tooltip/tooltip";
+import TooltipElement from "client/components/tooltip-element/tooltip-element";
 import SubjectCards from "client/components/subject-cards/subject-cards";
 import Navigation from "client/components/navigation/navigation";
 import Subjects from "client/components/subjects/subjects";

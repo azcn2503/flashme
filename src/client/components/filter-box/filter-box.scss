@@ -20,7 +20,9 @@
     right: 10px;
 
     &.visible {
-      @include transition(opacity);
+      @include transition();
+      transition-property: opacity;
+
       opacity: 0.2;
     }
   }

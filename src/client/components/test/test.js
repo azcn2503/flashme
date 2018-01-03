@@ -20,6 +20,7 @@ import FlashCard from "client/components/flash-card/flash-card";
 import Button from "client/components/button/button";
 import TestStatus from "client/components/test-status/test-status";
 import TestProgress from "client/components/test-progress/test-progress";
+import Tooltip from "client/components/tooltip/tooltip";
 
 import styles from "./test.scss";
 
@@ -208,9 +209,11 @@ class Test extends PureComponent {
         test.status === testStatusEnum.ABANDONED)
     ) {
       return (
-        <Button primary onClick={this.onClickRetest}>
-          Retest
-        </Button>
+        <Tooltip message="Retest the cards you failed on this test">
+          <Button primary onClick={this.onClickRetest}>
+            Retest
+          </Button>
+        </Tooltip>
       );
     } else {
       return null;

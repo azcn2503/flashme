@@ -24,14 +24,16 @@
 
 .fakeCard {
   @extend .card;
-  @include transition(transform);
+  @include transition();
+  transition-property: transform;
   position: absolute;
   z-index: 0;
 }
 
 .subjectCard {
   @extend .card;
-  @include transition(border-color);
+  @include transition();
+  transition-property: border-color;
 
   position: relative;
   z-index: 1;
@@ -54,7 +56,8 @@
   }
 
   .controls {
-    @include transition(opacity);
+    @include transition();
+    transition-property: opacity;
     opacity: 0;
 
     display: flex;
