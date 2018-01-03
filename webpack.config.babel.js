@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import config from "config";
 
 import { mergeWith, isArray } from "lodash";
 import webpack from "webpack";
@@ -78,7 +77,7 @@ const serverConfig = mergeWith(
     },
     output: {
       path: path.resolve(__dirname, "dist/server"),
-      filename: "[name].bundle.js"
+      filename: "[name]-bundle.js"
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -104,7 +103,7 @@ const clientConfig = mergeWith(
     output: {
       publicPath: "/",
       path: path.resolve(__dirname, "dist/client"),
-      filename: "[name].bundle.js"
+      filename: "[name]-bundle.js"
     },
     plugins: [
       new webpack.optimize.CommonsChunkPlugin({

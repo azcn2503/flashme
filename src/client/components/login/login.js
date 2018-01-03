@@ -9,6 +9,7 @@ import TextField from "client/components/textfield/textfield";
 import Button from "client/components/button/button";
 import Tabs from "client/components/tabs/tabs";
 import Tab from "client/components/tab/tab";
+import { Tooltip } from "client/components/tooltip/tooltip";
 
 import styles from "./login.scss";
 
@@ -187,13 +188,18 @@ class Login extends PureComponent {
           />
           <div className={styles.errors}>{this.state.loginError}</div>
           <div className={styles.actions}>
-            <Button
-              primary
-              submit
-              disabled={this.props.user.requesting || !this.canLogin()}
+            <Tooltip
+              message="Log in with a username and password"
+              disabled={this.canLogin()}
             >
-              Log in
-            </Button>
+              <Button
+                primary
+                submit
+                disabled={this.props.user.requesting || !this.canLogin()}
+              >
+                Log in
+              </Button>
+            </Tooltip>
           </div>
         </form>
       );
@@ -240,13 +246,18 @@ class Login extends PureComponent {
           />
           <div className={styles.errors}>{this.state.registerError}</div>
           <div className={styles.actions}>
-            <Button
-              primary
-              submit
-              disabled={this.props.user.requesting || !this.canRegister()}
+            <Tooltip
+              message="Registration requires all fields to be filled in"
+              disabled={this.canRegister()}
             >
-              Register
-            </Button>
+              <Button
+                primary
+                submit
+                disabled={this.props.user.requesting || !this.canRegister()}
+              >
+                Register
+              </Button>
+            </Tooltip>
           </div>
         </form>
       );

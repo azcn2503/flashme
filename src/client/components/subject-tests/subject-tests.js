@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import pluralize from "pluralize";
 
+import Tooltip from "client/components/tooltip/tooltip";
 import Button from "client/components/button/button";
 import Dialog from "client/components/dialog/dialog";
 import Subheader from "client/components/subheader/subheader";
@@ -177,14 +178,14 @@ class SubjectTests extends PureComponent {
       );
       if (test.cards.find(card => card.correct === false)) {
         actions.push(
-          <Button
-            key="retestButton"
-            small
-            primary
-            onClick={() => this.onClickRetest(test.id)}
+          <Tooltip
+            key="retest"
+            message="Retest the cards you failed on this test"
           >
-            Retest
-          </Button>
+            <Button small primary onClick={() => this.onClickRetest(test.id)}>
+              Retest
+            </Button>
+          </Tooltip>
         );
       }
     } else {
@@ -242,13 +243,15 @@ class SubjectTests extends PureComponent {
   renderActions() {
     return (
       <div className={styles.actions}>
-        <Button
-          primary
-          disabled={this.props.tests.requesting}
-          onClick={this.onClickAddTest}
-        >
-          New Test
-        </Button>
+        <Tooltip message="Add a new test for this subject">
+          <Button
+            primary
+            disabled={this.props.tests.requesting}
+            onClick={this.onClickAddTest}
+          >
+            New Test
+          </Button>
+        </Tooltip>
       </div>
     );
   }

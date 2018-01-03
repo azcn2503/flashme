@@ -1,0 +1,5 @@
+{
+  "db": {
+    "url": "mongodb://flashme:Mocha123@ds161336.mlab.com:61336/flashme"
+  }
+}
