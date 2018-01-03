@@ -60,5 +60,8 @@ export const getCurrentUser = () => dispatch => {
   return api
     .getCurrentUser()
     .then(user => dispatch({ type: GET_CURRENT_USER_SUCCESS, user }))
-    .catch(err => dispatch({ type: GET_CURRENT_USER_FAILURE, err }));
+    .catch(err => {
+      dispatch({ type: GET_CURRENT_USER_FAILURE, err });
+      throw new Error(err);
+    });
 };

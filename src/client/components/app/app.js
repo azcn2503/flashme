@@ -38,7 +38,9 @@ class App extends PureComponent {
 
   componentWillMount() {
     if (!this.props.user.loggedIn) {
-      this.props.dispatch(getCurrentUser());
+      this.props
+        .dispatch(getCurrentUser())
+        .catch(() => this.props.history.push("/"));
     }
   }
 
