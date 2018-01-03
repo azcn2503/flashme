@@ -33,6 +33,7 @@ class App extends PureComponent {
     this.renderTest = this.renderTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
     this.renderWelcome = this.renderWelcome.bind(this);
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
   componentWillMount() {
@@ -47,10 +48,12 @@ class App extends PureComponent {
         this.props.dispatch(resetSubjects());
         this.props.dispatch(resetCards());
         this.props.dispatch(resetTests());
-      } else {
-        this.props.history.push("/subjects");
       }
     }
+  }
+
+  onLoginSuccess() {
+    this.props.history.push("/subjects");
   }
 
   renderSubjects() {
@@ -73,7 +76,12 @@ class App extends PureComponent {
   }
 
   renderNavigation(routerProps) {
-    return <Navigation routerProps={routerProps} />;
+    return (
+      <Navigation
+        routerProps={routerProps}
+        onLoginSuccess={this.onLoginSuccess}
+      />
+    );
   }
 
   renderLoggedInContent() {
@@ -114,7 +122,7 @@ class App extends PureComponent {
                 tests.
               </p>
             </div>
-            <Login className={styles.login} />
+            <Login className={styles.login} onSuccess={this.onLoginSuccess} />
           </div>
         </div>
       );

@@ -61,7 +61,7 @@ class Navigation extends PureComponent {
     this.setState({
       loginDialogOpen: false
     });
-    this.props.history.push("/subjects");
+    this.props.onLoginSuccess();
   }
 
   /**
@@ -210,7 +210,8 @@ Navigation.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
-  })
+  }),
+  onLoginSuccess: PropTypes.func
 };
 
 export default withRouter(connect(Navigation.mapStateToProps)(Navigation));
