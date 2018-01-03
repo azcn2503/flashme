@@ -23,7 +23,8 @@ class FlashCard extends PureComponent {
       answer: props.card.answer || "",
       flipped: false,
       deleteDialogOpen: false,
-      highlightUpdate: false
+      highlightUpdate: false,
+      dirty: false
     };
     this._question = null;
     this._answer = null;
@@ -52,10 +53,29 @@ class FlashCard extends PureComponent {
       this.highlightUpdate();
     }
 
-    // Reset flipped state when card changes
+    // Reset flipped and dirty state when card changes
     if (prevProps.card.id !== this.props.card.id) {
       this.setState({
-        flipped: false
+        flipped: false,
+        dirty: false
+      });
+    }
+
+    if (prevProps.card.updated !== this.props.card.updated) {
+      this.setState({
+        dirty: false
+      });
+    }
+
+    // Mark as updated
+    if (
+      this.props.card.id &&
+      prevProps.card.id === this.props.card.id &&
+      (prevState.question !== this.state.question ||
+        prevState.answer !== this.state.answer)
+    ) {
+      this.setState({
+        dirty: true
       });
     }
 
@@ -179,6 +199,19 @@ class FlashCard extends PureComponent {
     }
   }
 
+  canSubmit() {
+    return this.state.question !== "" && this.state.answer !== "";
+  }
+
+  canUpdate() {
+    return (
+      this.state.dirty &&
+      !this.props.requesting &&
+      this.state.question !== "" &&
+      this.state.answer !== ""
+    );
+  }
+
   closeDeleteDialog() {
     this.setState({
       deleteDialogOpen: false
@@ -207,11 +240,15 @@ class FlashCard extends PureComponent {
   submit() {
     if (this.props.card.id) {
       // Update
-      this.props.dispatch(updateCard(this.props.card.id, this.value()));
+      if (this.canUpdate()) {
+        this.props.dispatch(updateCard(this.props.card.id, this.value()));
+      }
     } else {
       // Create
-      this.props.dispatch(addCard(this.value(), this.props.subjectId));
-      this.resetCard();
+      if (this.canSubmit()) {
+        this.props.dispatch(addCard(this.value(), this.props.subjectId));
+        this.resetCard();
+      }
     }
   }
 
@@ -321,7 +358,12 @@ class FlashCard extends PureComponent {
   renderSubmitButton() {
     if (!this.props.card.id && !this.props.test) {
       return (
-        <Button small primary onClick={this.onClickAddCard}>
+        <Button
+          small
+          primary
+          onClick={this.onClickAddCard}
+          disabled={!this.canSubmit()}
+        >
           Add
         </Button>
       );
@@ -336,7 +378,7 @@ class FlashCard extends PureComponent {
         <Button
           small
           primary
-          disabled={!!this.props.card.requesting}
+          disabled={!this.canUpdate()}
           onClick={this.onClickUpdateCard}
         >
           Update
@@ -367,6 +409,7 @@ class FlashCard extends PureComponent {
     return (
       <div
         className={classNames(styles.flashCard, {
+          [styles.dirty]: this.state.dirty,
           [styles.highlightUpdate]: this.state.highlightUpdate,
           [styles.deleting]: this.state.deleteDialogOpen,
           [styles.selected]: this.props.selected,

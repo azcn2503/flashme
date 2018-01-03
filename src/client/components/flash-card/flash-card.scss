@@ -26,6 +26,10 @@
     transform: scale(1.5);
   }
 
+  &.dirty {
+    border-color: $dark-grey;
+  }
+
   &.showBothSides .face {
     position: relative;
   }
