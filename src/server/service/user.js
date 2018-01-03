@@ -94,6 +94,7 @@ class UserService {
       .then(hash => {
         const user = {
           id: uuidv4(),
+          created: Date.now(),
           username,
           email,
           password: hash
