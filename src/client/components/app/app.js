@@ -42,13 +42,14 @@ class App extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.user.loggedIn !== this.props.user.loggedIn &&
-      !this.props.user.loggedIn
-    ) {
-      this.props.dispatch(resetSubjects());
-      this.props.dispatch(resetCards());
-      this.props.dispatch(resetTests());
+    if (prevProps.user.loggedIn !== this.props.user.loggedIn) {
+      if (!this.props.user.loggedIn) {
+        this.props.dispatch(resetSubjects());
+        this.props.dispatch(resetCards());
+        this.props.dispatch(resetTests());
+      } else {
+        this.props.history.push("/subjects");
+      }
     }
   }
 
@@ -118,7 +119,6 @@ class App extends PureComponent {
         </div>
       );
     } else {
-      this.props.history.push("/subjects");
       return null;
     }
   }
