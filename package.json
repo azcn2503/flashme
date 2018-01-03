@@ -38,6 +38,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sass-loader": "^6.0.6",
+    "sass-mediaqueries": "^1.6.1",
     "source-map-support": "^0.5.0",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^1.1.5",
@@ -67,8 +68,7 @@
     "clean": "rm -rf dist",
     "start": "node dist/server/server-bundle.js",
     "start:debug": "nodemon --inspect dist/server/server-bundle.js",
-    "start:dev":
-      "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
+    "start:dev": "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
     "build": "webpack",
     "build:dev": "webpack --progress --watch",
     "lint": "eslint",
