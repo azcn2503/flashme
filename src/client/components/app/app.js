@@ -32,6 +32,7 @@ class App extends PureComponent {
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
     this.renderTest = this.renderTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
+    this.renderWelcome = this.renderWelcome.bind(this);
   }
 
   componentWillMount() {
@@ -75,48 +76,49 @@ class App extends PureComponent {
   }
 
   renderLoggedInContent() {
-    if (this.props.user.loggedIn) {
+    return (
+      <Switch>
+        <Route path="/subjects" component={this.renderSubjects} exact />
+        <Route
+          path="/subject/:subjectId/test/:testId"
+          component={this.renderTest}
+          exact
+        />
+        <Route
+          path="/subject/:subjectId/tests"
+          component={this.renderSubjectTests}
+          exact
+        />
+        <Route
+          path="/subject/:subjectId"
+          component={this.renderSubjectCards}
+          exact
+        />
+        <Route path="/" component={this.renderWelcome} exact />
+        <Redirect to="/subjects" />
+      </Switch>
+    );
+  }
+
+  renderWelcome() {
+    if (!this.props.user.loggedIn) {
       return (
-        <Switch>
-          <Route path="/subjects" component={this.renderSubjects} exact />
-          <Route
-            path="/subject/:subjectId/test/:testId"
-            component={this.renderTest}
-            exact
-          />
-          <Route
-            path="/subject/:subjectId/tests"
-            component={this.renderSubjectTests}
-            exact
-          />
-          <Route
-            path="/subject/:subjectId"
-            component={this.renderSubjectCards}
-            exact
-          />
-          <Redirect to="/subjects" />
-        </Switch>
+        <div className={styles.content}>
+          <div className={styles.notLoggedIn}>
+            <Subheader label="Welcome to FlashMe!" />
+            <div className={styles.appDescription}>
+              <p>A flash card app.</p>
+              <p>
+                Please login or register to start creating subjects, cards and
+                tests.
+              </p>
+            </div>
+            <Login className={styles.login} />
+          </div>
+        </div>
       );
     } else {
-      if (!this.props.user.loggedIn) {
-        return (
-          <div className={styles.content}>
-            <div className={styles.notLoggedIn}>
-              <Subheader label="Welcome to FlashMe!" />
-              <div className={styles.appDescription}>
-                <p>A flash card app.</p>
-                <p>
-                  Please login or register to start creating subjects, cards and
-                  tests.
-                </p>
-              </div>
-              <Login className={styles.login} />
-            </div>
-          </div>
-        );
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 
