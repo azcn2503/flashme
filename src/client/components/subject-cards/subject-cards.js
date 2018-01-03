@@ -69,12 +69,7 @@ class SubjectCards extends PureComponent {
   }
 
   getTestsForSubject() {
-    if (
-      this.props.tests.allIds.length === 0 ||
-      !Object.values(this.props.tests.byId).find(
-        test => test.subjectId === this.props.subjectId
-      )
-    ) {
+    if (this.props.tests.allIds.length === 0 || !this.props.tests.requesting) {
       this.props.dispatch(getTestsForSubject(this.props.subjectId));
     }
   }
