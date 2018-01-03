@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
@@ -34,6 +35,7 @@ class Tooltip extends PureComponent {
 
   componentWillUnmount() {
     this.removeListeners();
+    this.props.dispatch(hideTooltip());
   }
 
   addListeners() {
@@ -57,9 +59,9 @@ class Tooltip extends PureComponent {
   onMouseOver(e) {
     if (e.target && !this.props.disabled && !this.props.open) {
       const targetBox = e.target.getBoundingClientRect();
-      const { x, y, width, height } = targetBox;
+      const { left, top, width, height } = targetBox;
       this.props.dispatch(
-        showTooltip({ x, y, width, height, message: this.props.message })
+        showTooltip({ left, top, width, height, message: this.props.message })
       );
     }
   }
@@ -78,5 +80,13 @@ class Tooltip extends PureComponent {
     );
   }
 }
+
+Tooltip.propTypes = {
+  children: PropTypes.node,
+  dispatch: PropTypes.func,
+  message: PropTypes.string,
+  disabled: PropTypes.bool,
+  open: PropTypes.bool
+};
 
 export default connect(Tooltip.mapStateToProps)(Tooltip);

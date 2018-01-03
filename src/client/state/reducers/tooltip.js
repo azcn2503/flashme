@@ -3,8 +3,8 @@ import * as actions from "client/state/actions/tooltip";
 const defaultState = {
   open: false,
   message: null,
-  x: 0,
-  y: 0,
+  left: 0,
+  top: 0,
   width: 0,
   height: 0
 };
@@ -15,8 +15,8 @@ const reducer = (state = defaultState, action) => {
       return {
         open: true,
         message: action.message,
-        x: action.x,
-        y: action.y,
+        left: action.left,
+        top: action.top,
         width: action.width,
         height: action.height
       };
