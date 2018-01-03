@@ -118,6 +118,7 @@ class App extends PureComponent {
         </div>
       );
     } else {
+      this.props.history.push("/subjects");
       return null;
     }
   }
