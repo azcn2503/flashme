@@ -8,9 +8,7 @@
     "path": "dist/server",
     "logLevel": "debug"
   },
-  "db": {
-    "url": ""
-  },
+  "db": {},
   "http": {
     "port": 3000
   }
