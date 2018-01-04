@@ -9,7 +9,7 @@
     "logLevel": "debug"
   },
   "db": {
-    "url": "mongodb://demo:demo@ds161336.mlab.com:61336/flashme"
+    "url": ""
   },
   "http": {
     "port": 3000
