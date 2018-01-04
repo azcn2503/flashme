@@ -18,27 +18,14 @@
   justify-content: center;
   pointer-events: none;
 
-  &.opening,
   &.open {
     opacity: 1;
+    pointer-events: all;
 
     .window {
       transform: translateY(0);
       opacity: 1;
     }
-  }
-
-  &.closing {
-    opacity: 0;
-
-    .window {
-      transform: translateY(-$margin-medium);
-      opacity: 0;
-    }
-  }
-
-  &.open {
-    pointer-events: all;
   }
 
   .background {

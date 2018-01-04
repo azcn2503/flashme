@@ -7,65 +7,23 @@ import styles from "./dialog.scss";
 class Dialog extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-      opening: false,
-      closing: false
-    };
     this._parent = null;
     this._container = null;
     this.onClickBackground = this.onClickBackground.bind(this);
-    this.onContainerTransitionEnd = this.onContainerTransitionEnd.bind(this);
     this.onKeyDownWindow = this.onKeyDownWindow.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener("keydown", this.onKeyDownWindow);
-    if (this._container) {
-      this._container.addEventListener(
-        "transitionend",
-        this.onContainerTransitionEnd
-      );
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.open !== this.props.open) {
-      if (nextProps.open) {
-        this.open();
-      } else {
-        this.close();
-      }
-    }
   }
 
   componentWillUnmount() {
     window.removeEventListener("keydown", this.onKeyDownWindow);
-    if (this._container) {
-      this._container.removeEventListener(
-        "transitionend",
-        this.onContainerTransitionEnd
-      );
-    }
   }
 
   onKeyDownWindow(e) {
     if (e.keyCode === 27 && this.state.open && !this.state.closing) {
       this.close();
-    }
-  }
-
-  onContainerTransitionEnd() {
-    if (this.state.opening && !this.state.open) {
-      this.setState({
-        open: true,
-        opening: false
-      });
-    } else if (this.state.closing && this.state.open) {
-      this.setState({
-        open: false,
-        closing: false
-      });
     }
   }
 
@@ -76,18 +34,14 @@ class Dialog extends PureComponent {
   }
 
   close() {
-    this.setState({
-      closing: true
-    });
+    this.props.hideDialog();
     if (this.props.onClose) {
       this.props.onClose(this);
     }
   }
 
   open() {
-    this.setState({
-      opening: true
-    });
+    this.props.showDialog();
     if (this.props.onOpen) {
       this.props.onOpen(this);
     }
@@ -122,9 +76,7 @@ class Dialog extends PureComponent {
       <div
         ref={el => (this._container = el)}
         className={classNames(styles.dialog, {
-          [styles.open]: this.state.open,
-          [styles.opening]: this.state.opening,
-          [styles.closing]: this.state.closing
+          [styles.open]: this.props.open
         })}
       >
         <div className={styles.background} onClick={this.onClickBackground} />
@@ -145,7 +97,9 @@ Dialog.propTypes = {
   onClose: PropTypes.func,
   header: PropTypes.node,
   body: PropTypes.node,
-  footer: PropTypes.node
+  footer: PropTypes.node,
+  hideDialog: PropTypes.func,
+  showDialog: PropTypes.func
 };
 
 Dialog.defaultProps = {

@@ -72,7 +72,14 @@ class Subjects extends PureComponent {
   renderSubjects() {
     return Object.values(this.props.subjects.byId)
       .filter(this.filterSubjectBySearchTerm)
-      .map((subject, key) => <SubjectCard key={key} subject={subject} />);
+      .map((subject, key) => (
+        <SubjectCard
+          key={key}
+          subject={subject}
+          showDialog={this.props.showDialog}
+          hideDialog={this.props.hideDialog}
+        />
+      ));
   }
 
   getSubjectCount() {
@@ -103,7 +110,9 @@ class Subjects extends PureComponent {
 
 Subjects.propTypes = {
   dispatch: PropTypes.func,
-  subjects: SUBJECTS_PROPTYPE
+  subjects: SUBJECTS_PROPTYPE,
+  showDialog: PropTypes.func,
+  hideDialog: PropTypes.func
 };
 
 export default connect(Subjects.mapStateToProps)(Subjects);

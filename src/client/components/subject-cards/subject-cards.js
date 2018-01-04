@@ -137,6 +137,8 @@ class SubjectCards extends PureComponent {
         showBothSides={this.state.showBothSides}
         selected={card.selected}
         editable
+        showDialog={this.props.showDialog}
+        hideDialog={this.props.hideDialog}
       />
     );
   }
@@ -153,6 +155,8 @@ class SubjectCards extends PureComponent {
           subjectId={this.props.subjectId}
           editable
           showBothSides={this.state.showBothSides}
+          showDialog={this.props.showDialog}
+          hideDialog={this.props.hideDialog}
         />
         {this.props.cards ? cards.map(this.renderCard) : null}
       </div>
@@ -244,7 +248,8 @@ SubjectCards.propTypes = {
   subjects: SUBJECTS_PROPTYPE,
   tests: TESTS_PROPTYPE,
   subjectId: PropTypes.string,
-  testId: PropTypes.string
+  testId: PropTypes.string,
+  showDialog: PropTypes.func
 };
 
 export default connect(SubjectCards.mapStateToProps)(SubjectCards);

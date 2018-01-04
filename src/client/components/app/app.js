@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 
+import Dialog from "client/components/dialog/dialog";
 import TooltipElement from "client/components/tooltip-element/tooltip-element";
 import SubjectCards from "client/components/subject-cards/subject-cards";
 import Navigation from "client/components/navigation/navigation";
@@ -28,12 +29,21 @@ class App extends PureComponent {
 
   constructor(props) {
     super(props);
+    this.state = {
+      dialogOpen: false,
+      dialogHeader: null,
+      dialogBody: null,
+      dialogFooter: null
+    };
     this.renderSubjects = this.renderSubjects.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
+    this.renderSubjectTests = this.renderSubjectTests.bind(this);
     this.renderTest = this.renderTest.bind(this);
     this.renderNavigation = this.renderNavigation.bind(this);
     this.renderWelcome = this.renderWelcome.bind(this);
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.showDialog = this.showDialog.bind(this);
+    this.hideDialog = this.hideDialog.bind(this);
   }
 
   componentWillMount() {
@@ -54,27 +64,63 @@ class App extends PureComponent {
     }
   }
 
+  showDialog(header, body, footer) {
+    this.setState({
+      dialogOpen: true,
+      dialogHeader: header,
+      dialogBody: body,
+      dialogFooter: footer
+    });
+  }
+
+  hideDialog() {
+    this.setState({
+      dialogOpen: false
+    });
+  }
+
   onLoginSuccess() {
     this.props.history.push("/subjects");
   }
 
   renderSubjects() {
-    return <Subjects />;
+    return (
+      <Subjects showDialog={this.showDialog} hideDialog={this.hideDialog} />
+    );
   }
 
   renderSubjectCards(routerProps) {
     const { subjectId } = routerProps.match.params;
-    return <SubjectCards subjectId={subjectId} />;
+    return (
+      <SubjectCards
+        subjectId={subjectId}
+        showDialog={this.showDialog}
+        hideDialog={this.hideDialog}
+      />
+    );
   }
 
   renderSubjectTests(routerProps) {
     const { subjectId } = routerProps.match.params;
-    return <SubjectTests subjectId={subjectId} />;
+    return (
+      <SubjectTests
+        subjectId={subjectId}
+        showDialog={this.showDialog}
+        hideDialog={this.hideDialog}
+      />
+    );
   }
 
   renderTest(routerProps) {
     const { subjectId, testId } = routerProps.match.params;
-    return <Test subjectId={subjectId} testId={testId} />;
+    return (
+      <Test
+        subjectId={subjectId}
+        testId={testId}
+        showDialog={this.showDialog}
+        hideDialog={this.hideDialog}
+      />
+    );
   }
 
   renderNavigation(routerProps) {
@@ -82,6 +128,8 @@ class App extends PureComponent {
       <Navigation
         routerProps={routerProps}
         onLoginSuccess={this.onLoginSuccess}
+        showDialog={this.showDialog}
+        hideDialog={this.hideDialog}
       />
     );
   }
@@ -161,6 +209,14 @@ class App extends PureComponent {
           <Route component={this.renderNavigation} />
         </Switch>
         {this.renderLoggedInContent()}
+        <Dialog
+          open={this.state.dialogOpen}
+          showDialog={this.showDialog}
+          hideDialog={this.hideDialog}
+          header={this.state.dialogHeader}
+          body={this.state.dialogBody}
+          footer={this.state.dialogFooter}
+        />
         <TooltipElement />
       </div>
     );

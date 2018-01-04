@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 
 import { logout } from "client/state/actions/user";
-import Dialog from "client/components/dialog/dialog";
 import Login from "client/components/login/login";
 import {
   SUBJECTS_PROPTYPE,
@@ -28,21 +27,16 @@ class Navigation extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loginDialogOpen: false,
-      loginActions: null
-    };
-    this._login = null;
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.onClickLoginOrRegister = this.onClickLoginOrRegister.bind(this);
-    this.onCloseLoginDialog = this.onCloseLoginDialog.bind(this);
     this.onClickLogout = this.onClickLogout.bind(this);
   }
 
   onClickLoginOrRegister() {
-    this.setState({
-      loginDialogOpen: true
-    });
+    this.props.showDialog(
+      "Login / Register",
+      <Login className={styles.login} onLoginSuccess={this.onLoginSuccess} />
+    );
   }
 
   onClickLogout() {
@@ -51,16 +45,7 @@ class Navigation extends PureComponent {
     });
   }
 
-  onCloseLoginDialog() {
-    this.setState({
-      loginDialogOpen: false
-    });
-  }
-
   onLoginSuccess() {
-    this.setState({
-      loginDialogOpen: false
-    });
     this.props.onLoginSuccess();
   }
 
@@ -183,19 +168,6 @@ class Navigation extends PureComponent {
       <div className={styles.navigation}>
         <div className={styles.route}>{this.renderRoute()}</div>
         {this.renderUser()}
-        <Dialog
-          open={this.state.loginDialogOpen}
-          onClose={this.onCloseLoginDialog}
-          header="Login / Register"
-          body={
-            <Login
-              className={styles.login}
-              ref={el => (this._login = el)}
-              dispatch={this.props.dispatch}
-              onSuccess={this.onLoginSuccess}
-            />
-          }
-        />
       </div>
     );
   }
@@ -211,7 +183,8 @@ Navigation.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }),
-  onLoginSuccess: PropTypes.func
+  onLoginSuccess: PropTypes.func,
+  showDialog: PropTypes.func
 };
 
 export default withRouter(connect(Navigation.mapStateToProps)(Navigation));

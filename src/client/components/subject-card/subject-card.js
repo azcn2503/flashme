@@ -11,7 +11,6 @@ import {
   TESTS_PROPTYPE
 } from "../../proptypes";
 import Button from "../button/button";
-import Dialog from "../dialog/dialog";
 
 import { removeSubject } from "../../state/actions/subjects";
 import { addTest } from "../../state/actions/tests";
@@ -88,15 +87,15 @@ class SubjectCard extends PureComponent {
   }
 
   openDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: true
-    });
+    this.props.showDialog(
+      "Delete subject?",
+      this.renderDeleteDialogBody(),
+      this.renderDeleteDialogActions()
+    );
   }
 
   closeDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: false
-    });
+    this.props.hideDialog();
   }
 
   getCardCount() {
@@ -134,37 +133,33 @@ class SubjectCard extends PureComponent {
     ];
   }
 
-  renderDeleteDialog() {
+  renderDeleteDialogBody() {
     const cardCount = this.getCardCount();
     const testCount = this.getTestCount();
     return (
-      <Dialog
-        open={this.state.deleteDialogOpen}
-        onClose={this.onCloseDeleteDialog}
-        header="Delete subject?"
-        body={
-          <div>
-            <p>
-              Are you sure you want to delete this subject and all of its cards
-              and tests?
-            </p>
-            <p>{`${this.props.subject.title ||
-              "No title"} (${cardCount} ${pluralize(
-              "card",
-              cardCount
-            )} and ${testCount} ${pluralize("test", testCount)})`}</p>
-          </div>
-        }
-        footer={[
-          <Button key={0} delete onClick={this.onClickConfirmDelete}>
-            Yes, delete this subject
-          </Button>,
-          <Button key={1} onClick={this.onClickCancelDelete}>
-            No, cancel
-          </Button>
-        ]}
-      />
+      <div>
+        <p>
+          Are you sure you want to delete this subject and all of its cards and
+          tests?
+        </p>
+        <p>{`${this.props.subject.title ||
+          "No title"} (${cardCount} ${pluralize(
+          "card",
+          cardCount
+        )} and ${testCount} ${pluralize("test", testCount)})`}</p>
+      </div>
     );
+  }
+
+  renderDeleteDialogActions() {
+    return [
+      <Button key={0} delete onClick={this.onClickConfirmDelete}>
+        Yes, delete this subject
+      </Button>,
+      <Button key={1} onClick={this.onClickCancelDelete}>
+        No, cancel
+      </Button>
+    ];
   }
 
   render() {
@@ -202,7 +197,6 @@ class SubjectCard extends PureComponent {
               </Button>
             </div>
           </div>
-          {this.renderDeleteDialog()}
         </div>
       );
     } else {
@@ -218,7 +212,9 @@ SubjectCard.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
-  })
+  }),
+  showDialog: PropTypes.func,
+  hideDialog: PropTypes.func
 };
 
 SubjectCard.defaultProps = {

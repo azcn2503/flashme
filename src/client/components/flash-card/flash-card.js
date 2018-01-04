@@ -6,7 +6,6 @@ import { CARD_PROPTYPE } from "../../proptypes";
 import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
 import EditableContent from "../editable-content/editable-content";
-import Dialog from "../dialog/dialog";
 
 import styles from "./flash-card.scss";
 
@@ -36,7 +35,6 @@ class FlashCard extends PureComponent {
     this.onKeyDownAnswer = this.onKeyDownAnswer.bind(this);
     this.onClickFlip = this.onClickFlip.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
-    this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
     this.onClickConfirmDelete = this.onClickConfirmDelete.bind(this);
     this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
     this.onClickAddCard = this.onClickAddCard.bind(this);
@@ -142,16 +140,20 @@ class FlashCard extends PureComponent {
   }
 
   onClickDelete(e) {
-    this.openDeleteDialog();
+    this.props.showDialog(
+      "Delete card?",
+      this.renderDeleteDialogBody(),
+      this.renderDeleteDialogActions()
+    );
   }
 
   onClickCancelDelete() {
-    this.closeDeleteDialog();
+    this.props.hideDialog();
   }
 
   onClickConfirmDelete() {
-    this.closeDeleteDialog();
     this.props.dispatch(removeCard(this.props.card.id));
+    this.props.hideDialog();
   }
 
   onClickFlip(e) {
@@ -165,12 +167,6 @@ class FlashCard extends PureComponent {
 
   onClickUpdateCard() {
     this.submit();
-  }
-
-  onCloseDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: false
-    });
   }
 
   onAnswerTestCard(value) {
@@ -210,18 +206,6 @@ class FlashCard extends PureComponent {
       this.state.question !== "" &&
       this.state.answer !== ""
     );
-  }
-
-  closeDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: false
-    });
-  }
-
-  openDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: true
-    });
   }
 
   highlightUpdate() {
@@ -330,29 +314,25 @@ class FlashCard extends PureComponent {
     }
   }
 
-  renderDeleteDialog() {
+  renderDeleteDialogBody() {
     return (
-      <Dialog
-        open={this.state.deleteDialogOpen}
-        onClose={this.onCloseDeleteDialog}
-        header="Delete card?"
-        body={
-          <div>
-            <p>Are you sure you want to delete this card?</p>
-            <p>Question: {this.props.card.question || "No question"}</p>
-            <p>Answer: {this.props.card.answer || "No answer"}</p>
-          </div>
-        }
-        footer={[
-          <Button key={0} delete onClick={this.onClickConfirmDelete}>
-            Yes, delete this card
-          </Button>,
-          <Button key={1} onClick={this.onClickCancelDelete}>
-            No, cancel
-          </Button>
-        ]}
-      />
+      <div>
+        <p>Are you sure you want to delete this card?</p>
+        <p>Question: {this.props.card.question || "No question"}</p>
+        <p>Answer: {this.props.card.answer || "No answer"}</p>
+      </div>
     );
+  }
+
+  renderDeleteDialogActions() {
+    return [
+      <Button key={0} delete onClick={this.onClickConfirmDelete}>
+        Yes, delete this card
+      </Button>,
+      <Button key={1} onClick={this.onClickCancelDelete}>
+        No, cancel
+      </Button>
+    ];
   }
 
   renderSubmitButton() {
@@ -443,7 +423,6 @@ class FlashCard extends PureComponent {
           />
         </div>
         {this.renderControls()}
-        {this.renderDeleteDialog()}
       </div>
     );
   }
@@ -462,7 +441,9 @@ FlashCard.propTypes = {
   selected: PropTypes.bool,
   dispatch: PropTypes.func,
   showControls: PropTypes.bool,
-  requesting: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+  requesting: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  showDialog: PropTypes.func,
+  hideDialog: PropTypes.func
 };
 
 FlashCard.defaultProps = {

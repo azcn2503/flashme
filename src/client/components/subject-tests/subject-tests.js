@@ -7,7 +7,6 @@ import pluralize from "pluralize";
 
 import Tooltip from "client/components/tooltip/tooltip";
 import Button from "client/components/button/button";
-import Dialog from "client/components/dialog/dialog";
 import Subheader from "client/components/subheader/subheader";
 import TestStatus from "client/components/test-status/test-status";
 import TestProgress from "client/components/test-progress/test-progress";
@@ -60,29 +59,24 @@ class SubjectTests extends PureComponent {
   }
 
   onClickDeleteTest(testId) {
-    this.setState({
-      deleteTest: this.props.tests.byId[testId],
-      deleteDialogOpen: true
-    });
+    this.props.showDialog(
+      "Delete test?",
+      this.renderDeleteDialogBody(testId),
+      this.renderDeleteDialogActions(testId)
+    );
   }
 
-  onClickConfirmDeleteTest() {
-    this.props.dispatch(removeTest(this.state.deleteTest.id));
-    this.setState({
-      deleteDialogOpen: false
-    });
+  onClickConfirmDeleteTest(testId) {
+    this.props.dispatch(removeTest(testId));
+    this.props.hideDialog();
   }
 
   onClickCancelDeleteTest() {
-    this.setState({
-      deleteDialogOpen: false
-    });
+    this.props.hideDialog();
   }
 
   onCloseDeleteDialog() {
-    this.setState({
-      deleteDialogOpen: false
-    });
+    this.props.hideDialog();
   }
 
   onClickAddTest() {
@@ -256,35 +250,32 @@ class SubjectTests extends PureComponent {
     );
   }
 
-  renderDeleteDialog() {
-    const { deleteTest } = this.state;
+  renderDeleteDialogBody(testId) {
+    const test = this.props.tests.byId[testId];
     return (
-      <Dialog
-        open={this.state.deleteDialogOpen}
-        onClose={this.onCloseDeleteDialog}
-        header="Delete test?"
-        body={
-          deleteTest ? (
-            <div>
-              <p>Are you sure you want to delete test {deleteTest.id}?</p>
-              <p>
-                This test was created {moment(deleteTest.created).fromNow()} and
-                contains {deleteTest.cards.length}{" "}
-                {pluralize("card", deleteTest.cards.length)}.
-              </p>
-            </div>
-          ) : null
-        }
-        footer={[
-          <Button key={0} delete onClick={this.onClickConfirmDeleteTest}>
-            Yes, delete this test
-          </Button>,
-          <Button key={1} onClick={this.onClickCancelDeleteTest}>
-            No, cancel
-          </Button>
-        ]}
-      />
+      <div>
+        <p>Are you sure you want to delete test {test.id}?</p>
+        <p>
+          This test was created {moment(test.created).fromNow()} and contains{" "}
+          {test.cards.length} {pluralize("card", test.cards.length)}.
+        </p>
+      </div>
     );
+  }
+
+  renderDeleteDialogActions(testId) {
+    return [
+      <Button
+        key={0}
+        delete
+        onClick={() => this.onClickConfirmDeleteTest(testId)}
+      >
+        Yes, delete this test
+      </Button>,
+      <Button key={1} onClick={this.onClickCancelDeleteTest}>
+        No, cancel
+      </Button>
+    ];
   }
 
   render() {
@@ -298,7 +289,6 @@ class SubjectTests extends PureComponent {
             {this.renderActions()}
           </div>
           {this.renderTestList(tests)}
-          {this.renderDeleteDialog()}
         </div>
       );
     } else {
@@ -314,7 +304,9 @@ SubjectTests.propTypes = {
   tests: TESTS_PROPTYPE,
   history: PropTypes.shape({
     push: PropTypes.func
-  })
+  }),
+  showDialog: PropTypes.func,
+  hideDialog: PropTypes.func
 };
 
 export default withRouter(connect(SubjectTests.mapStateToProps)(SubjectTests));
