@@ -86,7 +86,6 @@ const serverConfig = mergeWith(
     },
     plugins: [
       new webpack.DefinePlugin({
-        "process.env.MONGO_URL": JSON.stringify(process.env.MONGO_URL),
         "process.env.NODE_ENV": JSON.stringify(
           process.env.NODE_ENV || "development"
         )
