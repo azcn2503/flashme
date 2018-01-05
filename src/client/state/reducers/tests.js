@@ -256,7 +256,8 @@ const reducer = (state = defaultState, action) => {
               ...state.byId[action.testId].cards.slice(0, action.cardIndex),
               {
                 ...state.byId[action.testId].cards[action.cardIndex],
-                correct: action.correct
+                correct: action.correct,
+                answered: true
               },
               ...state.byId[action.testId].cards.slice(action.cardIndex + 1)
             ]

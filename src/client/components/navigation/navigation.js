@@ -45,24 +45,16 @@ class Navigation extends PureComponent {
     });
   }
 
-  onLoginSuccess() {
-    this.props.onLoginSuccess();
+  onClickCardsButton(subjectId) {
+    this.props.history.push(`/subject/${subjectId}`);
   }
 
-  /**
-   * Build a link
-   * @param {array} splitPath
-   * @param {array} splitUrl
-   * @param {number} index
-   * @param {string} text
-   * @param {string} segmentOverride
-   */
-  buildLink(splitPath, splitUrl, index, text, segmentOverride) {
-    const url = [
-      ...splitUrl.slice(0, index + (segmentOverride ? 0 : 1)),
-      segmentOverride
-    ].join("/");
-    return <Link to={url}>{text}</Link>;
+  onClickTestsButton(subjectId) {
+    this.props.history.push(`/subject/${subjectId}/tests`);
+  }
+
+  onLoginSuccess() {
+    this.props.onLoginSuccess();
   }
 
   /**
@@ -77,36 +69,54 @@ class Navigation extends PureComponent {
     }
   }
 
+  renderSubjectLink() {
+    const { subjectId } = this.props.routerProps.match.params;
+    const subject = this.props.subjects.byId[subjectId];
+    if (subject) {
+      return <Link to={`/subject/${subjectId}`}>{subject.title}</Link>;
+    } else {
+      return this.renderLoadingMessage(this.props.subjects);
+    }
+  }
+
+  renderSubjectsLink() {
+    return <Link to="/subjects">Subjects</Link>;
+  }
+
+  renderTestLink() {
+    const { subjectId, testId } = this.props.routerProps.match.params;
+    const test = this.props.tests.byId[testId];
+    if (test) {
+      return <Link to={`/subject/${subjectId}/test/${testId}`}>Test</Link>;
+    } else {
+      return this.renderLoadingMessage(this.props.tests);
+    }
+  }
+
+  renderTestsLink() {
+    const { subjectId } = this.props.routerProps.match.params;
+    const subject = this.props.subjects.byId[subjectId];
+    if (subject) {
+      return <Link to={`/subject/${subjectId}/tests`}>Tests</Link>;
+    } else {
+      return this.renderLoadingMessage(this.props.subjects);
+    }
+  }
+
   renderSegment(splitPath, splitUrl, index) {
     const path = splitPath[index];
     const url = splitUrl[index];
     switch (path) {
       case "subject":
       case "subjects":
-        return this.buildLink(
-          splitPath,
-          splitUrl,
-          index,
-          "Subjects",
-          "subjects"
-        );
+        return this.renderSubjectsLink();
       case ":subjectId":
-        const subject = this.props.subjects.byId[url];
-        if (subject) {
-          return this.buildLink(splitPath, splitUrl, index, subject.title);
-        } else {
-          return this.renderLoadingMessage(this.props.subjects);
-        }
+        return this.renderSubjectLink();
       case "test":
       case "tests":
-        return this.buildLink(splitPath, splitUrl, index, "Tests", "tests");
+        return this.renderTestsLink();
       case ":testId":
-        const test = this.props.tests.byId[url];
-        if (test) {
-          return this.buildLink(splitPath, splitUrl, index, test.id);
-        } else {
-          return this.renderLoadingMessage(this.props.tests);
-        }
+        return this.renderTestLink();
       default:
         return null;
     }
@@ -163,10 +173,44 @@ class Navigation extends PureComponent {
     }
   }
 
+  getSubjectFilteredTests(subjectId) {
+    return Object.values(this.props.tests.byId).filter(
+      test => test.subjectId === subjectId
+    );
+  }
+
+  getSubjectFilteredCards(subjectId) {
+    return Object.values(this.props.cards.byId).filter(
+      card => card.subjectId === subjectId
+    );
+  }
+
+  renderContextualActions() {
+    const { routerProps } = this.props;
+    const { subjectId, testId } = routerProps.match.params;
+    switch (routerProps.match.path) {
+      case "/subject/:subjectId":
+        return (
+          <Button onClick={() => this.onClickTestsButton(subjectId)}>
+            Tests ({this.getSubjectFilteredTests(subjectId).length})
+          </Button>
+        );
+      // case "/subject/:subjectId/tests":
+      //   return (
+      //     <Button onClick={() => this.onClickCardsButton(subjectId)}>
+      //       Cards ({this.getSubjectFilteredCards(subjectId).length})
+      //     </Button>
+      //   );
+    }
+  }
+
   render() {
     return (
       <div className={styles.navigation}>
         <div className={styles.route}>{this.renderRoute()}</div>
+        <div className={styles.contextualActions}>
+          {this.renderContextualActions()}
+        </div>
         {this.renderUser()}
       </div>
     );
@@ -178,7 +222,9 @@ Navigation.propTypes = {
   subjects: SUBJECTS_PROPTYPE,
   tests: TESTS_PROPTYPE,
   user: USER_PROPTYPE,
-  routerProps: PropTypes.object,
+  routerProps: PropTypes.shape({
+    match: PropTypes.object
+  }),
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func

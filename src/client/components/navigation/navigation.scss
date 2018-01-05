@@ -11,7 +11,7 @@
 
   .route {
     display: flex;
-    flex-grow: 1;
+    margin-right: $margin-large;
 
     & > * {
       margin-right: $margin-medium;
@@ -20,6 +20,10 @@
         margin-right: 0;
       }
     }
+  }
+
+  .contextualActions {
+    flex-grow: 1;
   }
 
   .userActions {

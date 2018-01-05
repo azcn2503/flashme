@@ -164,6 +164,7 @@ class SubjectCard extends PureComponent {
 
   render() {
     if (this.props.subject) {
+      const cardCount = this.getCardCount();
       return (
         <div className={styles.subjectCardContainer}>
           {this.renderFakeCards()}
@@ -174,9 +175,14 @@ class SubjectCard extends PureComponent {
             onMouseOver={this.scatterFakeCards}
           >
             <div className={styles.title}>
-              <NavLink to={`/subject/${this.props.subject.id}`}>
-                {this.props.subject.title} ({this.getCardCount()})
-              </NavLink>
+              <div className={styles.label}>
+                <NavLink to={`/subject/${this.props.subject.id}`}>
+                  {this.props.subject.title}
+                </NavLink>
+              </div>
+              <div className={styles.cardCount}>
+                {cardCount} {pluralize("card", cardCount)}
+              </div>
             </div>
             <div className={styles.controls}>
               <Button

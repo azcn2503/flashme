@@ -1,9 +1,21 @@
 $primary-color: rgb(0, 90, 180);
 $delete-color: rgb(180, 30, 0);
 $success-color: rgb(30, 180, 0);
+$failure-color: $delete-color;
 $light-grey: rgb(230, 232, 235);
 $dark-grey: rgb(130, 132, 135);
 $light-tan: rgb(240, 235, 232);
+
+$success-gradient: linear-gradient(
+  135deg,
+  transparentize($success-color, 0.8),
+  transparent
+);
+$failure-gradient: linear-gradient(
+  135deg,
+  transparentize($failure-color, 0.8),
+  transparent
+);
 
 $card-gradient: linear-gradient(135deg, $light-tan, white);
 

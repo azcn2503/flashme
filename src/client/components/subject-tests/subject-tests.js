@@ -11,6 +11,7 @@ import Subheader from "client/components/subheader/subheader";
 import TestStatus from "client/components/test-status/test-status";
 import TestProgress from "client/components/test-progress/test-progress";
 import { getSubject } from "client/state/actions/subjects";
+import { getCards } from "client/state/actions/cards";
 import {
   getTestsForSubject,
   removeTest,
@@ -19,16 +20,18 @@ import {
   startTest
 } from "client/state/actions/tests";
 import { testStatusEnum, testTypeEnum } from "shared/tests";
-import { SUBJECTS_PROPTYPE, TESTS_PROPTYPE } from "client/proptypes";
+import {
+  SUBJECTS_PROPTYPE,
+  CARDS_PROPTYPE,
+  TESTS_PROPTYPE
+} from "client/proptypes";
 
 import styles from "./subject-tests.scss";
 
 class SubjectTests extends PureComponent {
   static mapStateToProps(state) {
-    return {
-      subjects: state.subjects,
-      tests: state.tests
-    };
+    const { cards, subjects, tests } = state;
+    return { cards, subjects, tests };
   }
 
   constructor(props) {
@@ -43,11 +46,15 @@ class SubjectTests extends PureComponent {
     this.onClickConfirmDeleteTest = this.onClickConfirmDeleteTest.bind(this);
     this.onClickCancelDeleteTest = this.onClickCancelDeleteTest.bind(this);
     this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
+    this.onClickCardsButton = this.onClickCardsButton.bind(this);
   }
 
   componentDidMount() {
     if (!this.props.subjects.byId[this.props.subjectId]) {
       this.props.dispatch(getSubject(this.props.subjectId));
+    }
+    if (!this.subjectHasCards()) {
+      this.props.dispatch(getCards(this.props.subjectId));
     }
     if (!this.props.tests.requesting) {
       this.props.dispatch(getTestsForSubject(this.props.subjectId));
@@ -98,6 +105,22 @@ class SubjectTests extends PureComponent {
 
   onClickReviewTest(testId) {
     this.props.history.push(`/subject/${this.props.subjectId}/test/${testId}`);
+  }
+
+  onClickCardsButton() {
+    this.props.history.push(`/subject/${this.props.subjectId}`);
+  }
+
+  subjectHasCards() {
+    return Object.values(this.props.cards.byId).find(
+      card => card.subjectId === this.props.subjectId
+    );
+  }
+
+  getSubjectFilteredCards() {
+    return Object.values(this.props.cards.byId).filter(
+      card => card.subjectId === this.props.subjectId
+    );
   }
 
   getSubjectFilteredTests() {
@@ -237,10 +260,16 @@ class SubjectTests extends PureComponent {
   renderActions() {
     return (
       <div className={styles.actions}>
-        <Tooltip message="Add a new test for this subject">
+        <Tooltip
+          message={
+            this.subjectHasCards()
+              ? "Add a new test for this subject"
+              : "Add some cards to create a new test"
+          }
+        >
           <Button
             primary
-            disabled={this.props.tests.requesting}
+            disabled={this.props.tests.requesting || !this.subjectHasCards()}
             onClick={this.onClickAddTest}
           >
             New Test
@@ -285,7 +314,7 @@ class SubjectTests extends PureComponent {
       return (
         <div className={styles.subjectTests}>
           <div className={styles.subheader}>
-            <Subheader label={`${subject.title}: Tests (${tests.length})`} />
+            <Subheader label={`Tests for ${subject.title}`} />
             {this.renderActions()}
           </div>
           {this.renderTestList(tests)}
@@ -301,6 +330,7 @@ SubjectTests.propTypes = {
   dispatch: PropTypes.func,
   subjectId: PropTypes.string,
   subjects: SUBJECTS_PROPTYPE,
+  cards: CARDS_PROPTYPE,
   tests: TESTS_PROPTYPE,
   history: PropTypes.shape({
     push: PropTypes.func

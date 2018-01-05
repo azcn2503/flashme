@@ -132,16 +132,21 @@ class Test extends PureComponent {
             </thead>
             <tbody>
               {test.cards.map(card => (
-                <tr key={card.id}>
+                <tr
+                  key={card.id}
+                  className={classNames(styles.row, {
+                    [styles.correct]: card.answered && card.correct,
+                    [styles.incorrect]: card.answered && !card.correct
+                  })}
+                >
                   <td dangerouslySetInnerHTML={this.getQuestionMarkup(card)} />
                   <td dangerouslySetInnerHTML={this.getAnswerMarkup(card)} />
                   <td>
                     <div
-                      className={classNames({
-                        [styles.correct]: card.correct,
-                        [styles.incorrect]:
-                          card.hasOwnProperty("correct") && !card.correct,
-                        [styles.notAnswered]: !card.hasOwnProperty("correct")
+                      className={classNames(styles.correctStatus, {
+                        [styles.correct]: card.answered && card.correct,
+                        [styles.incorrect]: card.answered && !card.correct,
+                        [styles.notAnswered]: !card.answered
                       })}
                     >
                       {card.hasOwnProperty("correct")

@@ -1,9 +1,8 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { debounce } from "lodash";
-import pluralize from "pluralize";
 
 import {
   CARDS_PROPTYPE,
@@ -37,6 +36,7 @@ class SubjectCards extends PureComponent {
       filter: "",
       showBothSides: false
     };
+    this.onClickTestsButton = this.onClickTestsButton.bind(this);
     this.onClickShowBothSides = this.onClickShowBothSides.bind(this);
     this.onChangeFilter = this.onChangeFilter.bind(this);
     this.filterCardsBySearchTerm = this.filterCardsBySearchTerm.bind(this);
@@ -95,6 +95,10 @@ class SubjectCards extends PureComponent {
     this.props.dispatch(addCard(card, this.props.subjectId));
   }
 
+  onClickTestsButton() {
+    this.props.history.push(`/subject/${this.props.subjectId}/tests`);
+  }
+
   onClickShowBothSides() {
     this.setState({
       showBothSides: !this.state.showBothSides
@@ -131,7 +135,7 @@ class SubjectCards extends PureComponent {
     return (
       <FlashCard
         dispatch={this.props.dispatch}
-        key={key}
+        key={card.id || key}
         card={card}
         subjectId={this.props.subjectId}
         showBothSides={this.state.showBothSides}
@@ -202,19 +206,6 @@ class SubjectCards extends PureComponent {
     );
   }
 
-  renderTestsSummary() {
-    const tests = Object.values(this.props.tests.byId).filter(
-      test => test.subjectId === this.props.subjectId
-    );
-    return (
-      <div className={styles.testsSummary}>
-        <Link to={`/subject/${this.props.subjectId}/tests`}>
-          {tests.length} {pluralize("test", tests.length)} for this subject
-        </Link>
-      </div>
-    );
-  }
-
   render() {
     if (this.props.subjects.allIds.length > 0) {
       const subject = this.props.subjects.byId[this.props.subjectId];
@@ -229,7 +220,6 @@ class SubjectCards extends PureComponent {
               />
               {this.renderControls()}
             </div>
-            {this.renderTestsSummary()}
             {this.renderCardList()}
           </div>
         );
@@ -249,7 +239,10 @@ SubjectCards.propTypes = {
   tests: TESTS_PROPTYPE,
   subjectId: PropTypes.string,
   testId: PropTypes.string,
-  showDialog: PropTypes.func
+  showDialog: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  })
 };
 
-export default connect(SubjectCards.mapStateToProps)(SubjectCards);
+export default withRouter(connect(SubjectCards.mapStateToProps)(SubjectCards));

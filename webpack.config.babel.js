@@ -70,7 +70,7 @@ const baseConfig = {
     },
     extensions: [".js", ".jsx", ".json"]
   },
-  plugins: [new HardSourceWebpackPlugin()]
+  plugins: [new HardSourceWebpackPlugin(), new webpack.NoEmitOnErrorsPlugin()]
 };
 
 const serverConfig = mergeWith(

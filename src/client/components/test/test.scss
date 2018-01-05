@@ -60,16 +60,25 @@
       border-bottom-color: $light-grey;
     }
 
-    .correct {
-      color: $success-color;
+    .row {
+      &.correct {
+        background-image: $success-gradient;
+      }
+      &.incorrect {
+        background-image: $failure-gradient;
+      }
     }
 
-    .incorrect {
-      color: $delete-color;
-    }
-
-    .notAnswered {
-      color: $dark-grey;
+    .correctStatus {
+      &.correct {
+        color: $success-color;
+      }
+      &.incorrect {
+        color: $delete-color;
+      }
+      &.notAnswered {
+        color: $dark-grey;
+      }
     }
   }
 }

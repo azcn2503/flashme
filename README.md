@@ -22,7 +22,7 @@ yarn
 This will install the dependencies.
 
 ```sh
-yarn run build -- --watch
+yarn run build:dev
 ```
 
 This will build the server and the client, and watch your local files for changes.
@@ -30,7 +30,7 @@ This will build the server and the client, and watch your local files for change
 In another terminal, run the following command:
 
 ```sh
-yarn run start
+MONGO_URL=mongodb://username:password@some.mongo.connection yarn run start:dev
 ```
 
 This will run the server (required for the website to work) and will restart automatically when any changes are detected.

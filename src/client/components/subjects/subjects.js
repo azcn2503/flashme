@@ -72,9 +72,9 @@ class Subjects extends PureComponent {
   renderSubjects() {
     return Object.values(this.props.subjects.byId)
       .filter(this.filterSubjectBySearchTerm)
-      .map((subject, key) => (
+      .map(subject => (
         <SubjectCard
-          key={key}
+          key={subject.id}
           subject={subject}
           showDialog={this.props.showDialog}
           hideDialog={this.props.hideDialog}
@@ -94,10 +94,14 @@ class Subjects extends PureComponent {
     return (
       <div className={styles.subjects}>
         <div className={styles.subheader}>
-          <Subheader label={`Subjects (${this.getSubjectCount()})`} />
+          <Subheader label="Subjects" />
           <div className={styles.controls}>
             {this.renderFilters()}
-            <Button primary onClick={this.onClickAddSubject}>
+            <Button
+              primary
+              onClick={this.onClickAddSubject}
+              disabled={this.props.subjects.requesting}
+            >
               Add Subject
             </Button>
           </div>

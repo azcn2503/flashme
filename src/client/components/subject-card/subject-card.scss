@@ -48,11 +48,20 @@
 
   .title {
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: $padding-medium;
+
+    .cardCount {
+      color: $dark-grey;
+    }
+
+    & > * {
+      margin-bottom: $margin-medium;
+    }
   }
 
   .controls {
