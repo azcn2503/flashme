@@ -215,7 +215,11 @@ class Test extends PureComponent {
     ) {
       return (
         <Tooltip message="Retest the cards you failed on this test">
-          <Button primary onClick={this.onClickRetest}>
+          <Button
+            primary
+            onClick={this.onClickRetest}
+            disabled={this.props.tests.requesting}
+          >
             Retest
           </Button>
         </Tooltip>

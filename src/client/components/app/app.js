@@ -172,7 +172,10 @@ class App extends PureComponent {
                 tests.
               </p>
             </div>
-            <Login className={styles.login} onSuccess={this.onLoginSuccess} />
+            <Login
+              className={styles.login}
+              onLoginSuccess={this.onLoginSuccess}
+            />
           </div>
         </div>
       );

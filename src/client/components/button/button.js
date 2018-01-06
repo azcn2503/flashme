@@ -23,7 +23,7 @@ class Button extends PureComponent {
           [styles.small]: this.props.small,
           [styles.primary]: this.props.primary,
           [styles.delete]: this.props.delete,
-          [styles.disabled]: this.props.disabled
+          [styles.disabled]: !!this.props.disabled
         })}
         onClick={this.onClick}
         type={this.props.submit ? "submit" : undefined}
