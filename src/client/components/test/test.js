@@ -198,13 +198,21 @@ class Test extends PureComponent {
     const test = this.props.tests.byId[this.props.testId];
     if (test.status === testStatusEnum.NOT_STARTED) {
       return (
-        <Button primary onClick={this.onClickStartTest}>
+        <Button
+          primary
+          onClick={this.onClickStartTest}
+          disabled={this.props.tests.requesting}
+        >
           Start Test
         </Button>
       );
     } else if (test.status === testStatusEnum.STARTED) {
       return (
-        <Button delete onClick={this.onClickAbandonTest}>
+        <Button
+          delete
+          onClick={this.onClickAbandonTest}
+          disabled={this.props.tests.requesting}
+        >
           Abandon Test
         </Button>
       );
