@@ -55,6 +55,7 @@ class Navigation extends PureComponent {
 
   onLoginSuccess() {
     this.props.onLoginSuccess();
+    this.props.hideDialog();
   }
 
   /**
@@ -230,7 +231,8 @@ Navigation.propTypes = {
     push: PropTypes.func
   }),
   onLoginSuccess: PropTypes.func,
-  showDialog: PropTypes.func
+  showDialog: PropTypes.func,
+  hideDialog: PropTypes.func
 };
 
 export default withRouter(connect(Navigation.mapStateToProps)(Navigation));

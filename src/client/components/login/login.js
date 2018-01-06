@@ -134,8 +134,8 @@ class Login extends PureComponent {
       this.props
         .dispatch(login(this.state.username, this.state.password))
         .then(() => {
-          if (this.props.onSuccess) {
-            this.props.onSuccess();
+          if (this.props.onLoginSuccess) {
+            this.props.onLoginSuccess();
           }
         })
         .catch(err => {
@@ -285,7 +285,7 @@ Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
-  onSuccess: PropTypes.func,
+  onLoginSuccess: PropTypes.func,
   user: USER_PROPTYPE
 };
 
