@@ -50,6 +50,11 @@ class App extends PureComponent {
     if (!this.props.user.loggedIn) {
       this.props
         .dispatch(getCurrentUser())
+        .then(() => {
+          if (this.props.history.location.pathname === "/") {
+            this.props.history.push("/subjects");
+          }
+        })
         .catch(() => this.props.history.push("/"));
     }
   }

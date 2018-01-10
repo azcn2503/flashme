@@ -139,4 +139,8 @@ const reducer = (state = defaultState, action) => {
   }
 };
 
+export const getSubjectFilteredCards = (state, subjectId) => {
+  return Object.values(state.byId).filter(card => card.subjectId === subjectId);
+};
+
 export default reducer;

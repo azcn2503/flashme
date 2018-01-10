@@ -9,11 +9,13 @@ import {
   SUBJECT_PROPTYPE,
   CARDS_PROPTYPE,
   TESTS_PROPTYPE
-} from "../../proptypes";
-import Button from "../button/button";
-
-import { removeSubject } from "../../state/actions/subjects";
-import { addTest } from "../../state/actions/tests";
+} from "client/proptypes";
+import Button from "client/components/button/button";
+import Tooltip from "client/components/tooltip/tooltip";
+import { getSubjectFilteredCards } from "client/state/reducers/cards";
+import { getSubjectFilteredTests } from "client/state/reducers/tests";
+import { removeSubject } from "client/state/actions/subjects";
+import { addTest } from "client/state/actions/tests";
 
 import styles from "./subject-card.scss";
 
@@ -100,9 +102,7 @@ class SubjectCard extends PureComponent {
 
   getCardCount() {
     return (
-      Object.values(this.props.cards.byId).filter(
-        card => card.subjectId === this.props.subject.id
-      ).length ||
+      getSubjectFilteredCards(this.props.cards, this.props.subject.id).length ||
       this.props.subject.cardCount ||
       0
     );
@@ -110,9 +110,7 @@ class SubjectCard extends PureComponent {
 
   getTestCount() {
     return (
-      Object.values(this.props.tests.byId).filter(
-        test => test.subjectId === this.props.subject.id
-      ).length ||
+      getSubjectFilteredTests(this.props.tests, this.props.subject.id).length ||
       this.props.subject.testCount ||
       0
     );
@@ -185,14 +183,21 @@ class SubjectCard extends PureComponent {
               </div>
             </div>
             <div className={styles.controls}>
-              <Button
-                small
-                primary
-                disabled={this.props.tests.requesting}
-                onClick={this.onClickTest}
+              <Tooltip
+                disabled={this.getCardCount() !== 0}
+                message="Add some cards to start a new test"
               >
-                Test
-              </Button>
+                <Button
+                  small
+                  primary
+                  disabled={
+                    this.props.tests.requesting || this.getCardCount() === 0
+                  }
+                  onClick={this.onClickTest}
+                >
+                  Test
+                </Button>
+              </Tooltip>
               <Button
                 small
                 delete

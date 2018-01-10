@@ -10,9 +10,8 @@ import {
   TESTS_PROPTYPE
 } from "client/proptypes";
 import { getSubject, updateSubjectTitle } from "client/state/actions/subjects";
-import { getCards, addCard, answerTestCard } from "client/state/actions/cards";
-import { getTestsForSubject } from "client/state/actions/tests";
-import { startTest } from "client/state/actions/tests";
+import { getCards, addCard } from "client/state/actions/cards";
+import { getTestsForSubject, startTest } from "client/state/actions/tests";
 import FlashCard from "client/components/flash-card/flash-card";
 import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";

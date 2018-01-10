@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 
 import { logout } from "client/state/actions/user";
+import { getSubjectFilteredTests } from "client/state/reducers/tests";
+import { getSubjectFilteredCards } from "client/state/reducers/cards";
 import Login from "client/components/login/login";
 import {
   SUBJECTS_PROPTYPE,
@@ -174,18 +176,6 @@ class Navigation extends PureComponent {
     }
   }
 
-  getSubjectFilteredTests(subjectId) {
-    return Object.values(this.props.tests.byId).filter(
-      test => test.subjectId === subjectId
-    );
-  }
-
-  getSubjectFilteredCards(subjectId) {
-    return Object.values(this.props.cards.byId).filter(
-      card => card.subjectId === subjectId
-    );
-  }
-
   renderContextualActions() {
     const { routerProps } = this.props;
     const { subjectId, testId } = routerProps.match.params;
@@ -193,13 +183,13 @@ class Navigation extends PureComponent {
       case "/subject/:subjectId":
         return (
           <Button onClick={() => this.onClickTestsButton(subjectId)}>
-            Tests ({this.getSubjectFilteredTests(subjectId).length})
+            Tests ({getSubjectFilteredTests(this.props.tests, subjectId).length})
           </Button>
         );
       // case "/subject/:subjectId/tests":
       //   return (
       //     <Button onClick={() => this.onClickCardsButton(subjectId)}>
-      //       Cards ({this.getSubjectFilteredCards(subjectId).length})
+      //       Cards ({getSubjectFilteredCards(this.props.cards, subjectId).length})
       //     </Button>
       //   );
     }

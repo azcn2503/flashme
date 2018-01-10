@@ -284,4 +284,8 @@ const reducer = (state = defaultState, action) => {
   }
 };
 
+export const getSubjectFilteredTests = (state, subjectId) => {
+  return Object.values(state.byId).filter(test => test.subjectId === subjectId);
+};
+
 export default reducer;
