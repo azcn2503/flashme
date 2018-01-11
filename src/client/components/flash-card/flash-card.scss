@@ -9,7 +9,7 @@
 
 .flashCard {
   @include transition();
-  transition-property: border-color;
+  transition-property: opacity, border-color;
 
   position: relative;
   width: 200px;
@@ -21,6 +21,10 @@
   box-shadow: $box-shadow-small;
   border-radius: $border-radius-small;
   background-color: white;
+
+  &.flashCardActive {
+    opacity: 0.5;
+  }
 
   &.test {
     transform: scale(1.5);

@@ -10,6 +10,7 @@ import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
 import TestStatus from "client/components/test-status/test-status";
 import TestProgress from "client/components/test-progress/test-progress";
+import Transition from "client/components/transition/transition";
 import { getSubject } from "client/state/actions/subjects";
 import { getCards } from "client/state/actions/cards";
 import {
@@ -225,7 +226,7 @@ class SubjectTests extends PureComponent {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <Transition component="tbody">
             {tests.map(test => (
               <tr key={test.id}>
                 <td>{this.renderTestType(test)}</td>
@@ -251,7 +252,7 @@ class SubjectTests extends PureComponent {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </Transition>
         </table>
       </div>
     );

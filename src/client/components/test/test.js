@@ -71,7 +71,6 @@ class Test extends PureComponent {
     this.props
       .dispatch(addRetest(this.props.subjectId, this.props.testId))
       .then(test => {
-        console.log(test);
         this.props.history.push(
           `/subject/${this.props.subjectId}/test/${test.id}`
         );
@@ -201,7 +200,7 @@ class Test extends PureComponent {
         <Button
           primary
           onClick={this.onClickStartTest}
-          disabled={this.props.tests.requesting}
+          disabled={!!this.props.tests.requesting}
         >
           Start Test
         </Button>
@@ -211,7 +210,7 @@ class Test extends PureComponent {
         <Button
           delete
           onClick={this.onClickAbandonTest}
-          disabled={this.props.tests.requesting}
+          disabled={!!this.props.tests.requesting}
         >
           Abandon Test
         </Button>

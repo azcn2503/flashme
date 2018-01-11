@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
+import Transition from "client/components/transition/transition";
+
 import styles from "./dialog.scss";
 
 class Dialog extends PureComponent {

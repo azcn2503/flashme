@@ -16,6 +16,7 @@ import FlashCard from "client/components/flash-card/flash-card";
 import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
+import Transition from "client/components/transition/transition";
 
 import styles from "./subject-cards.scss";
 
@@ -33,7 +34,8 @@ class SubjectCards extends PureComponent {
     this.state = {
       cards: [],
       filter: "",
-      showBothSides: false
+      showBothSides: false,
+      ready: true
     };
     this.onClickTestsButton = this.onClickTestsButton.bind(this);
     this.onClickShowBothSides = this.onClickShowBothSides.bind(this);
@@ -151,8 +153,9 @@ class SubjectCards extends PureComponent {
       .filter(this.filterCardsBySubject)
       .filter(this.filterCardsBySearchTerm);
     return (
-      <div className={styles.cardList}>
+      <Transition className={styles.cardList}>
         <FlashCard
+          key="input"
           dispatch={this.props.dispatch}
           card={{}}
           subjectId={this.props.subjectId}
@@ -162,7 +165,7 @@ class SubjectCards extends PureComponent {
           hideDialog={this.props.hideDialog}
         />
         {this.props.cards ? cards.map(this.renderCard) : null}
-      </div>
+      </Transition>
     );
   }
 

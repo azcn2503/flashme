@@ -1,0 +1,26 @@
+@import "~client/styles/tools.scss";
+
+.enter {
+  opacity: 0;
+}
+.enterActive {
+  @include transition();
+  opacity: 1;
+  transition-property: opacity;
+}
+.appear {
+  opacity: 0;
+}
+.appearActive {
+  @include transition();
+  opacity: 1;
+  transition-property: opacity;
+}
+.leave {
+  opacity: 1;
+}
+.leaveActive {
+  @include transition();
+  transition-property: opacity;
+  opacity: 0;
+}

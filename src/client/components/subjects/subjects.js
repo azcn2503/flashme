@@ -2,11 +2,12 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import FilterBox from "../filter-box/filter-box";
-import Button from "../button/button";
-import Subheader from "../subheader/subheader";
-import SubjectCard from "../subject-card/subject-card";
-import { getSubjects, addSubject } from "../../state/actions/subjects";
+import FilterBox from "client/components/filter-box/filter-box";
+import Button from "client/components/button/button";
+import Subheader from "client/components/subheader/subheader";
+import SubjectCard from "client/components/subject-card/subject-card";
+import Transition from "client/components/transition/transition";
+import { getSubjects, addSubject } from "client/state/actions/subjects";
 
 import styles from "./subjects.scss";
 import { SUBJECTS_PROPTYPE } from "../../proptypes";
@@ -106,7 +107,9 @@ class Subjects extends PureComponent {
             </Button>
           </div>
         </div>
-        <div className={styles.subjectList}>{this.renderSubjects()}</div>
+        <Transition className={styles.subjectList}>
+          {this.renderSubjects()}
+        </Transition>
       </div>
     );
   }
