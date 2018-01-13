@@ -6,6 +6,7 @@ import { CARD_PROPTYPE } from "../../proptypes";
 import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
 import EditableContent from "../editable-content/editable-content";
+import Tooltip from "../tooltip/tooltip";
 import Transition from "client/components/transition/transition";
 
 import styles from "./flash-card.scss";
@@ -14,6 +15,10 @@ const faceEnum = {
   QUESTION: "QUESTION",
   ANSWER: "ANSWER"
 };
+
+const metaKey = window.navigator.platform.toLowerCase().includes("mac")
+  ? "\u2318"
+  : "Ctrl";
 
 class FlashCard extends PureComponent {
   constructor(props) {
@@ -262,25 +267,29 @@ class FlashCard extends PureComponent {
 
   renderTestButtons() {
     if (this.props.test && this.state.flipped) {
-      return [
-        <Button
-          small
-          key={0}
-          onClick={() => this.onAnswerTestCard(true)}
-          primary
-          disabled={!!this.props.requesting}
-        >
-          Right
-        </Button>,
-        <Button
-          small
-          key={1}
-          onClick={() => this.onAnswerTestCard(false)}
-          disabled={!!this.props.requesting}
-        >
-          Wrong
-        </Button>
-      ];
+      return (
+        <React.Fragment>
+          <Tooltip message="Mark as correct (Enter)">
+            <Button
+              small
+              onClick={() => this.onAnswerTestCard(true)}
+              primary
+              disabled={!!this.props.requesting}
+            >
+              Right
+            </Button>
+          </Tooltip>
+          <Tooltip message="Mark as incorrect (Tab)">
+            <Button
+              small
+              onClick={() => this.onAnswerTestCard(false)}
+              disabled={!!this.props.requesting}
+            >
+              Wrong
+            </Button>
+          </Tooltip>
+        </React.Fragment>
+      );
     } else {
       return null;
     }
@@ -306,9 +315,14 @@ class FlashCard extends PureComponent {
   renderFlipButton() {
     if (!this.props.showBothSides) {
       return (
-        <Button small onClick={this.onClickFlip}>
-          Flip
-        </Button>
+        <Tooltip
+          message="Flip (Tab)"
+          disabled={this.props.test && this.state.flipped}
+        >
+          <Button small onClick={this.onClickFlip}>
+            Flip
+          </Button>
+        </Tooltip>
       );
     } else {
       return null;
@@ -339,14 +353,19 @@ class FlashCard extends PureComponent {
   renderSubmitButton() {
     if (!this.props.card.id && !this.props.test) {
       return (
-        <Button
-          small
-          primary
-          onClick={this.onClickAddCard}
+        <Tooltip
           disabled={!this.canSubmit()}
+          message={`Add (${metaKey}+Enter)`}
         >
-          Add
-        </Button>
+          <Button
+            small
+            primary
+            onClick={this.onClickAddCard}
+            disabled={!this.canSubmit()}
+          >
+            Add
+          </Button>
+        </Tooltip>
       );
     } else {
       return null;
@@ -356,14 +375,19 @@ class FlashCard extends PureComponent {
   renderUpdateButton() {
     if (this.props.card.id && !this.props.test) {
       return (
-        <Button
-          small
-          primary
+        <Tooltip
           disabled={!this.canUpdate()}
-          onClick={this.onClickUpdateCard}
+          message={`Update (${metaKey}+Enter)`}
         >
-          Update
-        </Button>
+          <Button
+            small
+            primary
+            disabled={!this.canUpdate()}
+            onClick={this.onClickUpdateCard}
+          >
+            Update
+          </Button>
+        </Tooltip>
       );
     } else {
       return null;

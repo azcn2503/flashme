@@ -155,6 +155,7 @@ class Navigation extends PureComponent {
             Logged in as <strong>{this.props.user.currentUser.username}</strong>
           </div>
           <Button
+            ghost
             onClick={this.onClickLogout}
             disabled={this.props.user.requesting}
           >
@@ -166,6 +167,7 @@ class Navigation extends PureComponent {
       return (
         <div className={styles.login}>
           <Button
+            ghost
             onClick={this.onClickLoginOrRegister}
             disabled={this.props.user.requesting}
           >

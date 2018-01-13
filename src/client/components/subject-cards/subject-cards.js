@@ -208,29 +208,27 @@ class SubjectCards extends PureComponent {
     );
   }
 
+  renderSubheader() {
+    const subject = this.props.subjects.byId[this.props.subjectId];
+    return (
+      <div className={styles.subheader}>
+        <Subheader
+          editable
+          label={subject ? subject.title : ""}
+          onChange={this.onChangeSubjectTitle}
+        />
+        {this.renderControls()}
+      </div>
+    );
+  }
+
   render() {
-    if (this.props.subjects.allIds.length > 0) {
-      const subject = this.props.subjects.byId[this.props.subjectId];
-      if (subject) {
-        return (
-          <div className={styles.subjectCards}>
-            <div className={styles.subheader}>
-              <Subheader
-                editable
-                label={`${subject.title}`}
-                onChange={this.onChangeSubjectTitle}
-              />
-              {this.renderControls()}
-            </div>
-            {this.renderCardList()}
-          </div>
-        );
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
+    return (
+      <div className={styles.subjectCards}>
+        {this.renderSubheader()}
+        {this.renderCardList()}
+      </div>
+    );
   }
 }
 
@@ -242,6 +240,7 @@ SubjectCards.propTypes = {
   subjectId: PropTypes.string,
   testId: PropTypes.string,
   showDialog: PropTypes.func,
+  hideDialog: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func
   })

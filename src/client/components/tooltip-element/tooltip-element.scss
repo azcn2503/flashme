@@ -13,6 +13,8 @@
   pointer-events: none;
   opacity: 0;
   transform: translateY(-5px);
+  max-width: 300px;
+  text-align: center;
 
   &.open {
     opacity: 1;

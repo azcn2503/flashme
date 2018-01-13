@@ -207,13 +207,15 @@ class Test extends PureComponent {
       );
     } else if (test.status === testStatusEnum.STARTED) {
       return (
-        <Button
-          delete
-          onClick={this.onClickAbandonTest}
-          disabled={!!this.props.tests.requesting}
-        >
-          Abandon Test
-        </Button>
+        <Tooltip message="Abandon this test">
+          <Button
+            delete
+            onClick={this.onClickAbandonTest}
+            disabled={!!this.props.tests.requesting}
+          >
+            Abandon Test
+          </Button>
+        </Tooltip>
       );
     } else if (
       test.cards.find(card => card.correct === false) &&
@@ -221,7 +223,7 @@ class Test extends PureComponent {
         test.status === testStatusEnum.ABANDONED)
     ) {
       return (
-        <Tooltip message="Retest the cards you failed on this test">
+        <Tooltip message="Retest yourself on the cards you failed on this test">
           <Button
             primary
             onClick={this.onClickRetest}

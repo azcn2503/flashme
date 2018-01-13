@@ -23,6 +23,7 @@ class Button extends PureComponent {
           [styles.small]: this.props.small,
           [styles.primary]: this.props.primary,
           [styles.delete]: this.props.delete,
+          [styles.ghost]: this.props.ghost,
           [styles.disabled]: !!this.props.disabled
         })}
         onClick={this.onClick}
@@ -42,7 +43,8 @@ Button.propTypes = {
   delete: PropTypes.bool,
   disabled: PropTypes.bool,
   small: PropTypes.bool,
-  submit: PropTypes.bool
+  submit: PropTypes.bool,
+  ghost: PropTypes.bool
 };
 
 Button.defaultProps = {
@@ -50,7 +52,8 @@ Button.defaultProps = {
   disabled: false,
   delete: false,
   small: false,
-  submit: false
+  submit: false,
+  ghost: false
 };
 
 export default Button;

@@ -2,11 +2,13 @@
 
 .enter {
   opacity: 0;
+  transform: translateY(-10px);
 }
 .enterActive {
   @include transition();
+  transition-property: opacity, transform;
+  transform: translateY(0);
   opacity: 1;
-  transition-property: opacity;
 }
 .appear {
   opacity: 0;
@@ -21,6 +23,7 @@
 }
 .leaveActive {
   @include transition();
-  transition-property: opacity;
+  transition-property: opacity, transform;
+  transform: translateY(-10px);
   opacity: 0;
 }
