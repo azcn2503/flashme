@@ -1,6 +1,7 @@
 # Flash Me
 
 [![Build Status](https://travis-ci.org/azcn2503/flashme.svg?branch=master)](https://travis-ci.org/azcn2503/flashme)
+[![Known Vulnerabilities](https://snyk.io/test/github/azcn2503/flashme/badge.svg)](https://snyk.io/test/github/azcn2503/flashme)
 
 A flash card app for Casey.
 
