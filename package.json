@@ -48,7 +48,8 @@
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1",
     "webpack-external-module": "^3.0.1",
-    "webpack-source-map-support": "^2.0.1"
+    "webpack-source-map-support": "^2.0.1",
+    "winston": "^2.4.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -58,7 +59,6 @@
     "express-session": "^1.15.6",
     "http": "^0.0.0",
     "lodash": "^4.17.4",
-    "log4js": "^2.3.3",
     "nodemon": "^1.11.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",

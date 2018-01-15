@@ -2,7 +2,7 @@ import path from "path";
 import config from "config";
 import express from "express";
 import session from "express-session";
-import { getLogger } from "log4js";
+import logger from "winston";
 import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 import passport from "passport";
@@ -33,9 +33,6 @@ const loggedIn = (req, res, next) => {
     return res.send(401);
   }
 };
-
-const logger = getLogger(config.server.name);
-logger.level = config.server.logLevel || "debug";
 
 app.use(session({ secret: "cards and secrets" }));
 app.use(bodyParser.json());
