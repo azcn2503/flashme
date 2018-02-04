@@ -9,6 +9,8 @@ A flash card app for Casey.
 
 These instructions will get the project up and running on your machine for development and testing purposes.
 
+If you just want to use the app, it is available as a demo at: [https://casey-flash-card-app.herokuapp.com](https://casey-flash-card-app.herokuapp.com)
+
 ### Prerequisites
 
 * [Node.js](https://nodejs.org/en/download/)
