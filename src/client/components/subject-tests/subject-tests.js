@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -294,18 +294,14 @@ class SubjectTests extends PureComponent {
   }
 
   renderDeleteDialogActions(testId) {
-    return [
-      <Button
-        key={0}
-        delete
-        onClick={() => this.onClickConfirmDeleteTest(testId)}
-      >
-        Yes, delete this test
-      </Button>,
-      <Button key={1} onClick={this.onClickCancelDeleteTest}>
-        No, cancel
-      </Button>
-    ];
+    return (
+      <Fragment>
+        <Button delete onClick={() => this.onClickConfirmDeleteTest(testId)}>
+          Yes, delete this test
+        </Button>,
+        <Button onClick={this.onClickCancelDeleteTest}>No, cancel</Button>
+      </Fragment>
+    );
   }
 
   render() {

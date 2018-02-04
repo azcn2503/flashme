@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import { NavLink, withRouter } from "react-router-dom";
@@ -117,18 +117,12 @@ class SubjectCard extends PureComponent {
   }
 
   renderFakeCards() {
-    return [
-      <div
-        className={styles.fakeCard}
-        key="fakeCard-0"
-        ref={el => this._fakeCards.push(el)}
-      />,
-      <div
-        className={styles.fakeCard}
-        key="fakeCard-1"
-        ref={el => this._fakeCards.push(el)}
-      />
-    ];
+    return (
+      <Fragment>
+        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />,
+        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />
+      </Fragment>
+    );
   }
 
   renderDeleteDialogBody() {
@@ -150,14 +144,14 @@ class SubjectCard extends PureComponent {
   }
 
   renderDeleteDialogActions() {
-    return [
-      <Button key={0} delete onClick={this.onClickConfirmDelete}>
-        Yes, delete this subject
-      </Button>,
-      <Button key={1} onClick={this.onClickCancelDelete}>
-        No, cancel
-      </Button>
-    ];
+    return (
+      <Fragment>
+        <Button delete onClick={this.onClickConfirmDelete}>
+          Yes, delete this subject
+        </Button>,
+        <Button onClick={this.onClickCancelDelete}>No, cancel</Button>
+      </Fragment>
+    );
   }
 
   render() {

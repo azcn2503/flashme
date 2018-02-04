@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
@@ -340,14 +340,14 @@ class FlashCard extends PureComponent {
   }
 
   renderDeleteDialogActions() {
-    return [
-      <Button key={0} delete onClick={this.onClickConfirmDelete}>
-        Yes, delete this card
-      </Button>,
-      <Button key={1} onClick={this.onClickCancelDelete}>
-        No, cancel
-      </Button>
-    ];
+    return (
+      <Fragment>
+        <Button delete onClick={this.onClickConfirmDelete}>
+          Yes, delete this card
+        </Button>,
+        <Button onClick={this.onClickCancelDelete}>No, cancel</Button>
+      </Fragment>
+    );
   }
 
   renderSubmitButton() {
