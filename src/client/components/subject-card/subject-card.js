@@ -119,7 +119,7 @@ class SubjectCard extends PureComponent {
   renderFakeCards() {
     return (
       <Fragment>
-        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />,
+        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />
         <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />
       </Fragment>
     );
@@ -148,7 +148,7 @@ class SubjectCard extends PureComponent {
       <Fragment>
         <Button delete onClick={this.onClickConfirmDelete}>
           Yes, delete this subject
-        </Button>,
+        </Button>
         <Button onClick={this.onClickCancelDelete}>No, cancel</Button>
       </Fragment>
     );
