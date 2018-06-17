@@ -20,19 +20,34 @@ import {
   addRetest,
   startTest
 } from "client/state/actions/tests";
+import * as cardsReducer from "client/state/reducers/cards";
+import * as subjectsReducer from "client/state/reducers/subjects";
+import * as testsReducer from "client/state/reducers/tests";
 import { testStatusEnum, testTypeEnum } from "shared/tests";
 import {
-  SUBJECTS_PROPTYPE,
-  CARDS_PROPTYPE,
+  CARD_PROPTYPE,
+  SUBJECT_PROPTYPE,
+  TEST_PROPTYPE,
   TESTS_PROPTYPE
 } from "client/proptypes";
 
 import styles from "./subject-tests.scss";
 
 class SubjectTests extends PureComponent {
-  static mapStateToProps(state) {
+  static mapStateToProps(state, ownProps) {
     const { cards, subjects, tests } = state;
-    return { cards, subjects, tests };
+    return {
+      subjectCards: cardsReducer.getSubjectFilteredCards(
+        cards,
+        ownProps.subjectId
+      ),
+      subject: subjectsReducer.getSubject(subjects, ownProps.subjectId),
+      subjectTests: testsReducer.getSubjectFilteredTests(
+        tests,
+        ownProps.subjectId
+      ),
+      tests
+    };
   }
 
   constructor(props) {
@@ -51,7 +66,7 @@ class SubjectTests extends PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.subjects.byId[this.props.subjectId]) {
+    if (!this.props.subject) {
       this.props.dispatch(getSubject(this.props.subjectId));
     }
     if (!this.subjectHasCards()) {
@@ -113,21 +128,7 @@ class SubjectTests extends PureComponent {
   }
 
   subjectHasCards() {
-    return Object.values(this.props.cards.byId).find(
-      card => card.subjectId === this.props.subjectId
-    );
-  }
-
-  getSubjectFilteredCards() {
-    return Object.values(this.props.cards.byId).filter(
-      card => card.subjectId === this.props.subjectId
-    );
-  }
-
-  getSubjectFilteredTests() {
-    return Object.values(this.props.tests.byId).filter(
-      test => test.subjectId === this.props.subjectId
-    );
+    return this.props.subjectCards.length > 0;
   }
 
   renderTestType(test) {
@@ -212,7 +213,8 @@ class SubjectTests extends PureComponent {
     return actions;
   }
 
-  renderTestList(tests = []) {
+  renderTestList() {
+    const { subjectTests } = this.props;
     return (
       <div className={styles.testList}>
         <table className={styles.testTable}>
@@ -227,7 +229,7 @@ class SubjectTests extends PureComponent {
             </tr>
           </thead>
           <Transition component="tbody">
-            {tests.map(test => (
+            {subjectTests.map(test => (
               <tr key={test.id}>
                 <td>{this.renderTestType(test)}</td>
                 <td>
@@ -298,23 +300,22 @@ class SubjectTests extends PureComponent {
       <Fragment>
         <Button delete onClick={() => this.onClickConfirmDeleteTest(testId)}>
           Yes, delete this test
-        </Button>,
+        </Button>
         <Button onClick={this.onClickCancelDeleteTest}>No, cancel</Button>
       </Fragment>
     );
   }
 
   render() {
-    if (this.props.subjects.byId[this.props.subjectId]) {
-      const subject = this.props.subjects.byId[this.props.subjectId];
-      const tests = this.getSubjectFilteredTests();
+    const { subject } = this.props;
+    if (subject) {
       return (
         <div className={styles.subjectTests}>
           <div className={styles.subheader}>
             <Subheader label={`Tests for ${subject.title}`} />
             {this.renderActions()}
           </div>
-          {this.renderTestList(tests)}
+          {this.renderTestList()}
         </div>
       );
     } else {
@@ -326,8 +327,9 @@ class SubjectTests extends PureComponent {
 SubjectTests.propTypes = {
   dispatch: PropTypes.func,
   subjectId: PropTypes.string,
-  subjects: SUBJECTS_PROPTYPE,
-  cards: CARDS_PROPTYPE,
+  subject: SUBJECT_PROPTYPE,
+  subjectTests: PropTypes.arrayOf(TEST_PROPTYPE),
+  subjectCards: PropTypes.arrayOf(CARD_PROPTYPE),
   tests: TESTS_PROPTYPE,
   history: PropTypes.shape({
     push: PropTypes.func

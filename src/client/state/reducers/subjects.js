@@ -164,4 +164,6 @@ const reducer = (state = defaultState, action) => {
   }
 };
 
+export const getSubject = (state, subjectId) => state.byId[subjectId];
+
 export default reducer;
