@@ -70,11 +70,13 @@
     "clean": "rm -rf dist",
     "start": "node dist/server/server-bundle.js",
     "start:debug": "nodemon --inspect dist/server/server-bundle.js",
-    "start:dev": "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
+    "start:dev":
+      "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
     "build": "webpack",
     "build:dev": "webpack --progress --watch",
     "lint": "eslint",
-    "heroku-postbuild": "yarn run build"
+    "heroku-postbuild": "yarn run build",
+    "test": "exit 0"
   },
   "engines": {
     "node": ">=6.9.5 <7"
