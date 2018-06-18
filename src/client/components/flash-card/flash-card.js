@@ -344,7 +344,7 @@ class FlashCard extends PureComponent {
       <Fragment>
         <Button delete onClick={this.onClickConfirmDelete}>
           Yes, delete this card
-        </Button>,
+        </Button>
         <Button onClick={this.onClickCancelDelete}>No, cancel</Button>
       </Fragment>
     );
