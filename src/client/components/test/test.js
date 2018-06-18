@@ -37,6 +37,7 @@ class Test extends PureComponent {
     this.onClickStartTest = this.onClickStartTest.bind(this);
     this.onClickAbandonTest = this.onClickAbandonTest.bind(this);
     this.onClickRetest = this.onClickRetest.bind(this);
+    this.onClickReturnToTests = this.onClickReturnToTests.bind(this);
     this.onAnswerTestCard = this.onAnswerTestCard.bind(this);
   }
 
@@ -75,6 +76,10 @@ class Test extends PureComponent {
           `/subject/${this.props.subjectId}/test/${test.id}`
         );
       });
+  }
+
+  onClickReturnToTests() {
+    this.props.history.push(`/subject/${this.props.subjectId}/tests`);
   }
 
   onAnswerTestCard(value) {
@@ -157,6 +162,11 @@ class Test extends PureComponent {
               ))}
             </tbody>
           </table>
+          <div className={styles.returnToTests}>
+            <Button primary onClick={this.onClickReturnToTests}>
+              Return to tests
+            </Button>
+          </div>
         </div>
       );
     }

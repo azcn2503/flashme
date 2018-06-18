@@ -56,6 +56,14 @@ class TestProgress extends PureComponent {
     this.updateProgressBars();
   }
 
+  getCorrectProgressCount() {
+    return this.props.test.cards.filter(card => card.correct === true).length;
+  }
+
+  getIncorrectProgressCount() {
+    return this.props.test.cards.filter(card => card.correct === false).length;
+  }
+
   getTotalProgressPercent() {
     return Math.round(
       100 /
@@ -124,7 +132,12 @@ class TestProgress extends PureComponent {
             className={styles.totalProgressLabel}
             ref={el => (this._totalProgressLabel = el)}
           >
-            {this.getTotalProgressPercent()}%
+            <div className={styles.percentLabel}>
+              {this.getTotalProgressPercent()}%
+            </div>
+            <div className={styles.countLabel}>
+              {this.getIncorrectProgressCount()}
+            </div>
           </div>
         </div>
         <div
@@ -136,7 +149,12 @@ class TestProgress extends PureComponent {
             className={styles.correctProgressLabel}
             ref={el => (this._correctProgressLabel = el)}
           >
-            {this.getCorrectProgressPercent()}%
+            <div className={styles.percentLabel}>
+              {this.getCorrectProgressPercent()}%
+            </div>
+            <div className={styles.countLabel}>
+              {this.getCorrectProgressCount()}
+            </div>
           </div>
         </div>
       </div>
