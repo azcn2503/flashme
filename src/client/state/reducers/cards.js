@@ -1,4 +1,4 @@
-import { keyBy, omitBy, uniq } from "lodash";
+import { keyBy, omitBy, uniq, values } from "lodash";
 
 import * as actions from "../actions/cards";
 
@@ -140,7 +140,7 @@ const reducer = (state = defaultState, action) => {
 };
 
 export const getSubjectFilteredCards = (state, subjectId) => {
-  return Object.values(state.byId).filter(card => card.subjectId === subjectId);
+  return values(state.byId).filter(card => card.subjectId === subjectId);
 };
 
 export default reducer;

@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { values } from "lodash";
 
 import styles from "./textfield.scss";
 
@@ -53,7 +54,7 @@ class TextField extends PureComponent {
 
 TextField.propTypes = {
   className: PropTypes.string,
-  type: PropTypes.oneOf(Object.values(typesEnum)),
+  type: PropTypes.oneOf(values(typesEnum)),
   value: PropTypes.string,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,

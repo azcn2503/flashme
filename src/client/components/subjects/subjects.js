@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { values, keys } from "lodash";
 
 import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";
@@ -52,8 +53,8 @@ class Subjects extends PureComponent {
   }
 
   renderFilters() {
-    if (Object.keys(this.props.subjects.byId).length > 0) {
-      const filteredSubjects = Object.values(this.props.subjects.byId).filter(
+    if (keys(this.props.subjects.byId).length > 0) {
+      const filteredSubjects = values(this.props.subjects.byId).filter(
         this.filterSubjectBySearchTerm
       );
       return (
@@ -61,7 +62,7 @@ class Subjects extends PureComponent {
           onChange={this.onChangeFilter}
           value={this.state.filter}
           type="subjects"
-          totalCount={Object.keys(this.props.subjects.byId).length}
+          totalCount={keys(this.props.subjects.byId).length}
           filteredCount={filteredSubjects.length}
         />
       );
@@ -71,7 +72,7 @@ class Subjects extends PureComponent {
   }
 
   renderSubjects() {
-    return Object.values(this.props.subjects.byId)
+    return values(this.props.subjects.byId)
       .filter(this.filterSubjectBySearchTerm)
       .map(subject => (
         <SubjectCard

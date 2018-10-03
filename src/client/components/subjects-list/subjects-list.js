@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { values } from "lodash";
 
 import { CARDS_PROPTYPE, SUBJECTS_PROPTYPE } from "../../proptypes";
 import SubjectCard from "../subject-card/subject-card";
@@ -66,7 +67,7 @@ class SubjectsList extends PureComponent {
         title={subject.title}
         active={subject.id === this.props.activeId}
         count={
-          Object.values(this.props.cards.byId).filter(
+          values(this.props.cards.byId).filter(
             card => card.subjectId === subject.id
           ).length || subject.cardCount
         }
@@ -92,13 +93,13 @@ class SubjectsList extends PureComponent {
           onChange={this.onChangeFilter}
           totalCount={this.props.subjects.allIds.length}
           filteredCount={
-            Object.values(this.props.subjects.byId).filter(this.filterSubject)
+            values(this.props.subjects.byId).filter(this.filterSubject)
               .length
           }
           type="subjects"
         />
         <div className={styles.list}>
-          {Object.values(this.props.subjects.byId)
+          {values(this.props.subjects.byId)
             .filter(this.filterSubject)
             .map(this.renderSubject)}
         </div>

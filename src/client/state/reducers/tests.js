@@ -1,4 +1,4 @@
-import { keyBy, uniq, omitBy } from "lodash";
+import { keyBy, uniq, omitBy, values } from "lodash";
 
 import { testStatusEnum } from "shared/tests";
 import { requestTypeEnum } from "shared/requests";
@@ -285,7 +285,7 @@ const reducer = (state = defaultState, action) => {
 };
 
 export const getSubjectFilteredTests = (state, subjectId) => {
-  return Object.values(state.byId).filter(test => test.subjectId === subjectId);
+  return values(state.byId).filter(test => test.subjectId === subjectId);
 };
 
 export default reducer;

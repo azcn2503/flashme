@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { debounce } from "lodash";
+import { debounce, values } from "lodash";
 
 import {
   CARDS_PROPTYPE,
@@ -62,7 +62,7 @@ class SubjectCards extends PureComponent {
     if (prevProps.subjectId !== this.props.subjectId) {
       this.getCards();
       this.setState({
-        cards: Object.values(this.props.cards.byId).filter(
+        cards: values(this.props.cards.byId).filter(
           this.filterCardsBySubject
         )
       });
@@ -84,7 +84,7 @@ class SubjectCards extends PureComponent {
   getCards() {
     if (
       this.props.cards.allIds.length === 0 ||
-      !Object.values(this.props.cards.byId).find(
+      !values(this.props.cards.byId).find(
         card => card.subjectId === this.props.subjectId
       )
     ) {
@@ -149,7 +149,7 @@ class SubjectCards extends PureComponent {
   }
 
   renderCardList() {
-    const cards = Object.values(this.props.cards.byId)
+    const cards = values(this.props.cards.byId)
       .filter(this.filterCardsBySubject)
       .filter(this.filterCardsBySearchTerm);
     return (
@@ -171,7 +171,7 @@ class SubjectCards extends PureComponent {
 
   renderFilters() {
     if (!this.props.test) {
-      const subjectCards = Object.values(this.props.cards.byId).filter(
+      const subjectCards = values(this.props.cards.byId).filter(
         this.filterCardsBySubject
       );
       return (
@@ -191,7 +191,7 @@ class SubjectCards extends PureComponent {
   }
 
   renderControls() {
-    const selected = Object.values(this.props.cards.byId).filter(
+    const selected = values(this.props.cards.byId).filter(
       card => card.selected
     );
     return (
