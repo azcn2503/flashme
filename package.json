@@ -53,32 +53,35 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.2",
     "config": "^1.26.1",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "http": "^0.0.0",
-    "lodash": "^4.17.4",
-    "nodemon": "^1.11.0",
+    "lodash": "^4.17.5",
+    "nodemon": "^1.17.1",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "react-router": "^4.2.0",
-    "serve-static": "^1.12.3"
+    "serve-static": "^1.13.0",
+    "snyk": "^1.103.4"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "start": "node dist/server/server-bundle.js",
     "start:debug": "nodemon --inspect dist/server/server-bundle.js",
-    "start:dev":
-      "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
+    "start:dev": "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
     "build": "webpack",
     "build:dev": "webpack --progress --watch",
     "lint": "eslint",
     "heroku-postbuild": "yarn run build",
-    "test": "exit 0"
+    "test": "exit 0",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "engines": {
     "node": ">=6.9.5 <7"
-  }
+  },
+  "snyk": true
 }
