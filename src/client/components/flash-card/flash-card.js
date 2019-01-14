@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { CARD_PROPTYPE } from "../../proptypes";
 import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
+import Card from "../card/card";
 import EditableContent from "../editable-content/editable-content";
 import Tooltip from "../tooltip/tooltip";
 import Transition from "client/components/transition/transition";
@@ -413,13 +414,12 @@ class FlashCard extends PureComponent {
   render() {
     return (
       <Transition>
-        <div
-          key="flashCard"
+        <Card
+          deleting={this.state.deleteDialogOpen}
+          selected={this.props.selected}
+          highlightUpdate={this.state.highlightUpdate}
+          dirty={this.state.dirty}
           className={classNames(styles.flashCard, {
-            [styles.dirty]: this.state.dirty,
-            [styles.highlightUpdate]: this.state.highlightUpdate,
-            [styles.deleting]: this.state.deleteDialogOpen,
-            [styles.selected]: this.props.selected,
             [styles.test]: this.props.test,
             [styles.editable]: this.props.editable,
             [styles.selectable]: !this.props.editable && !this.props.test,
@@ -450,7 +450,7 @@ class FlashCard extends PureComponent {
             />
           </div>
           {this.renderControls()}
-        </div>
+        </Card>
       </Transition>
     );
   }

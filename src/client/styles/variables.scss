@@ -6,6 +6,11 @@ $light-grey: rgb(230, 232, 235);
 $dark-grey: rgb(130, 132, 135);
 $light-tan: rgb(240, 235, 232);
 
+$black-10: rgba(0, 0, 0, 0.1);
+$black-38: rgba(0, 0, 0, 0.38);
+$black-54: rgba(0, 0, 0, 0.54);
+$black-87: rgba(0, 0, 0, 0.87);
+
 $success-gradient: linear-gradient(
   135deg,
   transparentize($success-color, 0.8),
@@ -17,7 +22,7 @@ $failure-gradient: linear-gradient(
   transparent
 );
 
-$card-gradient: linear-gradient(135deg, $light-tan, white);
+$card-gradient: linear-gradient(135deg, white, white);
 
 $padding-small: 5px;
 $padding-medium: 10px;

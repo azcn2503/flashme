@@ -8,19 +8,7 @@
 }
 
 .flashCard {
-  @include transition();
-  transition-property: opacity, border-color;
-
-  position: relative;
-  width: 200px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
   margin: 0 $margin-large $margin-large 0;
-  border: 2px solid transparent;
-  box-shadow: $box-shadow-small;
-  border-radius: $border-radius-small;
-  background-color: white;
 
   &.flashCardActive {
     opacity: 0.5;
@@ -28,10 +16,6 @@
 
   &.test {
     transform: scale(1.5);
-  }
-
-  &.dirty {
-    border-color: $dark-grey;
   }
 
   &.showBothSides .face {
@@ -42,18 +26,6 @@
   }
   &.showBothSides .face.back {
     display: flex;
-  }
-
-  &.highlightUpdate {
-    border-color: $primary-color;
-  }
-
-  &.selected {
-    border-color: $primary-color;
-  }
-
-  &.deleting {
-    border-color: $delete-color;
   }
 
   .face.front {

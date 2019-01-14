@@ -11,6 +11,7 @@ import {
   TESTS_PROPTYPE
 } from "client/proptypes";
 import Button from "client/components/button/button";
+import Card from "client/components/card/card";
 import Tooltip from "client/components/tooltip/tooltip";
 import { getSubjectFilteredCards } from "client/state/reducers/cards";
 import { getSubjectFilteredTests } from "client/state/reducers/tests";
@@ -89,14 +90,23 @@ class SubjectCard extends PureComponent {
   }
 
   openDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: true
+    });
     this.props.showDialog(
       "Delete subject?",
       this.renderDeleteDialogBody(),
-      this.renderDeleteDialogActions()
+      this.renderDeleteDialogActions(),
+      {
+        onClose: () => this.closeDeleteDialog()
+      }
     );
   }
 
   closeDeleteDialog() {
+    this.setState({
+      deleteDialogOpen: false
+    });
     this.props.hideDialog();
   }
 
@@ -159,12 +169,9 @@ class SubjectCard extends PureComponent {
       const cardCount = this.getCardCount();
       return (
         <div className={styles.subjectCardContainer}>
-          {this.renderFakeCards()}
-          <div
-            className={classNames(styles.subjectCard, {
-              [styles.deleting]: this.state.deleteDialogOpen
-            })}
-            onMouseOver={this.scatterFakeCards}
+          <Card
+            deleting={this.state.deleteDialogOpen}
+            className={styles.subjectCard}
           >
             <div className={styles.title}>
               <div className={styles.label}>
@@ -201,7 +208,7 @@ class SubjectCard extends PureComponent {
                 Delete
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
       );
     } else {

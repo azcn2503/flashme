@@ -12,6 +12,7 @@ import SubjectTests from "client/components/subject-tests/subject-tests";
 import Test from "client/components/test/test";
 import Subheader from "client/components/subheader/subheader";
 import Login from "client/components/login/login";
+import Toast from "client/components/toast/toast";
 import { getCurrentUser } from "client/state/actions/user";
 import { resetSubjects } from "client/state/actions/subjects";
 import { resetCards } from "client/state/actions/cards";
@@ -69,12 +70,13 @@ class App extends PureComponent {
     }
   }
 
-  showDialog(header, body, footer) {
+  showDialog(header, body, footer, props = {}) {
     this.setState({
       dialogOpen: true,
       dialogHeader: header,
       dialogBody: body,
-      dialogFooter: footer
+      dialogFooter: footer,
+      dialogProps: props
     });
   }
 
@@ -224,7 +226,9 @@ class App extends PureComponent {
           header={this.state.dialogHeader}
           body={this.state.dialogBody}
           footer={this.state.dialogFooter}
+          {...this.state.dialogProps}
         />
+        <Toast />
         <TooltipElement />
       </div>
     );
