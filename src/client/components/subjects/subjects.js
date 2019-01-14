@@ -7,7 +7,6 @@ import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
 import SubjectCard from "client/components/subject-card/subject-card";
-import Transition from "client/components/transition/transition";
 import { getSubjects, addSubject } from "client/state/actions/subjects";
 
 import styles from "./subjects.scss";
@@ -108,9 +107,7 @@ class Subjects extends PureComponent {
             </Button>
           </div>
         </div>
-        <Transition className={styles.subjectList}>
-          {this.renderSubjects()}
-        </Transition>
+        <div className={styles.subjectList}>{this.renderSubjects()}</div>
       </div>
     );
   }

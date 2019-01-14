@@ -34,6 +34,13 @@ const loggedIn = (req, res, next) => {
   }
 };
 
+const noCache = (req, res, next) => {
+  res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  res.header("Expires", "-1");
+  res.header("Pragma", "no-cache");
+  next();
+};
+
 app.use(session({ secret: "cards and secrets" }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -74,6 +81,8 @@ databaseController
       loggedIn
     });
     initialiseTestApi({ app, logger, testService, cardService, loggedIn });
+
+    app.get("/keep-alive", noCache, (req, res) => res.sendStatus(200));
 
     app.get("*", (req, res) => {
       res.sendFile(path.resolve(config.client.path, "index.html"));

@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -12,6 +12,7 @@ import SubjectTests from "client/components/subject-tests/subject-tests";
 import Test from "client/components/test/test";
 import Subheader from "client/components/subheader/subheader";
 import Login from "client/components/login/login";
+import KeepAlive from "client/components/keep-alive/keep-alive";
 import { getCurrentUser } from "client/state/actions/user";
 import { resetSubjects } from "client/state/actions/subjects";
 import { resetCards } from "client/state/actions/cards";
@@ -158,35 +159,32 @@ class App extends PureComponent {
           component={this.renderSubjectCards}
           exact
         />
-        <Route path="/" component={this.renderWelcome} exact />
+        <Route path="/" component={this.renderWelcome} />
         <Redirect to="/subjects" />
       </Switch>
     );
   }
 
   renderWelcome() {
-    if (!this.props.user.loggedIn) {
-      return (
-        <div className={styles.content}>
-          <div className={styles.notLoggedIn}>
-            <Subheader label="Welcome to FlashMe!" />
-            <div className={styles.appDescription}>
-              <p>A flash card app.</p>
-              <p>
-                Please login or register to start creating subjects, cards and
-                tests.
-              </p>
-            </div>
-            <Login
-              className={styles.login}
-              onLoginSuccess={this.onLoginSuccess}
-            />
+    if (this.props.user.loggedIn) return null;
+    return (
+      <div className={styles.content}>
+        <div className={styles.notLoggedIn}>
+          <Subheader label="Welcome to FlashMe!" />
+          <div className={styles.appDescription}>
+            <p>A flash card app.</p>
+            <p>
+              Please login or register to start creating subjects, cards and
+              tests.
+            </p>
           </div>
+          <Login
+            className={styles.login}
+            onLoginSuccess={this.onLoginSuccess}
+          />
         </div>
-      );
-    } else {
-      return null;
-    }
+      </div>
+    );
   }
 
   render() {
@@ -226,6 +224,7 @@ class App extends PureComponent {
           footer={this.state.dialogFooter}
         />
         <TooltipElement />
+        <KeepAlive />
       </div>
     );
   }

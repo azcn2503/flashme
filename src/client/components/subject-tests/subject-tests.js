@@ -10,7 +10,6 @@ import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
 import TestStatus from "client/components/test-status/test-status";
 import TestProgress from "client/components/test-progress/test-progress";
-import Transition from "client/components/transition/transition";
 import { getSubject } from "client/state/actions/subjects";
 import { getCards } from "client/state/actions/cards";
 import {
@@ -228,33 +227,31 @@ class SubjectTests extends PureComponent {
               <th>Actions</th>
             </tr>
           </thead>
-          <Transition component="tbody">
-            {subjectTests.map(test => (
-              <tr key={test.id}>
-                <td>{this.renderTestType(test)}</td>
-                <td>
-                  <TestStatus test={test} />
-                </td>
-                <td>
-                  <TestProgress test={test} />
-                </td>
-                <td>{test.cards.length}</td>
-                <td>{moment(test.created).fromNow()}</td>
-                <td>
-                  <div className={styles.testActions}>
-                    {this.renderTestAction(test)}
-                    <Button
-                      small
-                      delete
-                      onClick={() => this.onClickDeleteTest(test.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </Transition>
+          {subjectTests.map(test => (
+            <tr key={test.id}>
+              <td>{this.renderTestType(test)}</td>
+              <td>
+                <TestStatus test={test} />
+              </td>
+              <td>
+                <TestProgress test={test} />
+              </td>
+              <td>{test.cards.length}</td>
+              <td>{moment(test.created).fromNow()}</td>
+              <td>
+                <div className={styles.testActions}>
+                  {this.renderTestAction(test)}
+                  <Button
+                    small
+                    delete
+                    onClick={() => this.onClickDeleteTest(test.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          ))}
         </table>
       </div>
     );

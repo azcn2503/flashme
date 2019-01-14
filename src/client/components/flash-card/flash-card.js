@@ -7,7 +7,6 @@ import { addCard, updateCard, removeCard } from "../../state/actions/cards";
 import Button from "../button/button";
 import EditableContent from "../editable-content/editable-content";
 import Tooltip from "../tooltip/tooltip";
-import Transition from "client/components/transition/transition";
 
 import styles from "./flash-card.scss";
 
@@ -412,46 +411,44 @@ class FlashCard extends PureComponent {
 
   render() {
     return (
-      <Transition>
-        <div
-          key="flashCard"
-          className={classNames(styles.flashCard, {
-            [styles.dirty]: this.state.dirty,
-            [styles.highlightUpdate]: this.state.highlightUpdate,
-            [styles.deleting]: this.state.deleteDialogOpen,
-            [styles.selected]: this.props.selected,
-            [styles.test]: this.props.test,
-            [styles.editable]: this.props.editable,
-            [styles.selectable]: !this.props.editable && !this.props.test,
-            [styles.flipped]: this.state.flipped && !this.props.showBothSides,
-            [styles.showBothSides]: this.props.showBothSides
-          })}
-        >
-          <div className={classNames(styles.front, styles.face)}>
-            <div className={styles.faceTitle}>Question</div>
-            <EditableContent
-              ref={el => (this._question = el)}
-              className={styles.question}
-              value={this.state.question}
-              editable={this.props.editable}
-              onChange={this.onChangeQuestion}
-              onKeyDown={this.onKeyDownQuestion}
-            />
-          </div>
-          <div className={classNames(styles.back, styles.face)}>
-            <div className={styles.faceTitle}>Answer</div>
-            <EditableContent
-              ref={el => (this._answer = el)}
-              className={styles.answer}
-              value={this.state.answer}
-              editable={this.props.editable}
-              onChange={this.onChangeAnswer}
-              onKeyDown={this.onKeyDownAnswer}
-            />
-          </div>
-          {this.renderControls()}
+      <div
+        key="flashCard"
+        className={classNames(styles.flashCard, {
+          [styles.dirty]: this.state.dirty,
+          [styles.highlightUpdate]: this.state.highlightUpdate,
+          [styles.deleting]: this.state.deleteDialogOpen,
+          [styles.selected]: this.props.selected,
+          [styles.test]: this.props.test,
+          [styles.editable]: this.props.editable,
+          [styles.selectable]: !this.props.editable && !this.props.test,
+          [styles.flipped]: this.state.flipped && !this.props.showBothSides,
+          [styles.showBothSides]: this.props.showBothSides
+        })}
+      >
+        <div className={classNames(styles.front, styles.face)}>
+          <div className={styles.faceTitle}>Question</div>
+          <EditableContent
+            ref={el => (this._question = el)}
+            className={styles.question}
+            value={this.state.question}
+            editable={this.props.editable}
+            onChange={this.onChangeQuestion}
+            onKeyDown={this.onKeyDownQuestion}
+          />
         </div>
-      </Transition>
+        <div className={classNames(styles.back, styles.face)}>
+          <div className={styles.faceTitle}>Answer</div>
+          <EditableContent
+            ref={el => (this._answer = el)}
+            className={styles.answer}
+            value={this.state.answer}
+            editable={this.props.editable}
+            onChange={this.onChangeAnswer}
+            onKeyDown={this.onKeyDownAnswer}
+          />
+        </div>
+        {this.renderControls()}
+      </div>
     );
   }
 }

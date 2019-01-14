@@ -16,7 +16,6 @@ import FlashCard from "client/components/flash-card/flash-card";
 import FilterBox from "client/components/filter-box/filter-box";
 import Button from "client/components/button/button";
 import Subheader from "client/components/subheader/subheader";
-import Transition from "client/components/transition/transition";
 
 import styles from "./subject-cards.scss";
 
@@ -62,9 +61,7 @@ class SubjectCards extends PureComponent {
     if (prevProps.subjectId !== this.props.subjectId) {
       this.getCards();
       this.setState({
-        cards: values(this.props.cards.byId).filter(
-          this.filterCardsBySubject
-        )
+        cards: values(this.props.cards.byId).filter(this.filterCardsBySubject)
       });
     }
   }
@@ -153,7 +150,7 @@ class SubjectCards extends PureComponent {
       .filter(this.filterCardsBySubject)
       .filter(this.filterCardsBySearchTerm);
     return (
-      <Transition className={styles.cardList}>
+      <div className={styles.cardList}>
         <FlashCard
           key="input"
           dispatch={this.props.dispatch}
@@ -165,7 +162,7 @@ class SubjectCards extends PureComponent {
           hideDialog={this.props.hideDialog}
         />
         {this.props.cards ? cards.map(this.renderCard) : null}
-      </Transition>
+      </div>
     );
   }
 

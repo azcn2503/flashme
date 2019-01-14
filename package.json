@@ -32,7 +32,6 @@
     "prettier": "^1.9.2",
     "prop-types": "^15.6.0",
     "react": "16.4.0",
-    "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "16.4.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -70,8 +69,7 @@
     "clean": "rm -rf dist",
     "start": "node dist/server/server-bundle.js",
     "start:debug": "nodemon --inspect dist/server/server-bundle.js",
-    "start:dev":
-      "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
+    "start:dev": "nodemon --watch dist/server/server-bundle.js --exec \"node dist/server/server-bundle.js\"",
     "build": "webpack",
     "build:dev": "webpack --progress --watch",
     "lint": "eslint",
@@ -79,6 +77,6 @@
     "test": "exit 0"
   },
   "engines": {
-    "node": ">=6.9.5 <7"
+    "node": ">=6.9.5 <=8.12.0"
   }
 }
