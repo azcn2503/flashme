@@ -3,8 +3,8 @@ $delete-color: rgb(180, 30, 0);
 $success-color: rgb(30, 180, 0);
 $failure-color: $delete-color;
 $light-grey: rgb(230, 232, 235);
+$lighter-grey: rgb(240, 242, 245);
 $dark-grey: rgb(130, 132, 135);
-$light-tan: rgb(240, 235, 232);
 
 $success-gradient: linear-gradient(
   135deg,
@@ -16,8 +16,6 @@ $failure-gradient: linear-gradient(
   transparentize($failure-color, 0.8),
   transparent
 );
-
-$card-gradient: linear-gradient(135deg, $light-tan, white);
 
 $padding-small: 5px;
 $padding-medium: 10px;

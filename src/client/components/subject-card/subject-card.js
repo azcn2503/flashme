@@ -37,12 +37,6 @@ class SubjectCard extends PureComponent {
     this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
     this.onClickConfirmDelete = this.onClickConfirmDelete.bind(this);
     this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
-    this.scatterFakeCards = this.scatterFakeCards.bind(this);
-    this._fakeCards = [];
-  }
-
-  componentDidMount() {
-    this.scatterFakeCards();
   }
 
   onClickDelete() {
@@ -72,22 +66,6 @@ class SubjectCard extends PureComponent {
     this.closeDeleteDialog();
   }
 
-  /**
-   * Randomly scatters the fake cards behind the subject card
-   */
-  scatterFakeCards() {
-    if (this._fakeCards.length > 0) {
-      setTimeout(() => {
-        this._fakeCards.forEach(fakeCard => {
-          if (fakeCard && fakeCard.style) {
-            const rotateAmount = Math.round(Math.random() * 6 - 3);
-            fakeCard.style.transform = `rotateZ(${rotateAmount}deg`;
-          }
-        });
-      });
-    }
-  }
-
   openDeleteDialog() {
     this.props.showDialog(
       "Delete subject?",
@@ -113,15 +91,6 @@ class SubjectCard extends PureComponent {
       getSubjectFilteredTests(this.props.tests, this.props.subject.id).length ||
       this.props.subject.testCount ||
       0
-    );
-  }
-
-  renderFakeCards() {
-    return (
-      <Fragment>
-        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />
-        <div className={styles.fakeCard} ref={el => this._fakeCards.push(el)} />
-      </Fragment>
     );
   }
 
@@ -155,58 +124,48 @@ class SubjectCard extends PureComponent {
   }
 
   render() {
-    if (this.props.subject) {
-      const cardCount = this.getCardCount();
-      return (
-        <div className={styles.subjectCardContainer}>
-          {this.renderFakeCards()}
-          <div
-            className={classNames(styles.subjectCard, {
-              [styles.deleting]: this.state.deleteDialogOpen
-            })}
-            onMouseOver={this.scatterFakeCards}
-          >
-            <div className={styles.title}>
-              <div className={styles.label}>
-                <NavLink to={`/subject/${this.props.subject.id}`}>
-                  {this.props.subject.title}
-                </NavLink>
-              </div>
-              <div className={styles.cardCount}>
-                {cardCount} {pluralize("card", cardCount)}
-              </div>
-            </div>
-            <div className={styles.controls}>
-              <Tooltip
-                disabled={this.getCardCount() !== 0}
-                message="Add some cards to start a new test"
-              >
-                <Button
-                  small
-                  primary
-                  disabled={
-                    this.props.tests.requesting || this.getCardCount() === 0
-                  }
-                  onClick={this.onClickTest}
-                >
-                  Test
-                </Button>
-              </Tooltip>
-              <Button
-                small
-                delete
-                disabled={this.props.subject.requesting}
-                onClick={this.onClickDelete}
-              >
-                Delete
-              </Button>
-            </div>
+    const { subject } = this.props;
+    if (!subject) return null;
+    const cardCount = this.getCardCount();
+    return (
+      <div
+        className={classNames(styles.subjectCard, {
+          [styles.deleting]: this.state.deleteDialogOpen
+        })}
+      >
+        <div className={styles.title}>
+          <div className={styles.label}>
+            <NavLink to={`/subject/${subject.id}`}>{subject.title}</NavLink>
+          </div>
+          <div className={styles.cardCount}>
+            {cardCount} {pluralize("card", cardCount)}
           </div>
         </div>
-      );
-    } else {
-      return null;
-    }
+        <div className={styles.controls}>
+          <Tooltip
+            disabled={cardCount !== 0}
+            message="Add some cards to start a new test"
+          >
+            <Button
+              small
+              primary
+              disabled={this.props.tests.requesting || cardCount === 0}
+              onClick={this.onClickTest}
+            >
+              Test
+            </Button>
+          </Tooltip>
+          <Button
+            small
+            delete
+            disabled={subject.requesting}
+            onClick={this.onClickDelete}
+          >
+            Delete
+          </Button>
+        </div>
+      </div>
+    );
   }
 }
 

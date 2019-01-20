@@ -11,16 +11,16 @@
   @include transition();
   transition-property: opacity, border-color;
 
+  background-color: white;
   position: relative;
   width: 200px;
   height: 300px;
   display: flex;
   flex-direction: column;
   margin: 0 $margin-large $margin-large 0;
-  border: 2px solid transparent;
-  box-shadow: $box-shadow-small;
-  border-radius: $border-radius-small;
-  background-color: white;
+  border: 2px solid $light-grey;
+  box-shadow: $box-shadow-large;
+  border-radius: $border-radius-large;
 
   &.flashCardActive {
     opacity: 0.5;
@@ -90,7 +90,6 @@
 
 .face {
   flex-grow: 1;
-  background-color: white;
   display: flex;
   flex-direction: column;
   border-radius: $border-radius-small;
@@ -100,7 +99,6 @@
 
   .faceTitle {
     z-index: 0;
-    background-image: $card-gradient;
     color: rgba(0, 0, 0, 0.05);
     position: absolute;
     top: 0;
