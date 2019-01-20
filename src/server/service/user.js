@@ -31,11 +31,11 @@ class UserService {
 
     passport.serializeUser((user, done) => done(null, user.id));
 
-    passport.deserializeUser((id, done) =>
-      this.findUserById(id)
+    passport.deserializeUser((id, done) => {
+      return this.findUserById(id)
         .then(user => done(null, user))
-        .catch(err => done(err))
-    );
+        .catch(err => done(err));
+    });
   }
 
   /**

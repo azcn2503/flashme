@@ -2,16 +2,14 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
   app.get("/api/test/:testId", loggedIn, (req, res) => {
     const { testId } = req.params;
     logger.info(`Getting test ${testId}`);
-    return testService
-      .getTest(req.user.id, testId)
-      .then(test => res.json(test));
+    return testService.getTest(req.userId, testId).then(test => res.json(test));
   });
 
   app.get("/api/tests/subject/:subjectId", loggedIn, (req, res) => {
     const { subjectId } = req.params;
     logger.info(`Getting tests for subject ${subjectId}`);
     return testService
-      .getTestsForSubject(req.user.id, subjectId)
+      .getTestsForSubject(req.userId, subjectId)
       .then(tests => res.json(tests));
   });
 
@@ -19,8 +17,8 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { subjectId } = req.params;
     logger.info(`Adding test to subject ${subjectId}`);
     return cardService
-      .getCards(req.user.id, subjectId)
-      .then(cards => testService.addTest(req.user.id, subjectId, cards))
+      .getCards(req.userId, subjectId)
+      .then(cards => testService.addTest(req.userId, subjectId, cards))
       .then(test => res.json(test))
       .catch(err => res.sendStatus(500));
   });
@@ -29,7 +27,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { subjectId, testId } = req.params;
     logger.info(`Adding retest of ${testId} to subject ${subjectId}`);
     return testService
-      .addRetest(req.user.id, subjectId, testId)
+      .addRetest(req.userId, subjectId, testId)
       .then(test => res.json(test))
       .catch(err => res.sendStatus(500));
   });
@@ -38,7 +36,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { testId } = req.params;
     logger.info(`Removing test ${testId}`);
     return testService
-      .removeTest(req.user.id, testId)
+      .removeTest(req.userId, testId)
       .then(() => res.sendStatus(200))
       .catch(err => res.sendStatus(500));
   });
@@ -47,7 +45,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { testId } = req.params;
     logger.info(`Starting test ${testId}`);
     return testService
-      .startTest(req.user.id, testId)
+      .startTest(req.userId, testId)
       .then(() => res.sendStatus(200))
       .catch(err => res.sendStatus(500));
   });
@@ -56,7 +54,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { testId } = req.params;
     logger.info(`Completing test ${testId}`);
     return testService
-      .completeTest(req.user.id, testId)
+      .completeTest(req.userId, testId)
       .then(() => res.sendStatus(200))
       .catch(err => res.sendStatus(500));
   });
@@ -65,7 +63,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { testId } = req.params;
     logger.info(`Abandoning test ${testId}`);
     return testService
-      .abandonTest(req.user.id, testId)
+      .abandonTest(req.userId, testId)
       .then(() => res.sendStatus(200))
       .catch(err => res.sendStatus(500));
   });
@@ -74,7 +72,7 @@ const testApi = ({ app, logger, testService, cardService, loggedIn }) => {
     const { testId } = req.params;
     const { cardIndex, correct } = req.body;
     return testService
-      .answerTestCard(req.user.id, testId, cardIndex, correct)
+      .answerTestCard(req.userId, testId, cardIndex, correct)
       .then(test => res.status(200).json(test))
       .catch(err => res.sendStatus(500));
   });
