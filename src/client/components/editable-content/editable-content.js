@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import Promise from "bluebird";
 
+import Tooltip from "../tooltip/tooltip";
+
 import styles from "./editable-content.scss";
 
 class EditableContent extends PureComponent {
@@ -117,21 +119,26 @@ class EditableContent extends PureComponent {
 
   render() {
     return (
-      <div
-        key={this.state.updateCount}
-        ref={el => (this._el = el)}
-        className={classNames(
-          styles.editableContent,
-          { [styles.editable]: this.props.editable },
-          this.props.className
-        )}
-        contentEditable={this.props.editable}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-        onKeyUp={this.onKeyUp}
-        onKeyDown={this.onKeyDown}
-        dangerouslySetInnerHTML={this.getMarkup()}
-      />
+      <Tooltip
+        message="Click to edit"
+        disabled={!this.props.showTooltip || this.state.focused}
+      >
+        <div
+          key={this.state.updateCount}
+          ref={el => (this._el = el)}
+          className={classNames(
+            styles.editableContent,
+            { [styles.editable]: this.props.editable },
+            this.props.className
+          )}
+          contentEditable={this.props.editable}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          onKeyUp={this.onKeyUp}
+          onKeyDown={this.onKeyDown}
+          dangerouslySetInnerHTML={this.getMarkup()}
+        />
+      </Tooltip>
     );
   }
 }
@@ -145,11 +152,15 @@ EditableContent.propTypes = {
   onFocus: PropTypes.func,
   onKeyDown: PropTypes.func,
   onKeyUp: PropTypes.func,
-  blurOnEnter: PropTypes.bool
+  blurOnEnter: PropTypes.bool,
+  showTooltip: PropTypes.bool,
+  emptyContent: PropTypes.node
 };
 
 EditableContent.defaultProps = {
-  blurOnEnter: false
+  blurOnEnter: false,
+  showTooltip: false,
+  emptyContent: ""
 };
 
 export default EditableContent;

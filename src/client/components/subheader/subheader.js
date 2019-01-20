@@ -14,6 +14,7 @@ class Subheader extends PureComponent {
         editable={this.props.editable}
         onChange={this.props.onChange}
         blurOnEnter={this.props.editable}
+        showTooltip={this.props.editable}
       />
     );
   }
