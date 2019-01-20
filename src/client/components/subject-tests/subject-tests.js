@@ -283,7 +283,7 @@ class SubjectTests extends PureComponent {
     const test = this.props.tests.byId[testId];
     return (
       <div>
-        <p>Are you sure you want to delete test {test.id}?</p>
+        <p>Are you sure you want to delete this test?</p>
         <p>
           This test was created {moment(test.created).fromNow()} and contains{" "}
           {test.cards.length} {pluralize("card", test.cards.length)}.
