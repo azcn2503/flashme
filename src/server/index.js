@@ -7,7 +7,6 @@ import bodyParser from "body-parser";
 import serveStatic from "serve-static";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import cookieParser from "cookie-parser";
 
 import {
   userApi as initialiseUserApi,
@@ -28,8 +27,7 @@ const port = process.env.PORT || config.http.port;
 const app = express();
 
 const loggedIn = (req, res, next) => {
-  if (req.user || req.cookies.user) {
-    req.userId = req.user || req.cookies.user;
+  if (req.user) {
     return next();
   } else {
     return res.send(401);
@@ -43,7 +41,6 @@ const noCache = (req, res, next) => {
   next();
 };
 
-app.use(cookieParser());
 app.use(session({ secret: "cards and secrets" }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

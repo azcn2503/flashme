@@ -10,7 +10,6 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
           if (err) {
             return next(err);
           } else {
-            res.cookie("user", user.id, { maxAge: 2592000000 });
             return res.json(user);
           }
         });
@@ -32,7 +31,6 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
     try {
       req.logout();
       req.session.destroy();
-      res.clearCookie("user");
       return res.sendStatus(200);
     } catch (ex) {
       return res.sendStatus(500);
@@ -41,7 +39,7 @@ const userApi = ({ app, logger, userService, passport, loggedIn }) => {
 
   app.get("/api/user", loggedIn, (req, res) => {
     return userService
-      .findUserById(req.userId)
+      .findUserById(req.user.id)
       .then(user => res.json(user))
       .catch(() => res.sendStatus(404));
   });

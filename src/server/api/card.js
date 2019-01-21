@@ -3,7 +3,7 @@ const cardApi = ({ app, logger, cardService, loggedIn }) => {
     const { subjectId } = req.params;
     logger.info(`Getting cards for subject ${subjectId}`);
     return cardService
-      .getCards(req.userId, subjectId)
+      .getCards(req.user.id, subjectId)
       .then(cards => res.json(cards))
       .catch(err => res.status(500).json(err));
   });
@@ -11,7 +11,7 @@ const cardApi = ({ app, logger, cardService, loggedIn }) => {
   app.post("/api/card", loggedIn, (req, res) => {
     logger.info("Adding card");
     return cardService
-      .addCard(req.userId, req.body.card, req.body.subjectId)
+      .addCard(req.user.id, req.body.card, req.body.subjectId)
       .then(card => res.json(card))
       .catch(err => res.status(500).json(err));
   });
@@ -19,7 +19,7 @@ const cardApi = ({ app, logger, cardService, loggedIn }) => {
   app.put("/api/card/:cardId", loggedIn, (req, res) => {
     logger.info(`Updating card ${req.params.cardId}`);
     return cardService
-      .updateCard(req.userId, req.params.cardId, req.body.card)
+      .updateCard(req.user.id, req.params.cardId, req.body.card)
       .then(card => res.json(card))
       .catch(err => res.status(500).json(err));
   });
@@ -27,7 +27,7 @@ const cardApi = ({ app, logger, cardService, loggedIn }) => {
   app.delete("/api/card/:cardId", loggedIn, (req, res) => {
     logger.info(`Removing card ${req.params.cardId}`);
     return cardService
-      .removeCard(req.userId, req.params.cardId)
+      .removeCard(req.user.id, req.params.cardId)
       .then(() => res.sendStatus(200))
       .catch(err => res.status(500).json(err));
   });
