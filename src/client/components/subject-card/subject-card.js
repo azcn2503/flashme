@@ -37,6 +37,7 @@ class SubjectCard extends PureComponent {
     this.onCloseDeleteDialog = this.onCloseDeleteDialog.bind(this);
     this.onClickConfirmDelete = this.onClickConfirmDelete.bind(this);
     this.onClickCancelDelete = this.onClickCancelDelete.bind(this);
+    this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
   }
 
   onClickDelete() {
@@ -70,12 +71,21 @@ class SubjectCard extends PureComponent {
     this.props.showDialog(
       "Delete subject?",
       this.renderDeleteDialogBody(),
-      this.renderDeleteDialogActions()
+      this.renderDeleteDialogActions(),
+      {
+        onClose: this.closeDeleteDialog
+      }
     );
+    this.setState({
+      deleteDialogOpen: true
+    });
   }
 
   closeDeleteDialog() {
     this.props.hideDialog();
+    this.setState({
+      deleteDialogOpen: false
+    });
   }
 
   getCardCount() {

@@ -34,7 +34,8 @@ class App extends PureComponent {
       dialogOpen: false,
       dialogHeader: null,
       dialogBody: null,
-      dialogFooter: null
+      dialogFooter: null,
+      dialogProps: {}
     };
     this.renderSubjects = this.renderSubjects.bind(this);
     this.renderSubjectCards = this.renderSubjectCards.bind(this);
@@ -70,12 +71,13 @@ class App extends PureComponent {
     }
   }
 
-  showDialog(header, body, footer) {
+  showDialog(header, body, footer, dialogProps) {
     this.setState({
       dialogOpen: true,
       dialogHeader: header,
       dialogBody: body,
-      dialogFooter: footer
+      dialogFooter: footer,
+      dialogProps
     });
   }
 
@@ -222,6 +224,7 @@ class App extends PureComponent {
           header={this.state.dialogHeader}
           body={this.state.dialogBody}
           footer={this.state.dialogFooter}
+          {...this.state.dialogProps}
         />
         <TooltipElement />
         <KeepAlive />

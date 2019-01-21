@@ -45,6 +45,7 @@ class FlashCard extends PureComponent {
     this.onClickAddCard = this.onClickAddCard.bind(this);
     this.onClickUpdateCard = this.onClickUpdateCard.bind(this);
     this.onWindowKeyDown = this.onWindowKeyDown.bind(this);
+    this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -148,17 +149,26 @@ class FlashCard extends PureComponent {
     this.props.showDialog(
       "Delete card?",
       this.renderDeleteDialogBody(),
-      this.renderDeleteDialogActions()
+      this.renderDeleteDialogActions(),
+      {
+        onClose: this.onClickCancelDelete
+      }
     );
+    this.setState({
+      deleteDialogOpen: true
+    });
   }
 
   onClickCancelDelete() {
-    this.props.hideDialog();
+    this.closeDeleteDialog();
   }
 
   onClickConfirmDelete() {
     this.props.dispatch(removeCard(this.props.card.id));
     this.props.hideDialog();
+    this.setState({
+      deleteDialogOpen: false
+    });
   }
 
   onClickFlip(e) {
@@ -198,6 +208,13 @@ class FlashCard extends PureComponent {
         this.submit();
       }
     }
+  }
+
+  closeDeleteDialog() {
+    this.props.hideDialog();
+    this.setState({
+      deleteDialogOpen: false
+    });
   }
 
   canSubmit() {
