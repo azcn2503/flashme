@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import Promise from "bluebird";
 
-import Tooltip from "../tooltip/tooltip";
-
 import styles from "./editable-content.scss";
 
 class EditableContent extends PureComponent {
@@ -21,6 +19,8 @@ class EditableContent extends PureComponent {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
   }
+
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value && !this.state.focused) {
@@ -119,26 +119,21 @@ class EditableContent extends PureComponent {
 
   render() {
     return (
-      <Tooltip
-        message="Click to edit"
-        disabled={!this.props.showTooltip || this.state.focused}
-      >
-        <div
-          key={this.state.updateCount}
-          ref={el => (this._el = el)}
-          className={classNames(
-            styles.editableContent,
-            { [styles.editable]: this.props.editable },
-            this.props.className
-          )}
-          contentEditable={this.props.editable}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyDown}
-          dangerouslySetInnerHTML={this.getMarkup()}
-        />
-      </Tooltip>
+      <div
+        key={this.state.updateCount}
+        ref={el => (this._el = el)}
+        className={classNames(
+          styles.editableContent,
+          { [styles.editable]: this.props.editable },
+          this.props.className
+        )}
+        contentEditable={this.props.editable}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}
+        dangerouslySetInnerHTML={this.getMarkup()}
+      />
     );
   }
 }
